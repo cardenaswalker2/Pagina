@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Proyectos | Luis Devp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #FAF9F6;
+            --bg-secondary: #F3F1EC;
+            --accent-color: #8C6D58; /* Warm copper */
+            --accent-hover: #755B49;
+            --text-main: #2C2A29;
+            --text-muted: #7A7571;
+            --border-color: rgba(44, 42, 41, 0.08);
+            --card-bg: #FFFFFF;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --shadow: 0 4px 15px rgba(140, 109, 88, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Glassmorphic Navbar */
+        nav {
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* Wrapper */
+        .calculator-container {
+            max-width: 750px;
+            margin: 3rem auto;
+            width: 100%;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        .calc-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .calc-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-header p {
+            color: var(--text-muted);
+        }
+
+        /* Indicators */
+        .steps-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .steps-nav::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--border-color);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .step-node {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .step-node.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        /* Step cards */
+        .calc-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .calc-box.active {
+            display: flex;
+        }
+
+        .box-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        /* Options grid */
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .option-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .option-item.selected {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .option-item.selected p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .option-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .option-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Form groups */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        input, select {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+        }
+
+        /* Summary box */
+        .summary-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Control buttons */
+        .action-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .btn-action {
+            background: var(--accent-color);
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-action:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-action.btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-action.btn-secondary:hover {
+            background: var(--bg-secondary);
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
+        <ul class="nav-links">
+            <li><a href="/simulador">Simuladores</a></li>
+            <li><a href="/calculadora" style="color:var(--text-main)">Calculadora de Costos</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/cliente" class="btn-action" style="box-shadow:none; padding: 0.5rem 1.1rem; border-radius: 6px; font-size: 0.9rem;">Portal del Cliente</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="calculator-container">
+        <header class="calc-header">
+            <h1>Configura tu Software a Medida</h1>
+            <p>Selecciona los módulos, plazos y requerimientos de tu proyecto para cotizar directamente por WhatsApp.</p>
+        </header>
+
+        <!-- Progress Indicator -->
+        <div class="steps-nav">
+            <div class="step-node active" id="node-1">1</div>
+            <div class="step-node" id="node-2">2</div>
+            <div class="step-node" id="node-3">3</div>
+            <div class="step-node" id="node-4">4</div>
+        </div>
+
+        <!-- Step 1: Type selection -->
+        <div class="calc-box active" id="box-1">
+            <h3 class="box-title">1. ¿Qué plataforma deseas desarrollar?</h3>
+            <div class="grid-options">
+                <div class="option-item selected" onclick="selectType('Sitio Web / Cloud', this)">
+                    <h4>Sitio Web / Cloud</h4>
+                    <p>Portales interactivos o ERP.</p>
+                </div>
+                <div class="option-item" onclick="selectType('App Móvil', this)">
+                    <h4>App Móvil</h4>
+                    <p>Desarrollo móvil nativo con Flutter.</p>
+                </div>
+                <div class="option-item" onclick="selectType('Sistema a Medida', this)">
+                    <h4>Sistema a Medida</h4>
+                    <p>Clínicas, restaurantes o inventarios.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Modules selection -->
+        <div class="calc-box" id="box-2">
+            <h3 class="box-title">2. ¿Qué funcionalidades principales necesitas?</h3>
+            <div class="grid-options">
+                <div class="option-item" onclick="toggleModule('Seguridad & Roles', this)">
+                    <h4>Seguridad y Roles</h4>
+                    <p>Autenticación segura de usuarios.</p>
+                </div>
+                <div class="option-item" onclick="toggleModule('Pagos Online', this)">
+                    <h4>Pagos Online</h4>
+                    <p>Pasarela Stripe / PayPal.</p>
+                </div>
+                <div class="option-item" onclick="toggleModule('Chatbot de Soporte', this)">
+                    <h4>Asistente Integrado</h4>
+                    <p>Chats inteligentes automáticos.</p>
+                </div>
+                <div class="option-item" onclick="toggleModule('Reportes en PDF', this)">
+                    <h4>Reportes de Ventas</h4>
+                    <p>Estadísticas y descargas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Users & Urgency -->
+        <div class="calc-box" id="box-3">
+            <h3 class="box-title">3. Escala y Plazos del Proyecto</h3>
+            <div class="form-group">
+                <label for="users-range">Cantidad Estimada de Usuarios</label>
+                <select id="users-range">
+                    <option value="Menos de 10 usuarios">Menos de 10 usuarios</option>
+                    <option value="10 a 50 usuarios">Entre 10 y 50 usuarios</option>
+                    <option value="Más de 50 usuarios">Más de 50 usuarios concurrentes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="urgency">Plazo de Entrega Requerido</label>
+                <select id="urgency">
+                    <option value="Estándar (Recomendado)">Estándar (Recomendado)</option>
+                    <option value="Alta Prioridad">Alta Prioridad (Urgente)</option>
+                    <option value="Crítica (Inmediata)">Crítica (Inmediata)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Step 4: Contact form & WhatsApp Redirect -->
+        <div class="calc-box" id="box-4">
+            <h3 class="box-title">4. Completa tu Información para Cotizar</h3>
+            <div class="form-group">
+                <label for="client-name">Nombre Completo</label>
+                <input type="text" id="client-name" placeholder="Ej. Carlos Gómez" required>
+            </div>
+            <div class="form-group">
+                <label for="client-email">Correo Electrónico</label>
+                <input type="email" id="client-email" placeholder="carlos@empresa.com" required>
+            </div>
+            <div class="form-group">
+                <label for="client-phone">Número de WhatsApp</label>
+                <input type="text" id="client-phone" placeholder="Ej. +54 9 11 2345-6789">
+            </div>
+
+            <div class="summary-box" id="summary-details">
+                <strong>Resumen de Configuración:</strong>
+                <p id="summary-text" style="color:var(--text-muted); font-size:0.85rem; margin-top:0.4rem"></p>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="action-nav">
+            <button class="btn-action btn-secondary" id="prev-btn" onclick="prevStep()" style="display:none">Anterior</button>
+            <button class="btn-action" id="next-btn" onclick="nextStep()">Siguiente</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Luis Devp. Cotizaciones ágiles vía WhatsApp.</p>
+    </footer>
+
+    <!-- Interactive script triggers -->
+    <script>
+        let currentStep = 1;
+        let selectedType = 'Sitio Web / Cloud';
+        let selectedModules = [];
+
+        function selectType(type, element) {
+            const items = element.parentElement.querySelectorAll('.option-item');
+            items.forEach(i => i.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedType = type;
+        }
+
+        function toggleModule(moduleName, element) {
+            element.classList.toggle('selected');
+            if (element.classList.contains('selected')) {
+                selectedModules.push(moduleName);
+            } else {
+                selectedModules = selectedModules.filter(m => m !== moduleName);
+            }
+        }
+
+        function updateSummary() {
+            const users = document.getElementById('users-range').value;
+            const urgency = document.getElementById('urgency').value;
+            
+            const modulesText = selectedModules.length > 0 ? selectedModules.join(', ') : 'Ninguno seleccionado';
+            
+            document.getElementById('summary-text').innerHTML = `
+                • Plataforma: <strong>${selectedType}</strong><br>
+                • Módulos: <strong>${modulesText}</strong><br>
+                • Escala: <strong>${users}</strong><br>
+                • Plazo: <strong>${urgency}</strong>
+            `;
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.calc-box').forEach(b => b.classList.remove('active'));
+            document.getElementById(`box-${step}`).classList.add('active');
+
+            // Dot states
+            document.querySelectorAll('.step-node').forEach((n, idx) => {
+                if (idx < step) n.classList.add('active');
+                else n.classList.remove('active');
+            });
+
+            document.getElementById('prev-btn').style.display = step > 1 ? 'block' : 'none';
+            document.getElementById('next-btn').innerText = step === 4 ? 'Guardar y Cotizar en WhatsApp' : 'Siguiente';
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        async function nextStep() {
+            if (currentStep < 4) {
+                currentStep++;
+                if (currentStep === 4) updateSummary();
+                showStep(currentStep);
+            } else {
+                // Submit lead to DB and redirect to WhatsApp
+                const name = document.getElementById('client-name').value.trim();
+                const email = document.getElementById('client-email').value.trim();
+                const phone = document.getElementById('client-phone').value.trim();
+
+                if (!name || !email) {
+                    alert('Por favor rellena tu nombre y correo.');
+                    return;
+                }
+
+                const users = document.getElementById('users-range').value;
+                const urgency = document.getElementById('urgency').value;
+                
+                const payload = {
+                    clientName: name,
+                    clientEmail: email,
+                    projectType: selectedType,
+                    modules: selectedModules,
+                    usersCount: 1, // Placeholder
+                    urgency: urgency
+                };
+
+                try {
+                    // Guardar cotización
+                    await fetch('/api/public/cotizacion', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    // Armar mensaje WhatsApp
+                    const modulesStr = selectedModules.length > 0 ? selectedModules.join(', ') : 'Ninguno';
+                    const messageText = `Hola Luis Devp! Acabo de configurar una propuesta en tu plataforma para un proyecto de tipo *${selectedType}* con los siguientes módulos: *${modulesStr}*, para una escala de *${users}* y prioridad de entrega *${urgency}*. Mi nombre es *${name}* y mi correo es *${email}*. ¡Quedo atento a tus comentarios para definir el presupuesto!`;
+                    
+                    const encodedMsg = encodeURIComponent(messageText);
+                    const whatsappUrl = `https://wa.me/5491123456789?text=${encodedMsg}`; // Reemplazar con el número del programador
+                    
+                    // Abrir WhatsApp en pestaña nueva
+                    window.open(whatsappUrl, '_blank');
+                    window.location.href = '/';
+                } catch (err) {
+                    alert('Hubo un error al guardar la propuesta. Redirigiendo igualmente a WhatsApp.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

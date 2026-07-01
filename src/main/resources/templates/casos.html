@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casos de Éxito | Luis Devp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #FAF9F6;
+            --bg-secondary: #F3F1EC;
+            --accent-color: #8C6D58; /* Warm copper */
+            --accent-hover: #755B49;
+            --text-main: #2C2A29;
+            --text-muted: #7A7571;
+            --border-color: rgba(44, 42, 41, 0.08);
+            --card-bg: #FFFFFF;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --shadow: 0 4px 20px rgba(140, 109, 88, 0.04);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Glassmorphic Navbar */
+        nav {
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-warm {
+            background-color: var(--accent-color);
+            color: #fff !important;
+            padding: 0.5rem 1.1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-warm:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Hero */
+        .cases-hero {
+            text-align: center;
+            padding: 5rem 1.5rem 3rem 1.5rem;
+            background: radial-gradient(circle at 50% 30%, rgba(140, 109, 88, 0.03) 0%, transparent 70%);
+        }
+
+        .cases-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.8rem;
+        }
+
+        .cases-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cases Grid */
+        .cases-container {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .case-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            transition: var(--transition);
+        }
+
+        @media(max-width: 800px) {
+            .case-card {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+                gap: 2rem;
+            }
+        }
+
+        .case-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 30px rgba(140, 109, 88, 0.08);
+        }
+
+        .case-visual {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .case-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .case-metric {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 0.5rem 0;
+        }
+
+        .case-metric-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .case-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .case-details h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .case-section-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+            margin-top: 1rem;
+        }
+
+        .case-details p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .case-techs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .case-tech-pill {
+            font-size: 0.75rem;
+            background: var(--bg-secondary);
+            color: var(--text-main);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: var(--bg-secondary);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
+        <ul class="nav-links">
+            <li><a href="/simulador">Simuladores</a></li>
+            <li><a href="/casos" style="color:var(--text-main)">Casos de Éxito</a></li>
+            <li><a href="/cliente" class="btn-warm">Portal del Cliente</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <header class="cases-hero">
+        <h1>Casos de Éxito</h1>
+        <p>Descubre cómo ayudamos a optimizar procesos, automatizar tareas y aumentar la rentabilidad de las empresas con software a medida.</p>
+    </header>
+
+    <!-- Cases list -->
+    <main class="cases-container">
+        
+        <!-- Caso 1 -->
+        <div class="case-card">
+            <div class="case-visual">
+                <span class="case-icon">🏨</span>
+                <div class="case-metric">+45%</div>
+                <div class="case-metric-label">Reservas Directas</div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Reducción del 30% en costos de intermediación de agencias externas.</p>
+            </div>
+            <div class="case-details">
+                <div>
+                    <h2>Hotel Boutique Cartagena</h2>
+                    <div class="case-section-title">El Problema</div>
+                    <p>La administración dependía de hojas de cálculo y reservas telefónicas, lo que causaba sobreventas frecuentes y demoras al hacer el check-in.</p>
+                    
+                    <div class="case-section-title">La Solución</div>
+                    <p>Desarrollamos una plataforma web completa de control de habitaciones conectada a una app móvil para huéspedes (Flutter) que permite solicitar servicios al cuarto, realizar pagos directos y digitalizar el check-in.</p>
+                </div>
+                
+                <div class="case-techs">
+                    <span class="case-tech-pill">Spring Boot</span>
+                    <span class="case-tech-pill">Java</span>
+                    <span class="case-tech-pill">MongoDB</span>
+                    <span class="case-tech-pill">Flutter</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caso 2 -->
+        <div class="case-card">
+            <div class="case-visual">
+                <span class="case-icon">🚗</span>
+                <div class="case-metric">-80%</div>
+                <div class="case-metric-label">Tiempo Administrativo</div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Ahorro diario de 4 horas en la consolidación de órdenes físicas.</p>
+            </div>
+            <div class="case-details">
+                <div>
+                    <h2>Taller AutoTech</h2>
+                    <div class="case-section-title">El Problema</div>
+                    <p>Los mecánicos elaboraban diagnósticos en papel, y el control de inventario de repuestos era impreciso, lo que provocaba retrasos en entregas y desconfianza en los clientes.</p>
+                    
+                    <div class="case-section-title">La Solución</div>
+                    <p>Diseñamos un sistema ERP a medida para el registro de órdenes de reparación digitales. El cliente recibe fotos del repuesto cambiado y alertas automáticas por correo al finalizar la orden de servicio.</p>
+                </div>
+                
+                <div class="case-techs">
+                    <span class="case-tech-pill">Java</span>
+                    <span class="case-tech-pill">PostgreSQL</span>
+                    <span class="case-tech-pill">Docker</span>
+                    <span class="case-tech-pill">Railway</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caso 3 -->
+        <div class="case-card">
+            <div class="case-visual">
+                <span class="case-icon">💳</span>
+                <div class="case-metric">98%</div>
+                <div class="case-metric-label">Cartera al Día</div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Reducción del índice de morosidad al enviar alertas automáticas vía WhatsApp API.</p>
+            </div>
+            <div class="case-details">
+                <div>
+                    <h2>Créditos de la Costa</h2>
+                    <div class="case-section-title">El Problema</div>
+                    <p>Los cobradores de calle tenían dificultades para registrar pagos sin conexión y el cálculo manual de intereses incrementaba los errores de caja.</p>
+                    
+                    <div class="case-section-title">La Solución</div>
+                    <p>Creamos una app móvil Flutter offline-first sincronizada de manera automática al recuperar red móvil, conectada a una base de datos en nube dedicada para auditar cobros diarios.</p>
+                </div>
+                
+                <div class="case-techs">
+                    <span class="case-tech-pill">Spring Boot</span>
+                    <span class="case-tech-pill">MySQL</span>
+                    <span class="case-tech-pill">Flutter</span>
+                    <span class="case-tech-pill">APIs REST</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Luis Devp. Casos de éxito e ingeniería de alta gama para tu negocio.</p>
+    </footer>
+
+</body>
+</html>

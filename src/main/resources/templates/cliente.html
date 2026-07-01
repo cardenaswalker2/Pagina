@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal del Cliente | Luis Devp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #FAF9F6;
+            --bg-secondary: #F3F1EC;
+            --accent-color: #8C6D58; /* Warm copper */
+            --accent-hover: #755B49;
+            --text-main: #2C2A29;
+            --text-muted: #7A7571;
+            --border-color: rgba(44, 42, 41, 0.08);
+            --card-bg: #FFFFFF;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --shadow: 0 4px 20px rgba(140, 109, 88, 0.04);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* SaaS Layout Header Nav */
+        nav {
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-actions a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .nav-actions a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-logout {
+            color: var(--danger-color) !important;
+            font-weight: 600 !important;
+        }
+
+        /* Main Workspace Structure */
+        .workspace {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            flex: 1;
+            min-height: calc(100vh - 65px);
+        }
+
+        @media(max-width: 900px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        @media(max-width: 900px) {
+            .sidebar {
+                display: none; /* Can be toggled or stack */
+            }
+        }
+
+        .sidebar-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: left;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+        }
+
+        .sidebar-btn:hover, .sidebar-btn.active {
+            background: var(--card-bg);
+            color: var(--text-main);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-btn.active {
+            border-left: 3px solid var(--accent-color);
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 3rem 2.5rem;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        @media(max-width: 600px) {
+            .content-area {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Section Container wrapper */
+        .dashboard-section {
+            display: none;
+            flex-direction: column;
+            gap: 2rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .dashboard-section.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Premium Dashboard Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #FAF9F6 0%, #F3F1EC 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--accent-color);
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome-banner p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            max-width: 800px;
+        }
+
+        /* Metrics grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
+        .metric-val {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+
+        .metric-label {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        /* Project Cards */
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .project-title-area h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.4rem;
+        }
+
+        .project-badge {
+            background: rgba(16, 185, 129, 0.08);
+            color: var(--success-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* Grid info values */
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.8rem 0;
+        }
+
+        .info-cell h5 {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-cell p {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Dynamic Progress Bar */
+        .progress-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .progress-bar-track {
+            background: var(--bg-secondary);
+            height: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            background: var(--accent-color);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Timeline steps */
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .timeline-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .step-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 2;
+            text-align: center;
+            min-width: 90px;
+        }
+
+        .step-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .step-node.completed .step-dot {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: #fff;
+        }
+
+        .step-node.active .step-dot {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(140, 109, 88, 0.4);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .step-node.active .step-label, .step-node.completed .step-label {
+            color: var(--text-main);
+        }
+
+        /* Cards Layout */
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+
+        @media(max-width: 850px) {
+            .two-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header-line {
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Tech lists and Módulos grid */
+        .grid-techs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .tech-box-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .tech-box-item strong {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .tech-box-item p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .modules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .module-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .status-pill {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-pill.done {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-pill.progress {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-pill.pending {
+            background: rgba(122, 117, 113, 0.1);
+            color: var(--text-muted);
+        }
+
+        /* Library and Deliverables downloads */
+        .doc-link, .down-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            margin-bottom: 0.8rem;
+        }
+
+        .doc-link:hover, .down-link:hover {
+            border-color: var(--accent-color);
+            background: rgba(140, 109, 88, 0.03);
+        }
+
+        .doc-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Center support ticketing */
+        .support-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .support-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .support-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .support-input, .support-select, .support-textarea {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: inherit;
+            outline: none;
+        }
+
+        .support-textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .support-input:focus, .support-select:focus, .support-textarea:focus {
+            border-color: var(--accent-color);
+        }
+
+        .btn-submit-ticket {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-submit-ticket:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Meeting calendar stub */
+        .meetings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .meeting-item {
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .meeting-time {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .meeting-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Activity feed */
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            border-left: 2px solid var(--border-color);
+            padding-left: 1.2rem;
+        }
+
+        .activity-item {
+            position: relative;
+            font-size: 0.85rem;
+        }
+
+        .activity-item::before {
+            content: '●';
+            position: absolute;
+            left: calc(-1.2rem - 6px);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            top: 0;
+        }
+
+        .activity-time {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        /* AI Asistente Integrado */
+        .ai-chat-card {
+            display: flex;
+            flex-direction: column;
+            height: 380px;
+        }
+
+        .ai-chat-body {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            padding-bottom: 1rem;
+        }
+
+        .ai-bubble {
+            max-width: 80%;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .ai-bubble.bot {
+            background: var(--bg-secondary);
+            align-self: flex-start;
+        }
+
+        .ai-bubble.user {
+            background: var(--accent-color);
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .ai-input-area {
+            display: flex;
+            gap: 0.5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        /* Profile management form */
+        .profile-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media(max-width: 600px) {
+            .profile-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            background: var(--bg-secondary);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SaaS Header Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
+        <div class="nav-actions">
+            <span style="font-size:0.85rem; font-weight:700; color:var(--text-muted)" th:if="${user != null}" th:text="'Cliente: ' + ${user.username}">Cliente: client</span>
+            <a href="/">Inicio</a>
+            <a href="/logout" class="btn-logout">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Workspace Layout -->
+    <div class="workspace">
+        <!-- Sidebar controls -->
+        <aside class="sidebar">
+            <button class="sidebar-btn active" onclick="switchSection('dashboard', this)">📊 General</button>
+            <button class="sidebar-btn" onclick="switchSection('timeline', this)">📅 Cronograma</button>
+            <button class="sidebar-btn" onclick="switchSection('techs', this)">🛠️ Tecnologías & Módulos</button>
+            <button class="sidebar-btn" onclick="switchSection('docs', this)">📚 Documentación</button>
+            <button class="sidebar-btn" onclick="switchSection('deliveries', this)">📦 Entregables</button>
+            <button class="sidebar-btn" onclick="switchSection('meetings', this)">🎥 Reuniones</button>
+            <button class="sidebar-btn" onclick="switchSection('support', this)">🛎️ Soporte & Tickets</button>
+            <button class="sidebar-btn" onclick="switchSection('versions', this)">🔖 Historial Versiones</button>
+            <button class="sidebar-btn" onclick="switchSection('profile', this)">👤 Ajustes Perfil</button>
+        </aside>
+
+        <!-- Dynamic Content Area -->
+        <div class="content-area">
+            
+            <!-- SECTION 1: GENERAL DASHBOARD -->
+            <div class="dashboard-section active" id="sec-dashboard">
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <h2 th:text="'Bienvenido, ' + (${user != null} ? ${user.username} : 'Cliente')">Bienvenido, Cliente</h2>
+                    <p>
+                        Gracias por confiar en Luis Devp. Desde este panel integral SaaS, podrás supervisar el avance de tus proyectos de software, descargar documentación técnica, abrir tickets de soporte y consultar el asistente virtual inteligente 24/7.
+                    </p>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-val">1</span>
+                        <span class="metric-label">Proyectos Activos</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-val">120h</span>
+                        <span class="metric-label">Horas Invertidas</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-val">v1.5</span>
+                        <span class="metric-label">Versión Actual</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-val">0</span>
+                        <span class="metric-label">Tickets Abiertos</span>
+                    </div>
+                </div>
+
+                <!-- Mis Proyectos (Thymeleaf Loop) -->
+                <div th:each="proj : ${projects}" class="project-card">
+                    <div class="project-header">
+                        <div class="project-title-area">
+                            <h3 th:text="${proj.name}">Sistema de Gestión Veterinaria Premium</h3>
+                            <p style="color:var(--text-muted); font-size:0.9rem">
+                                Desarrollo modular con base de datos NoSQL e integraciones.
+                            </p>
+                        </div>
+                        <span class="project-badge" th:text="${proj.status}">EN DESARROLLO</span>
+                    </div>
+
+                    <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6" th:text="${proj.description}"></p>
+
+                    <!-- Info Grid values -->
+                    <div class="project-info-grid">
+                        <div class="info-cell"><h5>Fecha Inicio</h5><p>2026-06-01</p></div>
+                        <div class="info-cell"><h5>Entrega Estimada</h5><p>2026-07-15</p></div>
+                        <div class="info-cell"><h5>Responsable</h5><p>Luis Devp</p></div>
+                        <div class="info-cell"><h5>Prioridad</h5><p style="color:var(--accent-color)">Alta</p></div>
+                        <div class="info-cell"><h5>Complejidad</h5><p>Avanzada</p></div>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="progress-box">
+                        <div style="display:flex; justify-content:space-between; font-size:0.85rem">
+                            <span>Avance Global del Proyecto</span>
+                            <strong th:text="${proj.progress} + '%'">60%</strong>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" th:style="'width: ' + ${proj.progress} + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Details: Recent Activity & AI Helpdesk -->
+                <div class="two-cols">
+                    <!-- Recent Activity -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Actividad Reciente</div>
+                        <div class="activity-feed">
+                            <div class="activity-item">
+                                <span class="activity-time">Hoy 10:15 AM</span>
+                                <strong>Despliegue exitoso de v1.5</strong> en servidores cloud.
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">Ayer 04:30 PM</span>
+                                <strong>Integración con base de datos MongoDB</strong> terminada.
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">28 Jun</span>
+                                <strong>Esquemas de seguridad JWT y Roles</strong> validados.
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">25 Jun</span>
+                                <strong>Dashboard del administrador</strong> maquetado en frontend.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Center Assistant -->
+                    <div class="dashboard-card ai-chat-card">
+                        <div class="card-header-line">Asistente IA del Proyecto</div>
+                        <div class="ai-chat-body" id="ai-chat-board">
+                            <div class="ai-bubble bot">
+                                Hola, soy el asistente exclusivo de Luis Devp. Puedes preguntarme el avance, los módulos faltantes, o qué tecnologías utilizamos.
+                            </div>
+                        </div>
+                        <div class="ai-input-area">
+                            <input type="text" class="support-input" id="ai-input" placeholder="Pregunta algo sobre tu proyecto..." style="flex:1" onkeypress="handleAiKeyPress(event)">
+                            <button class="btn-submit-ticket" onclick="sendAiMessage()">Preguntar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: TIMELINE / CRONOGRAMA -->
+            <div class="dashboard-section" id="sec-timeline">
+                <div class="dashboard-card">
+                    <div class="card-header-line">Cronograma de Fases del Proyecto</div>
+                    <div class="timeline-steps">
+                        <div class="step-node completed"><div class="step-dot">1</div><span class="step-label">Idea</span></div>
+                        <div class="step-node completed"><div class="step-dot">2</div><span class="step-label">Análisis</span></div>
+                        <div class="step-node completed"><div class="step-dot">3</div><span class="step-label">Diseño UI</span></div>
+                        <div class="step-node completed"><div class="step-dot">4</div><span class="step-label">BD</span></div>
+                        <div class="step-node active"><div class="step-dot">5</div><span class="step-label">Backend</span></div>
+                        <div class="step-node"><div class="step-dot">6</div><span class="step-label">Frontend</span></div>
+                        <div class="step-node"><div class="step-dot">7</div><span class="step-label">IA</span></div>
+                        <div class="step-node"><div class="step-dot">8</div><span class="step-label">Pruebas</span></div>
+                        <div class="step-node"><div class="step-dot">9</div><span class="step-label">Producción</span></div>
+                        <div class="step-node"><div class="step-dot">10</div><span class="step-label">Finalizado</span></div>
+                    </div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:2rem">
+                        * Fase actual: <strong>Backend (Fase 5)</strong>. Desarrollando los controladores Spring Boot y endpoints de facturación.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SECTION 3: TECHS & MODULES -->
+            <div class="dashboard-section" id="sec-techs">
+                <div class="two-cols">
+                    <!-- Tech stack list -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Tecnologías Utilizadas</div>
+                        <div class="grid-techs">
+                            <div class="tech-box-item"><strong>Spring Boot</strong><p>Backend robusto basado en Java.</p></div>
+                            <div class="tech-box-item"><strong>Java</strong><p>Programación fuertemente tipada.</p></div>
+                            <div class="tech-box-item"><strong>Flutter</strong><p>App móvil híbrida.</p></div>
+                            <div class="tech-box-item"><strong>MongoDB</strong><p>Base NoSQL ágil para catálogos.</p></div>
+                            <div class="tech-box-item"><strong>Docker</strong><p>Contenedores y portabilidad.</p></div>
+                            <div class="tech-box-item"><strong>JWT</strong><p>Seguridad de sesiones cifradas.</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Developed modules -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Módulos del Sistema</div>
+                        <div class="modules-list">
+                            <div class="module-row"><span>Dashboard Principal</span><span class="status-pill done">Completado</span></div>
+                            <div class="module-row"><span>Gestión de Clientes</span><span class="status-pill done">Completado</span></div>
+                            <div class="module-row"><span>Inventarios</span><span class="status-pill progress">En desarrollo</span></div>
+                            <div class="module-row"><span>Módulo de Ventas</span><span class="status-pill progress">En desarrollo</span></div>
+                            <div class="module-row"><span>Reportes PDF/Excel</span><span class="status-pill pending">Pendiente</span></div>
+                            <div class="module-row"><span>Mapeo de Roles y Permisos</span><span class="status-pill done">Completado</span></div>
+                            <div class="module-row"><span>IA Integrada</span><span class="status-pill pending">Pendiente</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: DOCUMENTATION -->
+            <div class="dashboard-section" id="sec-docs">
+                <div class="dashboard-card">
+                    <div class="card-header-line">Biblioteca de Documentación Técnica</div>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem">
+                        <a href="#" class="doc-link" onclick="alert('Abriendo manual del sistema en PDF...')"><span>📄 Manual del Sistema</span><span class="doc-meta">v1.2 • PDF</span></a>
+                        <a href="#" class="doc-link" onclick="alert('Cargando diagrama de arquitectura...')"><span>📄 Arquitectura de Software</span><span class="doc-meta">PNG</span></a>
+                        <a href="#" class="doc-link" onclick="alert('Cargando Diagrama de Entidad Relación...')"><span>📄 Diagrama de Base de Datos</span><span class="doc-meta">PDF</span></a>
+                        <a href="#" class="doc-link" onclick="alert('Cargando manual técnico...')"><span>📄 Manual Técnico de Despliegue</span><span class="doc-meta">Markdown</span></a>
+                        <a href="#" class="doc-link" onclick="alert('Abriendo especificaciones de API...')"><span>📄 Especificaciones API REST</span><span class="doc-meta">Swagger / OpenApi</span></a>
+                        <a href="#" class="doc-link" onclick="alert('Abriendo Roadmap del proyecto...')"><span>📄 Roadmap de Entregas</span><span class="doc-meta">PDF</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: DELIVERABLES -->
+            <div class="dashboard-section" id="sec-deliveries">
+                <div class="dashboard-card">
+                    <div class="card-header-line">Entregables y Archivos de Código</div>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem">
+                        <a href="#" class="down-link" onclick="alert('Preparando descarga de código fuente (.zip)...')"><span>📦 Código Fuente (ZIP)</span><span class="doc-meta">v1.5 • 42 MB</span></a>
+                        <a href="#" class="down-link" onclick="alert('Descargando archivo APK...')"><span>📱 Instalador App Android (APK)</span><span class="doc-meta">v1.2 • 18 MB</span></a>
+                        <a href="#" class="down-link" onclick="alert('Preparando backup SQL/NoSQL...')"><span>🗄️ Backup de Base de Datos</span><span class="doc-meta">JSON dump</span></a>
+                        <a href="#" class="down-link" onclick="alert('Descargando diapositivas...')"><span>📄 Presentación del Proyecto</span><span class="doc-meta">PPTX</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: MEETINGS -->
+            <div class="dashboard-section" id="sec-meetings">
+                <div class="two-cols">
+                    <!-- Schedule -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Calendario de Reuniones</div>
+                        <div class="meetings-list">
+                            <div class="meeting-item">
+                                <span class="meeting-time">Jueves, 02 Julio - 03:00 PM</span>
+                                <span class="meeting-title">Revisión de Avances de Backend</span>
+                                <p style="font-size:0.8rem; color:var(--text-muted)">Validaremos el flujo de APIs y los reportes automáticos.</p>
+                                <button class="btn-submit-ticket" style="align-self:flex-start; font-size:0.75rem; padding:0.4rem 0.8rem; margin-top:0.3rem" onclick="alert('Abriendo enlace de Google Meet...')">Conectarse a Meet</button>
+                            </div>
+                            <div class="meeting-item" style="border-left-color:var(--text-muted)">
+                                <span class="meeting-time">15 Jun 2026 - Completada</span>
+                                <span class="meeting-title">Presentación de Mockups Figma</span>
+                                <p style="font-size:0.8rem; color:var(--text-muted)">Aprobación de la paleta de colores y el mockup del teléfono.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meeting Notes -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Notas de Acuerdos</div>
+                        <div style="font-size:0.85rem; color:var(--text-muted); display:flex; flex-direction:column; gap:0.8rem">
+                            <p><strong>1.</strong> Sincronizar el simulador móvil con los datos del Gastrobar.</p>
+                            <p><strong>2.</strong> El hosting se realizará a través de Render en servidores de Virginia.</p>
+                            <p><strong>3.</strong> Añadir credenciales de demostración directas para accesos rápidos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 7: SUPPORT TICKETING -->
+            <div class="dashboard-section" id="sec-support">
+                <div class="two-cols">
+                    <!-- Form -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Crear Ticket de Soporte</div>
+                        <form class="support-form" onsubmit="handleTicketSubmit(event)">
+                            <div class="support-group">
+                                <label class="support-label">Título de la Solicitud</label>
+                                <input type="text" class="support-input" id="ticket-title" required placeholder="Ej. Error al exportar PDF">
+                            </div>
+                            <div class="support-group">
+                                <label class="support-label">Tipo de Reporte</label>
+                                <select class="support-select" id="ticket-type">
+                                    <option value="error">Reportar un error (Bug)</option>
+                                    <option value="feature">Solicitar nueva función</option>
+                                    <option value="duda">Duda operativa o consulta</option>
+                                </select>
+                            </div>
+                            <div class="support-group">
+                                <label class="support-label">Prioridad</label>
+                                <select class="support-select" id="ticket-priority">
+                                    <option value="baja">Baja (Sin urgencia)</option>
+                                    <option value="media">Media</option>
+                                    <option value="alta">Alta (Crítica)</option>
+                                </select>
+                            </div>
+                            <div class="support-group">
+                                <label class="support-label">Descripción</label>
+                                <textarea class="support-textarea" id="ticket-desc" required placeholder="Detalla paso a paso el requerimiento..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit-ticket">Enviar Solicitud</button>
+                        </form>
+                    </div>
+
+                    <!-- Ticket History -->
+                    <div class="dashboard-card">
+                        <div class="card-header-line">Historial de Tickets</div>
+                        <div class="modules-list" id="tickets-history-list">
+                            <div class="module-row" style="flex-direction:column; align-items:flex-start; gap:0.4rem">
+                                <div style="display:flex; justify-content:space-between; width:100%">
+                                    <strong>#1002 - Integrar MongoDB</strong>
+                                    <span class="status-pill done">Resuelto</span>
+                                </div>
+                                <p style="font-size:0.75rem; color:var(--text-muted)">La base de datos se conectó con éxito a Atlas.</p>
+                            </div>
+                            <div class="module-row" style="flex-direction:column; align-items:flex-start; gap:0.4rem">
+                                <div style="display:flex; justify-content:space-between; width:100%">
+                                    <strong>#1001 - Error en login</strong>
+                                    <span class="status-pill done">Resuelto</span>
+                                </div>
+                                <p style="font-size:0.75rem; color:var(--text-muted)">Se corrigieron los problemas de cifrado de contraseñas con BCrypt.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: VERSIONS -->
+            <div class="dashboard-section" id="sec-versions">
+                <div class="dashboard-card">
+                    <div class="card-header-line">Historial de Versiones</div>
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <strong>Versión 2.0 (Próximamente)</strong>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem">
+                                Integración nativa del bot de Inteligencia Artificial para atención directa por WhatsApp.
+                            </p>
+                        </div>
+                        <div class="activity-item">
+                            <strong>Versión 1.5 (Desplegado hoy)</strong>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem">
+                                Conexión con base de datos en nube, diseño del portal del cliente premium y soporte de múltiples roles.
+                            </p>
+                        </div>
+                        <div class="activity-item">
+                            <strong>Versión 1.2 (10 Jun 2026)</strong>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem">
+                                Implementación del simulador de aplicación móvil Flutter con cambio de vistas interactivo.
+                            </p>
+                        </div>
+                        <div class="activity-item">
+                            <strong>Versión 1.0 (01 Jun 2026)</strong>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem">
+                                Arquitectura inicial del backend con Spring Boot 3.x y maquetación de base de datos relacional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 9: PROFILE SETTINGS -->
+            <div class="dashboard-section" id="sec-profile">
+                <div class="dashboard-card">
+                    <div class="card-header-line">Ajustes del Perfil del Cliente</div>
+                    <form class="profile-form" onsubmit="handleProfileSubmit(event)">
+                        <div class="support-group">
+                            <label class="support-label">Nombre del Cliente</label>
+                            <input type="text" class="support-input" value="client" disabled>
+                        </div>
+                        <div class="support-group">
+                            <label class="support-label">Nombre de la Empresa</label>
+                            <input type="text" class="support-input" id="profile-company" value="Cartagena Business Inc.">
+                        </div>
+                        <div class="support-group">
+                            <label class="support-label">Correo Electrónico</label>
+                            <input type="email" class="support-input" id="profile-email" value="client@client.com">
+                        </div>
+                        <div class="support-group">
+                            <label class="support-label">Teléfono de Contacto</label>
+                            <input type="text" class="support-input" id="profile-phone" value="+57 300 123 4567">
+                        </div>
+                        <div class="support-group" style="grid-column:span 2">
+                            <label class="support-label">Preferencias de Notificaciones</label>
+                            <div style="display:flex; gap:2rem; margin-top:0.5rem; font-size:0.85rem">
+                                <label style="text-transform:none; font-weight:400; display:flex; align-items:center; gap:0.5rem">
+                                    <input type="checkbox" checked> Recibir alertas por WhatsApp
+                                </label>
+                                <label style="text-transform:none; font-weight:400; display:flex; align-items:center; gap:0.5rem">
+                                    <input type="checkbox" checked> Correos de avance semanal
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit-ticket" style="grid-column:span 2; margin-top:1rem">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Luis Devp. Portal de Seguimiento Privado de Proyectos.</p>
+    </footer>
+
+    <!-- Interactive dashboard script -->
+    <script>
+        function switchSection(secId, btnEl) {
+            // Remove active classes
+            const sections = document.querySelectorAll('.dashboard-section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+            sidebarBtns.forEach(b => b.classList.remove('active'));
+
+            // Set active
+            document.getElementById(`sec-${secId}`).classList.add('active');
+            if (btnEl) btnEl.classList.add('active');
+        }
+
+        // Ticket handler
+        function handleTicketSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('ticket-title').value.trim();
+            const type = document.getElementById('ticket-type').value;
+            const priority = document.getElementById('ticket-priority').value;
+            const desc = document.getElementById('ticket-desc').value.trim();
+
+            if(!title || !desc) return;
+
+            const list = document.getElementById('tickets-history-list');
+            const row = document.createElement('div');
+            row.className = 'module-row';
+            row.style.flexDirection = 'column';
+            row.style.alignItems = 'flex-start';
+            row.style.gap = '0.4rem';
+            row.innerHTML = `
+                <div style="display:flex; justify-content:space-between; width:100%">
+                    <strong>#1003 - ${title}</strong>
+                    <span class="status-pill progress">Abierto</span>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-muted)">${desc}</p>
+            `;
+
+            list.insertBefore(row, list.firstChild);
+
+            document.getElementById('ticket-title').value = '';
+            document.getElementById('ticket-desc').value = '';
+
+            alert('Ticket de soporte registrado con éxito.');
+        }
+
+        // Profile handler
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+            alert('Ajustes del perfil del cliente actualizados con éxito.');
+        }
+
+        // AI Chat handler
+        function handleAiKeyPress(e) {
+            if (e.key === 'Enter') sendAiMessage();
+        }
+
+        function sendAiMessage() {
+            const input = document.getElementById('ai-input');
+            const text = input.value.trim().toLowerCase();
+            if(!text) return;
+
+            appendAiBubble(input.value.trim(), 'user');
+            input.value = '';
+
+            let reply = "Lo siento, soy un asistente virtual limitado a la información de tu proyecto actual. Pregúntame sobre el 'avance', las 'tecnologías', o 'cuándo termina'.";
+
+            if (text.includes('avance') || text.includes('va') || text.includes('estado')) {
+                reply = "Tu proyecto 'Sistema de Gestión Veterinaria Premium' va en un <strong>60% de avance</strong>. Nos encontramos actualmente finalizando la fase 5 (Backend y controladores de facturación).";
+            } else if (text.includes('tecnologia') || text.includes('lenguaje') || text.includes('base de datos')) {
+                reply = "El sistema está construido utilizando: <strong>Spring Boot (Java)</strong> en el backend, <strong>MongoDB</strong> como base de datos ágil, <strong>Docker</strong> para contenedores, y <strong>Flutter</strong> para el desarrollo de la aplicación móvil.";
+            } else if (text.includes('termina') || text.includes('fecha') || text.includes('entrega')) {
+                reply = "La fecha estimada de entrega final del proyecto es el <strong>15 de Julio de 2026</strong>. Todo marcha según el cronograma establecido.";
+            } else if (text.includes('modulo') || text.includes('falta')) {
+                reply = "Módulos completados: Dashboard y Roles. Módulos en desarrollo: Inventarios y Ventas. Módulos pendientes: Reportes interactivos e Inteligencia Artificial.";
+            } else if (text.includes('documentacion') || text.includes('manual') || text.includes('diagrama')) {
+                reply = "Toda la documentación (diagrama de base de datos, propuesta técnica, arquitectura, etc.) está disponible en la pestaña <strong>Documentación</strong> en el menú lateral izquierdo de tu portal.";
+            }
+
+            setTimeout(() => {
+                appendAiBubble(reply, 'bot');
+            }, 1000);
+        }
+
+        function appendAiBubble(text, sender) {
+            const board = document.getElementById('ai-chat-board');
+            const bubble = document.createElement('div');
+            bubble.className = `ai-bubble ${sender}`;
+            bubble.innerHTML = text;
+            board.appendChild(bubble);
+            board.scrollTop = board.scrollHeight;
+        }
+    </script>
+</body>
+</html>

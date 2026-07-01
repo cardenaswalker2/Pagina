@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: platform
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/software_agency}
+  thymeleaf:
+    cache: false # Desactivar cache para desarrollo en caliente
+    prefix: classpath:/templates/
+    suffix: .html
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:407765654C46566864477367543239324E483038676B744A6267794B37775953}
+    expiration-ms: 86400000 # 1 día

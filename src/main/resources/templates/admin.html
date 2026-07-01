@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | Luis Devp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #FAF9F6;
+            --bg-secondary: #F3F1EC;
+            --accent-color: #8C6D58; /* Warm copper */
+            --accent-hover: #755B49;
+            --text-main: #2C2A29;
+            --text-muted: #7A7571;
+            --border-color: rgba(44, 42, 41, 0.08);
+            --card-bg: #FFFFFF;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 15px rgba(140, 109, 88, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* Container */
+        .admin-container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            width: 100%;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card h3 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+
+        .data-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .section-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">Luis Devp [ADMIN]</div>
+        <ul class="nav-links">
+            <li><a href="/simulador">Simuladores</a></li>
+            <li><a href="/calculadora">Calculadora de Costos</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/logout" style="color:red">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Admin Wrapper -->
+    <div class="admin-container">
+        <h2 style="font-weight:800; font-size:2rem; letter-spacing:-0.5px">Control Operativo de la Agencia</h2>
+
+        <!-- KPI Grid -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3>Proyectos en Marcha</h3>
+                <p th:text="${#lists.size(projects)}">2</p>
+            </div>
+            <div class="stat-card">
+                <h3>Propuestas de Clientes</h3>
+                <p th:text="${#lists.size(quotations)}">15</p>
+            </div>
+            <div class="stat-card">
+                <h3>Leads de Contacto</h3>
+                <p th:text="${#lists.size(leads)}">8</p>
+            </div>
+        </div>
+
+        <!-- 1. Cotizaciones Recibidas -->
+        <section class="data-section">
+            <h3 class="section-header">Propuestas Solicitadas (Calculadora)</h3>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Email</th>
+                            <th>Plataforma</th>
+                            <th>Urgencia</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="q : ${quotations}">
+                            <td th:text="${q.clientName}">Carlos Pérez</td>
+                            <td th:text="${q.clientEmail}">carlos@perez.com</td>
+                            <td th:text="${q.projectType}">App Móvil</td>
+                            <td th:text="${q.urgency}">Alta</td>
+                            <td th:text="${q.status}">PENDIENTE</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(quotations)}">
+                            <td colspan="5" style="text-align:center; color:var(--text-muted)">No hay registros.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 2. Leads de Contacto -->
+        <section class="data-section">
+            <h3 class="section-header">Contactos y Mensajes Capturados</h3>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="l : ${leads}">
+                            <td th:text="${l.name}">Juan Gómez</td>
+                            <td th:text="${l.email}">juan@gmail.com</td>
+                            <td th:text="${l.phone}">+54 9 11 2345 6789</td>
+                            <td th:text="${l.message}">Detalles...</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(leads)}">
+                            <td colspan="4" style="text-align:center; color:var(--text-muted)">No hay leads.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Luis Devp. Consola Operativa Interna.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,2850 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Builder & Simulador | Luis Devp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Space+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #FAF8F5;
+            --bg-secondary: #F3F1EC;
+            --accent-color: #8C6D58; /* Warm copper/brown */
+            --accent-hover: #755B49;
+            --text-main: #2C2A29;
+            --text-muted: #7A7571;
+            --border-color: rgba(44, 42, 41, 0.08);
+            --card-bg: #FFFFFF;
+            --font-family: 'Outfit', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            --shadow: 0 4px 15px rgba(140, 109, 88, 0.03);
+            --success-color: #10b981;
+            --success-bg: #E6F7F0;
+            --danger-color: #ef4444;
+            --danger-bg: #FEE2E2;
+            --warning-color: #f59e0b;
+            --warning-bg: #FEF3C7;
+        }
+
+        body.theme-dark {
+            --bg-primary: #1C1917;
+            --bg-secondary: #292524;
+            --text-main: #F5F5F4;
+            --text-muted: #A8A29E;
+            --card-bg: #292524;
+            --border-color: rgba(245, 245, 244, 0.1);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        body.theme-neon {
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --accent-color: #06B6D4;
+            --accent-hover: #0891B2;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --card-bg: #1E293B;
+            --border-color: rgba(248, 250, 252, 0.1);
+        }
+
+        body.font-serif { --font-family: 'Playfair Display', serif; }
+        body.font-mono { --font-family: 'Space Mono', monospace; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Header */
+        nav {
+            background: rgba(250, 248, 245, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        body.theme-dark nav { background: rgba(28, 25, 23, 0.9); }
+        body.theme-neon nav { background: rgba(15, 23, 42, 0.9); }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .nav-links .btn-acc-client {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Layout */
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 290px 1fr 310px;
+            gap: 1.2rem;
+            padding: 1.5rem 2.5rem;
+            flex: 1;
+            max-width: 1650px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media(max-width: 1200px) {
+            .builder-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        aside, main, .widget-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .sidebar-title-container {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+        }
+
+        .sidebar-title-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .sidebar-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .sidebar-info-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Checklists and Lists styling */
+        .sidebar-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .sidebar-list li svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--accent-color);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .recommendation-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            font-size: 0.85rem;
+        }
+
+        .recommendation-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .recommendation-list li .chk-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--text-main);
+            color: var(--bg-primary);
+            font-size: 0.65rem;
+            font-weight: 800;
+        }
+
+        .support-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .support-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .exclusive-badge {
+            background: #F3F1EC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .exclusive-badge svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--accent-color);
+            flex-shrink: 0;
+        }
+
+        .clock-card {
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .clock-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .clock-row svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-muted);
+        }
+
+        .clock-time {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 0.2rem;
+        }
+
+        /* Workspace Inner Navigation */
+        .workspace-inner {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            gap: 1.2rem;
+            position: relative;
+        }
+
+        .workspace-menu {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .workspace-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 20px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .workspace-menu-item svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .workspace-menu-item.active {
+            background: var(--bg-secondary);
+            color: var(--text-main);
+        }
+
+        /* Dashboard widgets layout */
+        .dash-widget-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        @media(max-width: 768px) {
+            .dash-widget-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.2rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .kpi-icon-container {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .kpi-icon-container.blue { background: #EFF6FF; color: #3B82F6; }
+        .kpi-icon-container.green { background: #E6F7F0; color: #10B981; }
+        .kpi-icon-container.orange { background: #FEF3C7; color: #F59E0B; }
+
+        .kpi-icon-container svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .kpi-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .kpi-info h4 {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .kpi-val-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .kpi-info p {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .kpi-trend {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--success-color);
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .kpi-subtext {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Lists layout bitacora / tareas */
+        .dashboard-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        @media(max-width: 768px) {
+            .dashboard-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .col-card {
+            background: #FAF8F5;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .col-card h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Buttons styling */
+        .btn-primary {
+            background: var(--accent-color);
+            border: none;
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-outline-brown {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn-outline-brown:hover {
+            background: rgba(140, 109, 88, 0.05);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Interactive table CRUD */
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 300px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .table-responsive {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .crud-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .crud-table th, .crud-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .crud-table th {
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .badge-status {
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-success { background: var(--success-bg); color: var(--success-color); }
+        .badge-pending { background: var(--warning-bg); color: var(--warning-color); }
+        .badge-danger { background: var(--danger-bg); color: var(--danger-color); }
+
+        /* Module access grid */
+        .modules-quick-access {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.8rem;
+        }
+
+        @media(max-width: 992px) {
+            .modules-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media(max-width: 576px) {
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .module-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.4rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .module-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
+        .module-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #EFF6FF;
+            color: #3B82F6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.2rem;
+        }
+
+        .module-card-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .module-card h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .module-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .module-card .btn-ir {
+            margin-top: 0.4rem;
+            background: #FAF8F5;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.25rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .module-card .btn-ir:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Banner security */
+        .security-banner {
+            background: #E6F7F0;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .security-banner svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--success-color);
+            flex-shrink: 0;
+        }
+
+        /* SVGs & Charts */
+        .chart-container {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 150px;
+        }
+
+        /* Calendar */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+            text-align: center;
+        }
+
+        .calendar-cell {
+            padding: 0.6rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .calendar-cell:hover {
+            background: var(--border-color);
+        }
+
+        .calendar-cell.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        /* Timeline Activities */
+        .activity-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            border-left: 2px solid var(--border-color);
+            padding-left: 1rem;
+        }
+
+        .activity-node {
+            position: relative;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .activity-node::before {
+            content: '';
+            position: absolute;
+            left: calc(-1rem - 6px);
+            top: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        /* Smartphone simulator */
+        .phone-mockup-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .phone-shell {
+            width: 278px;
+            height: 520px;
+            background: #000000;
+            border: 10px solid #1A1A1A;
+            border-radius: 36px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            margin: 0 auto;
+        }
+
+        .phone-shell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 18px;
+            background: #1A1A1A;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 10;
+        }
+
+        .phone-view {
+            flex: 1;
+            background: #FAF8F5;
+            color: #2C2A29;
+            padding: 2rem 0.8rem 0.6rem 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .phone-app-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .phone-app-header-left svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--accent-color);
+        }
+
+        .phone-app-title-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-app-title-text h4 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--text-main);
+        }
+
+        .phone-app-title-text span {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .phone-badge-available {
+            background: #E6F7F0;
+            color: #10B981;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .phone-badge-available::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: #10B981;
+            border-radius: 50%;
+        }
+
+        .phone-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.8rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .phone-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .phone-card-icon-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #EFF6FF;
+            color: #3B82F6;
+            flex-shrink: 0;
+        }
+
+        .phone-card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            flex: 1;
+            padding-right: 1rem;
+        }
+
+        .phone-card-text strong {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .phone-card-text p {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            line-height: 1.2;
+            font-weight: 500;
+        }
+
+        .phone-card-arrow {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        .phone-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+            margin: 0.4rem 0 0.1rem 0;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .phone-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .phone-row-item {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.5rem 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .phone-row-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .phone-row-icon-box {
+            width: 28px;
+            height: 28px;
+            border-radius: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .phone-row-text {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding-right: 0.8rem;
+        }
+
+        .phone-row-text strong {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .phone-row-text p {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .phone-row-arrow {
+            position: absolute;
+            right: 0.6rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        .phone-tabs {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-top: 0.4rem;
+            border-top: 1px solid var(--border-color);
+            background: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .phone-tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.6rem;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.15rem;
+            flex: 1;
+            transition: var(--transition);
+        }
+
+        .phone-tab-btn svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+        }
+
+        .phone-tab-btn.active {
+            color: var(--accent-color);
+        }
+
+        /* Floating action middle tab for Services */
+        .phone-tab-btn-floating {
+            background: var(--accent-color) !important;
+            color: #FFFFFF !important;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(140, 109, 88, 0.3);
+            margin-top: -12px;
+            flex: 0 0 34px !important;
+        }
+
+        .phone-tab-btn-floating svg {
+            width: 16px;
+            height: 16px;
+            fill: #FFFFFF !important;
+        }
+
+        /* Tips and Star cards */
+        .bullet-list-triangle {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .bullet-list-triangle li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .bullet-list-triangle li span {
+            color: var(--accent-color);
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        .motivational-quote {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--text-main);
+            line-height: 1.4;
+            font-weight: 500;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 0.6rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Floating Settings configuration triggers */
+        .config-toggle-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .config-toggle-btn:hover {
+            transform: rotate(30deg);
+            border-color: var(--accent-color);
+        }
+
+        .config-toggle-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-main);
+        }
+
+        /* Configuration Side drawer */
+        .config-drawer {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+            z-index: 2000;
+            transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .config-drawer.open {
+            left: 0;
+        }
+
+        .config-drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+        }
+
+        .config-drawer-header h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .config-drawer-header button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .form-select {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .module-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-theme-selector {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 6px;
+            color: var(--text-main);
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .btn-theme-selector.active {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        /* Floating AI support widget */
+        .ai-chat-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: none;
+            box-shadow: 0 4px 15px rgba(140, 109, 88, 0.3);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4000;
+            transition: var(--transition);
+        }
+
+        .ai-chat-btn:hover {
+            transform: scale(1.05);
+            background-color: var(--accent-hover);
+        }
+
+        .ai-chat-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .ai-chat-box {
+            position: fixed;
+            bottom: 6.5rem;
+            right: 2rem;
+            width: 360px;
+            height: 480px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            display: none;
+            flex-direction: column;
+            z-index: 4000;
+            overflow: hidden;
+        }
+
+        .ai-chat-box.open {
+            display: flex;
+        }
+
+        .ai-chat-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-chat-header h4 {
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .ai-chat-header span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            padding: 1.2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .chat-msg.bot {
+            background: var(--bg-secondary);
+            align-self: flex-start;
+            color: var(--text-main);
+        }
+
+        .chat-msg.user {
+            background: var(--accent-color);
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .ai-chat-input-area {
+            padding: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .ai-send-btn {
+            background: var(--accent-color);
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ai-send-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Modal CRUD */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            z-index: 5000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 460px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.65rem 0.9rem;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 6000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast-msg {
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent-color);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            animation: slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slide-in {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Loading skeleton */
+        .skeleton-loader {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .skeleton-block {
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-glow 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes skeleton-glow {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: var(--bg-primary);
+            margin-top: auto;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
+        <ul class="nav-links">
+            <li><a href="/simulador" style="color:var(--text-main)">Simuladores</a></li>
+            <li><a href="/casos">Casos de Éxito</a></li>
+            <li><a href="/cliente" class="btn-warm" style="box-shadow:none; padding: 0.5rem 1.1rem; border-radius: 6px; font-size: 0.9rem;">Portal del Cliente</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Software Builder Dashboard Layout -->
+    <div class="builder-layout">
+        
+        <!-- Left Panel: Information Card (dynamically updated) -->
+        <aside id="info-sidebar">
+            <div class="sidebar-title-container">
+                <div class="sidebar-title-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                </div>
+                <h3 class="sidebar-title" id="info-sidebar-title">Información del Sistema</h3>
+            </div>
+            
+            <p class="sidebar-info-text" id="info-sidebar-desc">
+                Bienvenido al sistema de gestión de <strong>Hotel & Glamping Manager</strong>. Aquí podrás administrar habitaciones, reservas, huéspedes, reportes, agenda y más, de forma fácil y segura.
+            </p>
+
+            <h4 class="sidebar-subtitle">¿Qué puedes hacer?</h4>
+            <ul class="sidebar-list" id="info-actions-list">
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    Gestionar habitaciones y servicios
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    Registrar huéspedes y reservas
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>
+                    Controlar ingresos y ocupación
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                    Generar reportes y estadísticas
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                    Revisar agenda y tareas
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    Configuración del sistema
+                </li>
+            </ul>
+
+            <h4 class="sidebar-subtitle">Recomendaciones</h4>
+            <ul class="recommendation-list">
+                <li><div class="chk-circle">✓</div> Mantén la información actualizada</li>
+                <li><div class="chk-circle">✓</div> Realiza respaldos periódicos</li>
+                <li><div class="chk-circle">✓</div> Cierra sesión al terminar tu jornada</li>
+                <li><div class="chk-circle">✓</div> Usa navegadores actualizados</li>
+            </ul>
+
+            <div class="support-card">
+                <div class="support-header">
+                    <!-- Headset Icon -->
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:var(--accent-color)"><path d="M12 2c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
+                    Soporte
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.4">Si necesitas ayuda o tienes algún inconveniente, contacta al administrador del sistema.</p>
+            </div>
+
+            <div class="exclusive-badge">
+                <!-- Shield Icon -->
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15l-4-4 1.41-1.41L10 13.17l5.59-5.59L17 9l-7 7z"/></svg>
+                <div>
+                    <strong style="display:block; font-size:0.85rem">Uso exclusivo</strong>
+                    <span style="font-size:0.75rem; color:var(--text-muted)">Sistema de uso interno. Acceso solo para personal autorizado.</span>
+                </div>
+            </div>
+
+            <div class="clock-card">
+                <div class="clock-row">
+                    <!-- Calendar Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                    Fecha y Hora Actual
+                </div>
+                <div class="clock-time" id="live-date">30 de junio de 2026</div>
+                <div class="clock-row" style="margin-top:0.2rem">
+                    <!-- Clock Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                    <span id="live-clock" style="font-size:0.95rem; font-weight:800; color:var(--text-main)">10:24:35 AM</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Panel: The Generated Software Interface -->
+        <main id="software-main">
+            <div class="workspace-inner">
+                
+                <!-- Workspace navigation tabs -->
+                <ul class="workspace-menu" id="work-tabs">
+                    <li class="workspace-menu-item active" id="tab-dash" onclick="switchActiveSection('dash')">
+                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                        Dashboard
+                    </li>
+                    <li class="workspace-menu-item" id="tab-crud" onclick="switchActiveSection('crud')">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        Clientes & Registros
+                    </li>
+                    <li class="workspace-menu-item" id="tab-charts" onclick="switchActiveSection('charts')">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                        Reportes & Gráficas
+                    </li>
+                    <li class="workspace-menu-item" id="tab-cal" onclick="switchActiveSection('cal')">
+                        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                        Agenda
+                    </li>
+                </ul>
+
+                <!-- Loading skeleton view -->
+                <div class="skeleton-loader" id="skel-view">
+                    <div class="skeleton-block" style="height:40px; width:40%;"></div>
+                    <div class="skeleton-block" style="height:100px;"></div>
+                    <div class="skeleton-block" style="height:200px;"></div>
+                </div>
+
+                <!-- SECTION 1: Dashboard -->
+                <div class="ws-section" id="sec-dash" style="display:flex; flex-direction:column; gap:1.2rem">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <h2 id="dash-heading" style="font-weight:800; font-size:1.6rem; letter-spacing:-0.5px">Hotel & Glamping Manager</h2>
+                        <span class="badge-status badge-success" style="display:flex; align-items:center; gap:0.3rem">
+                            Conectado a MongoDB
+                        </span>
+                    </div>
+
+                    <!-- Metrics cards -->
+                    <div class="dash-widget-grid" id="metrics-container">
+                        <!-- Filled by Rebuild JS -->
+                    </div>
+
+                    <!-- Bitacora & Tareas columns -->
+                    <div class="dashboard-columns">
+                        <div class="col-card">
+                            <h3>BITÁCORA DE OPERACIONES</h3>
+                            <div class="activity-timeline" id="timeline-container">
+                                <!-- Filled by JS -->
+                            </div>
+                            <button class="btn-outline-brown" style="margin-top:auto" onclick="switchActiveSection('crud')">Ver bitácora completa</button>
+                        </div>
+
+                        <div class="col-card">
+                            <h3>TAREAS PENDIENTES</h3>
+                            <ul class="sidebar-list" style="gap:0.8rem" id="tasks-list">
+                                <!-- Filled by JS -->
+                            </ul>
+                            <button class="btn-primary" style="margin-top:auto" onclick="alert('Funcionalidad de tareas simula guardado en MongoDB.')">Ver todas las tareas</button>
+                        </div>
+                    </div>
+
+                    <!-- Acceso rapido a modulos -->
+                    <div class="modules-quick-access">
+                        <h3 style="font-size:0.8rem; font-weight:800; color:var(--text-main); letter-spacing:0.5px">ACCESO RÁPIDO A MÓDULOS</h3>
+                        <div class="modules-grid" id="modules-quick-grid">
+                            <!-- Filled dynamically by business config -->
+                        </div>
+                    </div>
+
+                    <!-- Security banner -->
+                    <div class="security-banner">
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15l-4-4 1.41-1.41L10 13.17l5.59-5.59L17 9l-7 7z"/></svg>
+                        <div>
+                            <strong style="display:block; font-size:0.85rem">Seguridad y Buenas Prácticas</strong>
+                            <span style="font-size:0.75rem; color:var(--text-muted)">Recuerda mantener tu información actualizada y realizar cierres diarios para un mejor control de tu negocio.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: CRUD Records -->
+                <div class="ws-section" id="sec-crud" style="display:none; flex-direction:column; gap:1.2rem">
+                    <div class="table-controls">
+                        <input type="text" class="search-input" id="crud-search" placeholder="Búsqueda rápida en tiempo real..." onkeyup="filterCrudData()">
+                        <div style="display:flex; gap:0.5rem">
+                            <button class="btn-primary" onclick="openCreateModal()">+ Registrar</button>
+                            <button class="btn-secondary" onclick="exportToCSV()">Exportar CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="crud-table" id="data-table-el">
+                            <thead>
+                                <!-- JS rendered -->
+                            </thead>
+                            <tbody>
+                                <!-- JS rendered -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: SVG Graphics -->
+                <div class="ws-section" id="sec-charts" style="display:none; flex-direction:column; gap:1.2rem">
+                    <h3>Análisis Estadístico</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem">
+                        <div class="chart-container">
+                            <h4 style="margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-muted)">Distribución Mensual</h4>
+                            <svg class="chart-svg" viewBox="0 0 400 150">
+                                <rect x="30" y="20" width="40" height="100" fill="var(--accent-color)" rx="4"/>
+                                <rect x="90" y="40" width="40" height="80" fill="var(--accent-color)" opacity="0.8" rx="4"/>
+                                <rect x="150" y="10" width="40" height="110" fill="var(--accent-color)" opacity="0.6" rx="4"/>
+                                <rect x="210" y="50" width="40" height="70" fill="var(--accent-color)" opacity="0.4" rx="4"/>
+                                <rect x="270" y="30" width="40" height="90" fill="var(--accent-color)" opacity="0.2" rx="4"/>
+                            </svg>
+                        </div>
+                        <div class="chart-container">
+                            <h4 style="margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-muted)">Desempeño Operativo</h4>
+                            <svg class="chart-svg" viewBox="0 0 400 150">
+                                <circle cx="200" cy="75" r="50" fill="none" stroke="var(--bg-secondary)" stroke-width="15"/>
+                                <circle cx="200" cy="75" r="50" fill="none" stroke="var(--accent-color)" stroke-width="15" stroke-dasharray="200 314" transform="rotate(-90 200 75)"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: Calendar -->
+                <div class="ws-section" id="sec-cal" style="display:none; flex-direction:column; gap:1.2rem">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <h3 id="calendar-month-name">Julio 2026</h3>
+                        <button class="btn-secondary" onclick="alert('Se simuló el cambio de mes en el calendario')">Próximo Mes &gt;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-container">
+                        <!-- JS rendered -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Right Panel: Smartphone Emulator & Tips -->
+        <aside id="right-panel" style="gap:1.2rem">
+            <div class="phone-mockup-container">
+                <div style="font-weight:700; font-size:0.85rem; text-align:center; color:var(--text-muted)">App Móvil</div>
+                <div class="phone-shell">
+                    <div class="phone-view" id="p-view">
+                        <!-- Top Header Bar -->
+                        <div class="phone-app-header">
+                            <div class="phone-app-header-left">
+                                <!-- Phone Icon SVG -->
+                                <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                                <div class="phone-app-title-text">
+                                    <h4>App Móvil</h4>
+                                    <span id="phone-app-subtitle">Hotel Guest App</span>
+                                </div>
+                            </div>
+                            <div class="phone-badge-available">Disponible</div>
+                        </div>
+                        
+                        <!-- Scrollable Screen Content -->
+                        <div id="phone-content-body">
+                            <!-- Dynamic screens based on active tab -->
+                        </div>
+
+                        <!-- Bottom Navigation Tabs -->
+                        <div class="phone-tabs">
+                            <button class="phone-tab-btn active" onclick="switchPhoneTab('home', this)">
+                                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                                Inicio
+                            </button>
+                            <button class="phone-tab-btn" onclick="switchPhoneTab('reservations', this)">
+                                <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                                Reservas
+                            </button>
+                            <button class="phone-tab-btn phone-tab-btn-floating" onclick="switchPhoneTab('services', this)" title="Servicios">
+                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            </button>
+                            <button class="phone-tab-btn" onclick="switchPhoneTab('chat', this)">
+                                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                                Chat
+                            </button>
+                            <button class="phone-tab-btn" onclick="switchPhoneTab('profile', this)">
+                                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                Perfil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consejos del Día Card -->
+            <div class="widget-card" style="padding:1.2rem; gap:0.8rem">
+                <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700; font-size:0.9rem">
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:var(--accent-color)"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C8.25 12.4 7.5 10.8 7.5 9c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5c0 1.8-.75 3.4-1.65 4.1z"/></svg>
+                    Consejos del Día
+                </div>
+                <ul class="bullet-list-triangle" id="tips-list">
+                    <li><span>▸</span> Revisa las tareas pendientes cada mañana.</li>
+                    <li><span>▸</span> Actualiza los ingresos al finalizar el día.</li>
+                    <li><span>▸</span> Genera reportes semanales para análisis.</li>
+                    <li><span>▸</span> Usa la app móvil para atención rápida.</li>
+                </ul>
+            </div>
+
+            <!-- Mensaje Motivacional Card -->
+            <div class="widget-card" style="padding:1.2rem; gap:0.8rem">
+                <div style="display:flex; align-items:center; gap:0.5rem; font-weight:700; font-size:0.9rem">
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:var(--accent-color)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    Mensaje Motivacional
+                </div>
+                <p class="motivational-quote" id="motivational-quote-text">
+                    "La organización y el buen servicio son la clave del éxito. ¡Sigamos creciendo juntos!"
+                </p>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Floating Configuration Drawer Button -->
+    <button class="config-toggle-btn" onclick="toggleConfigDrawer()" title="Configuración del Simulador">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+    </button>
+
+    <!-- Config side drawer -->
+    <div class="config-drawer" id="config-drawer-el">
+        <div class="config-drawer-header">
+            <h3>⚙️ Configurador</h3>
+            <button onclick="toggleConfigDrawer()">✕</button>
+        </div>
+        
+        <!-- Cartagena demanded businesses select -->
+        <div class="option-group">
+            <span class="option-label">Giro de Negocio (Cartagena)</span>
+            <select class="form-select" id="business-type" onchange="rebuildSimulator()">
+                <option value="hotel">🏨 Hotel / Hospedaje Turístico</option>
+                <option value="restaurante">🍔 Restaurante / Gastrobar</option>
+                <option value="turismo">⛵ Agencia de Turismo / Yates</option>
+                <option value="clinica">🩺 Clínica Estética / Spa</option>
+                <option value="supermercado">🛒 Supermercado / Minimarket</option>
+                <option value="farmacia">💊 Farmacia / Droguería</option>
+                <option value="taller">🚗 Rent a Car / Taller Mecánico</option>
+                <option value="inmobiliaria">🏠 Inmobiliaria / Alquileres</option>
+                <option value="logistica">⚓ Logística de Carga / Aduanas</option>
+                <option value="gimnasio">🏋️ Gimnasio / Fitness Center</option>
+            </select>
+        </div>
+
+        <!-- Modules activations toggler -->
+        <div class="option-group">
+            <span class="option-label">Módulos a Habilitar</span>
+            <div class="module-checkbox-group">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="mod-dash" checked onchange="toggleModuleView('dash')"> Dashboard KPI
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="mod-crud" checked onchange="toggleModuleView('crud')"> Registros (CRUD)
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="mod-charts" checked onchange="toggleModuleView('charts')"> Gráficas SVG
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="mod-cal" checked onchange="toggleModuleView('cal')"> Agenda / Calendario
+                </label>
+            </div>
+        </div>
+
+        <!-- Stylings customizer -->
+        <div class="option-group">
+            <span class="option-label">Estilo UI & Personalizador</span>
+            <button class="btn-theme-selector active" id="btn-t-light" onclick="applyStyleTheme('light')">Claro Minimal</button>
+            <button class="btn-theme-selector" id="btn-t-dark" onclick="applyStyleTheme('dark')">Carbón Premium</button>
+            <button class="btn-theme-selector" id="btn-t-neon" onclick="applyStyleTheme('neon')">Neon Digital</button>
+        </div>
+
+        <div class="option-group">
+            <span class="option-label">Tipografía</span>
+            <select class="form-select" id="font-select" onchange="applyStyleFont()">
+                <option value="sans">Outfit (Sans)</option>
+                <option value="serif">Playfair Display (Serif)</option>
+                <option value="mono">Space Mono (Coders)</option>
+            </select>
+        </div>
+
+        <button class="btn-primary" onclick="startTutorial(); toggleConfigDrawer();">Ver Recorrido Guiado</button>
+    </div>
+
+    <!-- Modals area -->
+    <div class="modal-overlay" id="create-modal">
+        <div class="modal-card">
+            <h3 style="font-weight:800; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem" id="modal-title-label">Registrar Nuevo</h3>
+            <div class="form-group" style="margin-top:1rem">
+                <label id="lbl-field1">Cliente / Huésped</label>
+                <input type="text" id="modal-field1">
+            </div>
+            <div class="form-group">
+                <label id="lbl-field2">Detalles / Reserva</label>
+                <input type="text" id="modal-field2">
+            </div>
+            <div class="form-group">
+                <label id="lbl-field3">Estado</label>
+                <select id="modal-field3" class="form-select">
+                    <option value="badge-success">Activo / Completado</option>
+                    <option value="badge-pending">Pendiente / Espera</option>
+                    <option value="badge-danger">Cancelado / Alerta</option>
+                </select>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem">
+                <button class="btn-secondary" onclick="closeCreateModal()">Cancelar</button>
+                <button class="btn-primary" onclick="saveRecord()">Guardar Registro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toast-wrapper"></div>
+
+    <!-- Chatbot IA context aware flotante -->
+    <button class="ai-chat-btn" onclick="toggleContextAIChat()" id="ai-context-btn">
+        <!-- Speech Bubble SVG -->
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+    </button>
+    <div class="ai-chat-box" id="ai-context-chat-box">
+        <div class="ai-chat-header">
+            <h4><span></span> Asistente IA Luis Devp</h4>
+            <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:bold" onclick="toggleContextAIChat()">✕</button>
+        </div>
+        <div class="ai-chat-messages" id="context-chat-messages">
+            <div class="chat-msg bot" id="bot-initial-msg">¡Hola! Soy tu asistente Luis Devp. ¿Quieres saber cómo funciona la base de datos MongoDB o cómo escalar este sistema?</div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" class="ai-chat-input" id="context-chat-input" placeholder="Pregunta sobre este sistema..." onkeypress="handleContextChatKeyPress(event)">
+            <button class="ai-send-btn" onclick="sendContextChatMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Luis Devp. Software Builder interactivo de alta gama para Cartagena.</p>
+    </footer>
+
+    <!-- Software builder engine script -->
+    <script>
+        // Database definitions for 10 Cartagena demand types
+        const businessConfigs = {
+            hotel: {
+                title: "Hotel & Glamping Manager",
+                desc: "Bienvenido al sistema de gestión de <strong>Hotel & Glamping Manager</strong>. Aquí podrás administrar habitaciones, reservas, huéspedes, reportes, agenda y más, de forma fácil y segura.",
+                sidebarActions: [
+                    "Gestionar habitaciones y servicios",
+                    "Registrar huéspedes y reservas",
+                    "Controlar ingresos y ocupación",
+                    "Generar reportes y estadísticas",
+                    "Revisar agenda y tareas",
+                    "Configuración del sistema"
+                ],
+                kpis: [
+                    { label: "Habitaciones Ocupadas", val: "18 / 24", icon: `<svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>`, iconColor: "blue", subtext: "75% de ocupación", trend: "↑" },
+                    { label: "Ingresos del Día", val: "$1,850,000", icon: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>`, iconColor: "green", subtext: "+8.5% vs ayer", trend: "" },
+                    { label: "Check-ins Pendientes", val: "4", icon: `<svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0-2-.9-2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>`, iconColor: "orange", subtext: "Huéspedes por llegar", trend: "" }
+                ],
+                timeline: [
+                    { time: "08:30 AM", text: "Registro cargado en base de datos." },
+                    { time: "10:15 AM", text: "Sincronización con la App Móvil finalizada." },
+                    { time: "12:00 PM", text: "Reporte generado en PDF." },
+                    { time: "02:45 PM", text: "Respaldo automático completado." },
+                    { time: "05:30 PM", text: "Alertas enviadas por WhatsApp." }
+                ],
+                tasks: [
+                    { done: true, text: "Revisar base de datos en MongoDB" },
+                    { done: false, text: "Validar registros con el cliente" },
+                    { done: false, text: "Enviar alertas automáticas por WhatsApp" },
+                    { done: false, text: "Generar reporte de ocupación semanal" },
+                    { done: false, text: "Verificar pagos pendientes" }
+                ],
+                quickModules: [
+                    { title: "Habitaciones", desc: "Administrar", icon: `<svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>` },
+                    { title: "Huéspedes", desc: "Gestionar", icon: `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>` },
+                    { title: "Reservas", desc: "Ver todas", icon: `<svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>` },
+                    { title: "Reportes", desc: "Generar", icon: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>` },
+                    { title: "Agenda", desc: "Ver agenda", icon: `<svg viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>` },
+                    { title: "Configuración", desc: "Ajustes", icon: `<svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>` }
+                ],
+                headers: ["Huésped", "Habitación", "Estado"],
+                data: [
+                    { f1: "Andrés Mendoza", f2: "Suite 104 - 3 noches", f3: "badge-success", statusText: "Hospedado" },
+                    { f1: "Sarah Jenkins", f2: "Cabaña Vista Mar - 5 noches", f3: "badge-pending", statusText: "Por llegar" },
+                    { f1: "Diego Ortega", f2: "Hab. Estándar 203", f3: "badge-danger", statusText: "Cancelado" }
+                ],
+                fieldLabels: ["Huésped", "Habitación / Tarifa", "Estado"],
+                phoneTitle: "Hotel Guest App",
+                phoneHome: `
+                    <div class="phone-card-icon-container" style="background:#EFF6FF; color:#3B82F6;">
+                        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
+                    </div>
+                    <div class="phone-card-text">
+                        <strong>Tu Habitación: 104</strong>
+                        <p>Solicitudes de servicio de habitación disponibles.</p>
+                    </div>
+                    <span class="phone-card-arrow">›</span>
+                `,
+                phoneFunctions: [
+                    { title: "Reservas", desc: "Realiza, modifica o cancela tus reservas.", icon: "📅", bg: "#EEF2FF", color: "#4F46E5", action: "switchPhoneTab('reservations')" },
+                    { title: "Check-In / Check-Out", desc: "Gestiona tu entrada y salida.", icon: "🔑", bg: "#ECFDF5", color: "#059669", action: "alert('Check-In completado de forma digital.')" },
+                    { title: "Mis Reservas", desc: "Consulta el estado de tus reservas.", icon: "💖", bg: "#FFF1F2", color: "#E11D48", action: "switchPhoneTab('reservations')" },
+                    { title: "Servicios del Hotel", desc: "Room service, limpieza, lavandería y más.", icon: "🛎️", bg: "#EFF6FF", color: "#2563EB", action: "switchPhoneTab('services')" },
+                    { title: "Facturación Móvil", desc: "Visualiza y descarga tus facturas.", icon: "📄", bg: "#FFF7ED", color: "#EA580C", action: "alert('Descargando factura en PDF...')" },
+                    { title: "Pagos en Línea", desc: "Realiza pagos seguros desde la app.", icon: "💳", bg: "#F0FDF4", color: "#16A34A", action: "switchPhoneTab('pay_screen')" },
+                    { title: "Chat con Recepción", desc: "Comunícate directamente con el hotel.", icon: "💬", bg: "#EEF2FF", color: "#3B82F6", action: "switchPhoneTab('chat')" },
+                    { title: "Solicitudes Especiales", desc: "Peticiones adicionales para tu estadía.", icon: "💟", bg: "#FFF1F2", color: "#DB2777", action: "switchPhoneTab('services')" },
+                    { title: "Promociones Exclusivas", desc: "Ofertas y descuentos solo para ti.", icon: "🔔", bg: "#FFF7ED", color: "#D97706", action: "alert('15% OFF en restaurante activado')" },
+                    { title: "Calificar tu Estadía", desc: "Comparte tu experiencia con nosotros.", icon: "⭐", bg: "#FEF9C3", color: "#CA8A04", action: "alert('Gracias por calificar con 5 estrellas!')" }
+                ],
+                tips: [
+                    "Revisa las tareas pendientes cada mañana.",
+                    "Actualiza los ingresos al finalizar el día.",
+                    "Generar reportes semanales para análisis.",
+                    "Usa la app móvil para atención rápida."
+                ],
+                quote: "La organización y el buen servicio son la clave del éxito. ¡Sigamos creciendo juntos!"
+            },
+            restaurante: {
+                title: "Gastrobar & Restaurant POS",
+                desc: "Administra y optimiza el flujo de comandas, control de inventario y facturación ágil para tu Gastrobar o Restaurante.",
+                sidebarActions: [
+                    "Tomar comandas y pedidos",
+                    "Controlar stock de insumos",
+                    "Facturar mesas y cuentas",
+                    "Sincronizar comandas de cocina",
+                    "Ver reportes de platos vendidos",
+                    "Ajustes de carta e IVA"
+                ],
+                kpis: [
+                    { label: "Mesas Activas", val: "9 / 12", icon: `<svg viewBox="0 0 24 24"><path d="M4 18h16V6H4v12zm1-11h14v9H5V7z"/></svg>`, iconColor: "blue", subtext: "75% de mesas ocupadas", trend: "" },
+                    { label: "Ventas Totales", val: "$920,000", icon: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>`, iconColor: "green", subtext: "+5.2% vs almuerzo", trend: "" },
+                    { label: "Pedidos en Cocina", val: "5", icon: `<svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0-2-.9-2-2V5c0-1.1-.9-2-2-2z"/></svg>`, iconColor: "orange", subtext: "En preparación", trend: "" }
+                ],
+                timeline: [
+                    { time: "01:00 PM", text: "Pedido mesa 5 despachado." },
+                    { time: "01:25 PM", text: "Cierre parcial de caja diurna." },
+                    { time: "02:10 PM", text: "Alerta stock bajo en mariscos." }
+                ],
+                tasks: [
+                    { done: true, text: "Imprimir reportes de cierres" },
+                    { done: false, text: "Confirmar compras con proveedores" },
+                    { done: false, text: "Verificar cuadre de caja nocturno" }
+                ],
+                quickModules: [
+                    { title: "Comandas", desc: "Administrar", icon: `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>` },
+                    { title: "Platos/Menú", desc: "Gestionar", icon: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>` },
+                    { title: "Mesas", desc: "Ver todas", icon: `<svg viewBox="0 0 24 24"><path d="M4 18h16V6H4v12zm1-11h14v9H5V7z"/></svg>` },
+                    { title: "Caja", desc: "Cerrar Caja", icon: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>` },
+                    { title: "Cocina", desc: "Ver monitor", icon: `<svg viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2z"/></svg>` },
+                    { title: "Configuración", desc: "Ajustes", icon: `<svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65z"/></svg>` }
+                ],
+                headers: ["Mesa", "Pedido", "Estado"],
+                data: [
+                    { f1: "Mesa 4", f2: "2 Cazuelas de Mariscos + Bebidas", f3: "badge-pending", statusText: "Cocinando" },
+                    { f1: "Mesa 2", f2: "1 Mojito tradicional + Entrada", f3: "badge-success", statusText: "Servido" },
+                    { f1: "Mesa 10", f2: "Cena ejecutiva premium", f3: "badge-danger", statusText: "Sin pagar" }
+                ],
+                fieldLabels: ["Número Mesa", "Detalle Pedido / Bebidas", "Estado"],
+                phoneTitle: "Gourmet Mobile",
+                phoneHome: `
+                    <div class="phone-card-icon-container" style="background:#FFF1F2; color:#E11D48;">
+                        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
+                    </div>
+                    <div class="phone-card-text">
+                        <strong>Mesa 4 Activa</strong>
+                        <p>Menú interactivo y llamada a mozo disponibles.</p>
+                    </div>
+                    <span class="phone-card-arrow">›</span>
+                `,
+                phoneFunctions: [
+                    { title: "Ver Menú Digital", desc: "Explora la carta y precios interactivos.", icon: "📖", bg: "#EEF2FF", color: "#4F46E5", action: "alert('Abriendo menú digital...')" },
+                    { title: "Llamar al Mesero", desc: "Solicita asistencia a tu mesa en vivo.", icon: "🔔", bg: "#ECFDF5", color: "#059669", action: "alert('Notificando al mesero de tu mesa...')" },
+                    { title: "Ver Mi Cuenta", desc: "Detalle de platos consumidos y total.", icon: "🧾", bg: "#FFF1F2", color: "#E11D48", action: "alert('Cargando cuenta de la mesa...')" },
+                    { title: "Reservar Mesa", desc: "Agenda una mesa para eventos especiales.", icon: "🍽️", bg: "#EFF6FF", color: "#2563EB", action: "switchPhoneTab('reservations')" },
+                    { title: "Calificar Servicio", desc: "Califica la atención y los platos.", icon: "⭐", bg: "#FEF9C3", color: "#CA8A04", action: "alert('Gracias por calificar el servicio!')" },
+                    { title: "Pagos Móviles", desc: "Paga tu cuenta de forma rápida con Stripe.", icon: "💳", bg: "#F0FDF4", color: "#16A34A", action: "switchPhoneTab('pay_screen')" },
+                    { title: "Chat con Cocina", desc: "Envía especificaciones de tu comanda.", icon: "💬", bg: "#EEF2FF", color: "#3B82F6", action: "switchPhoneTab('chat')" },
+                    { title: "Pedido Especial", desc: "Solicitudes sobre ingredientes o alergias.", icon: "🍔", bg: "#FFF1F2", color: "#DB2777", action: "alert('Especificaciones de cocina enviadas')" },
+                    { title: "Cupones de Descuento", desc: "Ofertas y promociones exclusivas hoy.", icon: "🎟️", bg: "#FFF7ED", color: "#D97706", action: "alert('Cupón de cóctel de bienvenida activado')" },
+                    { title: "Sugerencias", desc: "Buzón de opiniones para mejora continua.", icon: "✍️", bg: "#FFF7ED", color: "#EA580C", action: "alert('Sugerencia enviada de forma anónima')" }
+                ],
+                tips: [
+                    "Asegura el cierre diario antes del cambio de turno.",
+                    "Controla el stock crítico en cocina.",
+                    "Fideliza a clientes recurrentes con cupones."
+                ],
+                quote: "El sabor atrae, pero el servicio y el control hacen regresar al cliente."
+            },
+            turismo: {
+                title: "Agencia de Yates & Tours",
+                desc: "Plataforma premium para agendar paseos náuticos a las Islas del Rosario, tours históricos y reservas con pasarela de pagos.",
+                sidebarActions: [
+                    "Agendar alquiler de yates",
+                    "Registrar capitanes y tripulación",
+                    "Pasarelas de cobro online",
+                    "Seguimiento GPS de embarcación",
+                    "Reportes de ocupación de flota",
+                    "Alertas climáticas en tiempo real"
+                ],
+                kpis: [
+                    { label: "Yates Alquilados", val: "4 / 6", icon: `<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`, iconColor: "blue", subtext: "66% ocupación de flota", trend: "" },
+                    { label: "Tours del Día", val: "12 Tours", icon: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>`, iconColor: "green", subtext: "140 pasajeros en total", trend: "" },
+                    { label: "Reservas Fin de Semana", val: "22", icon: `<svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0-2-.9-2-2V5c0-1.1-.9-2-2-2z"/></svg>`, iconColor: "orange", subtext: "Confirmadas con depósito", trend: "" }
+                ],
+                timeline: [
+                    { time: "08:00 AM", text: "Zarpe de Yate Luxury 42ft." },
+                    { time: "09:30 AM", text: "Pasajeros abordando tour histórico." },
+                    { time: "11:00 AM", text: "Alquiler aprobado por pasarela Stripe." }
+                ],
+                tasks: [
+                    { done: true, text: "Verificar zarpe seguro del muelle" },
+                    { done: false, text: "Enviar recordatorio vía WhatsApp" },
+                    { done: false, text: "Verificar seguros marítimos" }
+                ],
+                quickModules: [
+                    { title: "Yates", desc: "Administrar", icon: `<svg viewBox="0 0 24 24"><path d="M4 18h16V6H4v12zm1-11h14v9H5V7z"/></svg>` },
+                    { title: "Pasajeros", desc: "Gestionar", icon: `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg>` },
+                    { title: "Capitanes", desc: "Ver todas", icon: `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg>` },
+                    { title: "Ventas", desc: "Ver caja", icon: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>` },
+                    { title: "Muelle", desc: "Ver monitor", icon: `<svg viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2z"/></svg>` },
+                    { title: "Configuración", desc: "Ajustes", icon: `<svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98z"/></svg>` }
+                ],
+                headers: ["Cliente", "Embarcación / Tour", "Estado"],
+                data: [
+                    { f1: "John Smith", f2: "Yate Luxury 42ft - Islas del Rosario", f3: "badge-success", statusText: "Zarpado" },
+                    { f1: "Mariana Silva", f2: "Tour Histórico Ciudad Amurallada", f3: "badge-pending", statusText: "Agendado" },
+                    { f1: "Juan Carlos", f2: "Alquiler Lancha Deportiva", f3: "badge-danger", statusText: "Clima adverso" }
+                ],
+                fieldLabels: ["Nombre Cliente", "Yate o Tour Seleccionado", "Estado"],
+                phoneTitle: "CartagenaTours",
+                phoneHome: `
+                    <div class="phone-card-icon-container" style="background:#EFF6FF; color:#3B82F6;">
+                        <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    </div>
+                    <div class="phone-card-text">
+                        <strong>Tour: Islas del Rosario</strong>
+                        <p>Embarque sugerido: 8:30 AM Muelle de la Bodeguita.</p>
+                    </div>
+                    <span class="phone-card-arrow">›</span>
+                `,
+                phoneFunctions: [
+                    { title: "Reservar Tour", desc: "Elige entre yates o caminatas guiadas.", icon: "⛵", bg: "#EEF2FF", color: "#4F46E5", action: "switchPhoneTab('reservations')" },
+                    { title: "Catálogo de Yates", desc: "Ver flota y especificaciones de yates.", icon: "🚤", bg: "#ECFDF5", color: "#059669", action: "alert('Cargando catálogo de yates...')" },
+                    { title: "Mi Itinerario", desc: "Consulta el horario y punto de embarque.", icon: "📅", bg: "#FFF1F2", color: "#E11D48", action: "switchPhoneTab('reservations')" },
+                    { title: "Ubicación GPS", desc: "Sigue la ruta en vivo de tu embarcación.", icon: "📍", bg: "#EFF6FF", color: "#2563EB", action: "alert('Abriendo mapa de navegación...')" },
+                    { title: "Tickets Digitales", desc: "Comprobante de abordaje en tu móvil.", icon: "🎟️", bg: "#FFF7ED", color: "#EA580C", action: "alert('Mostrando ticket QR...')" },
+                    { title: "Pagos Seguros", desc: "Paga tu tour o yate por la pasarela móvil.", icon: "💳", bg: "#F0FDF4", color: "#16A34A", action: "switchPhoneTab('pay_screen')" },
+                    { title: "Chat con Guía", desc: "Comunícate directo con tu capitán o guía.", icon: "💬", bg: "#EEF2FF", color: "#3B82F6", action: "switchPhoneTab('chat')" },
+                    { title: "Clima y Alertas", desc: "Reportes del clima marítimo de hoy.", icon: "☀️", bg: "#FFF1F2", color: "#DB2777", action: "alert('Clima habilitado para zarpe hoy.')" },
+                    { title: "Descuentos de Flota", desc: "Beneficios de temporada y millas.", icon: "🔔", bg: "#FFF7ED", color: "#D97706", action: "alert('Cupón de 10% OFF en Yates activado')" },
+                    { title: "Calificar Guía", desc: "Evalúa la experiencia del tour.", icon: "⭐", bg: "#FEF9C3", color: "#CA8A04", action: "alert('Calificación de guía enviada.')" }
+                ],
+                tips: [
+                    "Verifica diariamente el pronóstico de la Capitanía de Puerto.",
+                    "Sincroniza los itinerarios con la tripulación.",
+                    "Confirma el pago del 50% de depósito antes del zarpe."
+                ],
+                quote: "El mar y la historia de Cartagena son el mejor escenario; un gran software hace el resto."
+            }
+        };
+
+        // Populate businessConfigs fallback models with similar structures
+        const fallbackKeys = ["clinica", "supermercado", "farmacia", "taller", "inmobiliaria", "logistica", "gimnasio"];
+        fallbackKeys.forEach(k => {
+            businessConfigs[k] = JSON.parse(JSON.stringify(businessConfigs["hotel"])); // clone
+            businessConfigs[k].title = k.charAt(0).toUpperCase() + k.slice(1) + " System";
+        });
+
+        // Specific modifications to fallbacks
+        businessConfigs["clinica"].title = "Centro de Estética & Spa";
+        businessConfigs["clinica"].desc = "Administra historias clínicas simplificadas, agendamiento de citas, cabinas disponibles y terapeutas asignados.";
+        businessConfigs["clinica"].phoneTitle = "AestheticSpa App";
+        businessConfigs["clinica"].phoneHome = `
+            <div class="phone-card-icon-container" style="background:#FFF1F2; color:#DB2777;">
+                <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="phone-card-text">
+                <strong>Tu Próxima Cita</strong>
+                <p>Masaje relajante mañana a las 4:00 PM con Dra. Lucía.</p>
+            </div>
+            <span class="phone-card-arrow">›</span>
+        `;
+        businessConfigs["clinica"].phoneFunctions = [
+            { title: "Agendar Cita", desc: "Reserva cabinas de spa o consulta médica.", icon: "📅", bg: "#EEF2FF", color: "#4F46E5", action: "switchPhoneTab('reservations')" },
+            { title: "Catálogo Estético", desc: "Tratamientos corporales y faciales.", icon: "🩺", bg: "#ECFDF5", color: "#059669", action: "alert('Mostrando catálogo de spa...')" },
+            { title: "Mis Citas", desc: "Estado y horario de tus reservas médicas.", icon: "💖", bg: "#FFF1F2", color: "#E11D48", action: "switchPhoneTab('reservations')" },
+            { title: "Instrucciones", desc: "Cuidados posteriores a tratamientos.", icon: "📄", bg: "#EFF6FF", color: "#2563EB", action: "alert('Abriendo PDF de cuidados...')" },
+            { title: "Factura Médica", desc: "Historial de pagos y facturación.", icon: "🧾", bg: "#FFF7ED", color: "#EA580C", action: "alert('Cargando facturas...')" },
+            { title: "Pagar Consulta", desc: "Liquidación y copagos desde la app.", icon: "💳", bg: "#F0FDF4", color: "#16A34A", action: "switchPhoneTab('pay_screen')" },
+            { title: "Chat con Terapeuta", desc: "Soporte personalizado pre y post cita.", icon: "💬", bg: "#EEF2FF", color: "#3B82F6", action: "switchPhoneTab('chat')" },
+            { title: "Ficha Médica", desc: "Alergias e historial clínico simplificado.", icon: "📝", bg: "#FFF1F2", color: "#DB2777", action: "alert('Cargando ficha técnica...')" },
+            { title: "Membresía VIP", desc: "Puntos acumulados y descuentos premium.", icon: "🌟", bg: "#FFF7ED", color: "#D97706", action: "alert('Membresía Oro Activa')" },
+            { title: "Calificar Terapeuta", desc: "Califica la atención y experiencia.", icon: "⭐", bg: "#FEF9C3", color: "#CA8A04", action: "alert('Gracias por calificar!')" }
+        ];
+
+        businessConfigs["inmobiliaria"].title = "Inmobiliaria & Rentas Turísticas";
+        businessConfigs["inmobiliaria"].desc = "Control operativo de check-ins vacacionales, capturas de inmuebles en Bocagrande y el Centro Histórico, y comisiones.";
+        businessConfigs["inmobiliaria"].phoneTitle = "CartagenaRentals";
+        businessConfigs["inmobiliaria"].phoneHome = `
+            <div class="phone-card-icon-container" style="background:#FEF9C3; color:#CA8A04;">
+                <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            </div>
+            <div class="phone-card-text">
+                <strong>Tu Estadía: Bocagrande</strong>
+                <p>Clave del smart lock enviada a tu correo.</p>
+            </div>
+            <span class="phone-card-arrow">›</span>
+        `;
+        businessConfigs["inmobiliaria"].phoneFunctions = [
+            { title: "Reservar Estadía", desc: "Elige apartamentos o casas coloniales.", icon: "🏠", bg: "#EEF2FF", color: "#4F46E5", action: "switchPhoneTab('reservations')" },
+            { title: "Buscar Propiedad", desc: "Catálogo completo de inmuebles en Cartagena.", icon: "🔍", bg: "#ECFDF5", color: "#059669", action: "alert('Abriendo catálogo de propiedades...')" },
+            { title: "Mis Alquileres", desc: "Fechas, contratos y accesos inteligentes.", icon: "📅", bg: "#FFF1F2", color: "#E11D48", action: "switchPhoneTab('reservations')" },
+            { title: "Limpieza", desc: "Programar aseo en el inmueble.", icon: "🧹", bg: "#EFF6FF", color: "#2563EB", action: "alert('Servicio de limpieza solicitado.')" },
+            { title: "Facturas de Arriendo", desc: "Recibos e historial de pagos.", icon: "🧾", bg: "#FFF7ED", color: "#EA580C", action: "alert('Mostrando facturas...')" },
+            { title: "Pagar Reserva", desc: "Pasarela segura para abonos y depósitos.", icon: "💳", bg: "#F0FDF4", color: "#16A34A", action: "switchPhoneTab('pay_screen')" },
+            { title: "Chat con Agente", desc: "Asistencia directa 24/7.", icon: "💬", bg: "#EEF2FF", color: "#3B82F6", action: "switchPhoneTab('chat')" },
+            { title: "Soporte Inmueble", desc: "Reporta daños o fallas en el arriendo.", icon: "🛠️", bg: "#FFF1F2", color: "#DB2777", action: "alert('Mantenimiento técnico notificado.')" },
+            { title: "Descuentos VIP", desc: "Promociones exclusivas de hospedaje.", icon: "🎟️", bg: "#FFF7ED", color: "#D97706", action: "alert('Código de descuento activado.')" },
+            { title: "Calificar Inmueble", desc: "Cuéntanos sobre tu estadía.", icon: "⭐", bg: "#FEF9C3", color: "#CA8A04", action: "alert('¡Gracias por tus comentarios!')" }
+        ];
+
+        // Specific modifications to fallbacks for full dynamic mapping compatibility
+        const specificFallbacks = ["supermercado", "farmacia", "taller", "logistica", "gimnasio"];
+        specificFallbacks.forEach(k => {
+            businessConfigs[k].phoneFunctions = [
+                { title: "Ver Catálogo", desc: "Explora productos y disponibilidad.", icon: "📦", bg: "#EEF2FF", color: "#4F46E5", action: "alert('Abriendo catálogo de productos...')" },
+                { title: "Escanear Código", desc: "Escanear código de barras para precios.", icon: "🔍", bg: "#ECFDF5", color: "#059669", action: "alert('Cargando escáner de cámara móvil...')" },
+                { title: "Mis Pedidos", desc: "Rastrea tus solicitudes activas.", icon: "📅", bg: "#FFF1F2", color: "#E11D48", action: "switchPhoneTab('reservations')" },
+                { title: "Factura Electrónica", desc: "Visualiza tus comprobantes Dian.", icon: "🧾", bg: "#EFF6FF", color: "#2563EB", action: "alert('Abriendo PDF de factura...')" },
+                { title: "Pagos Móviles", desc: "Liquidar facturas y envíos desde la app.", icon: "💳", bg: "#F0FDF4", color: "#16A34A", action: "switchPhoneTab('pay_screen')" },
+                { title: "Soporte Chat", desc: "Chat directo con el administrador.", icon: "💬", bg: "#EEF2FF", color: "#3B82F6", action: "switchPhoneTab('chat')" }
+            ];
+            businessConfigs[k].phoneTitle = k.charAt(0).toUpperCase() + k.slice(1) + " App";
+            businessConfigs[k].phoneHome = `
+                <div class="phone-card-icon-container" style="background:#EEF2FF; color:#4F46E5;">
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
+                </div>
+                <div class="phone-card-text">
+                    <strong>Sistema Activo: ${k.toUpperCase()}</strong>
+                    <p>Operaciones en la base de datos MongoDB listadas en tu panel.</p>
+                </div>
+                <span class="phone-card-arrow">›</span>
+            `;
+        });
+
+        // Active State
+        let activeBusiness = "hotel";
+        let activeSection = "dash";
+        let localData = [];
+
+        // Onboarding Guided Tour settings
+        let tourStepIndex = 0;
+        const tourSteps = [
+            { target: "business-type", title: "Selector de Negocio", body: "Aquí en el panel de configuración lateral, puedes cambiar el tipo de software que deseas simular para Cartagena." },
+            { target: "mod-dash", title: "Habilitar Módulos", body: "Puedes activar o desactivar módulos del sistema en tiempo real para ver cómo se reconstruye la interfaz." },
+            { target: "work-tabs", title: "Navegación del Software", body: "Usa estas pestañas superiores para navegar entre el Dashboard, el CRUD de registros, reportes y la agenda." },
+            { target: "p-view", title: "Simulador de App Móvil", body: "A la derecha verás una réplica de la App Móvil Flutter conectada al mismo sistema en tiempo real." }
+        ];
+
+        // Date & Clock script execution
+        function updateLiveDateTime() {
+            const dateEl = document.getElementById('live-date');
+            const clockEl = document.getElementById('live-clock');
+            
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const now = new Date();
+            
+            dateEl.innerText = now.toLocaleDateString('es-ES', options);
+            
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            seconds = seconds < 10 ? '0'+seconds : seconds;
+            
+            clockEl.innerText = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+        }
+
+        // Initialize Date and Clock
+        setInterval(updateLiveDateTime, 1000);
+        updateLiveDateTime();
+
+        // Config side drawer toggler
+        function toggleConfigDrawer() {
+            const drawer = document.getElementById('config-drawer-el');
+            drawer.classList.toggle('open');
+        }
+
+        // Initialize Simulator
+        function rebuildSimulator() {
+            const selectEl = document.getElementById('business-type');
+            activeBusiness = selectEl.value;
+            const config = businessConfigs[activeBusiness];
+
+            // Setup local data copy for CRUD operations
+            localData = JSON.parse(JSON.stringify(config.data));
+
+            // Load header texts
+            document.getElementById('dash-heading').innerText = config.title;
+            document.getElementById('info-sidebar-title').innerText = "Información del Sistema";
+            document.getElementById('info-sidebar-desc').innerHTML = config.desc;
+
+            // Load side actions
+            const sideActionsContainer = document.getElementById('info-actions-list');
+            sideActionsContainer.innerHTML = "";
+            config.sidebarActions.forEach((act, idx) => {
+                let svgIcon = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
+                if (idx === 0) svgIcon = `<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>`;
+                else if (idx === 1) svgIcon = `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg>`;
+                else if (idx === 2) svgIcon = `<svg viewBox="0 0 24 24"><path d="M10 20h4V4h-4v16z"/></svg>`;
+                else if (idx === 3) svgIcon = `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>`;
+                else if (idx === 4) svgIcon = `<svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>`;
+                else if (idx === 5) svgIcon = `<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32z"/></svg>`;
+                
+                sideActionsContainer.innerHTML += `
+                    <li>
+                        ${svgIcon}
+                        ${act}
+                    </li>
+                `;
+            });
+
+            // Load KPIs
+            const kpisContainer = document.getElementById('metrics-container');
+            kpisContainer.innerHTML = "";
+            config.kpis.forEach(k => {
+                kpisContainer.innerHTML += `
+                    <div class="kpi-card">
+                        <div class="kpi-icon-container ${k.iconColor}">
+                            ${k.icon}
+                        </div>
+                        <div class="kpi-info">
+                            <h4>${k.label}</h4>
+                            <div class="kpi-val-row">
+                                <p>${k.val}</p>
+                                ${k.trend ? `<span class="kpi-trend">${k.trend}</span>` : ''}
+                            </div>
+                            <span class="kpi-subtext">${k.subtext}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Load Activities
+            const timeline = document.getElementById('timeline-container');
+            timeline.innerHTML = "";
+            config.timeline.forEach(t => {
+                timeline.innerHTML += `
+                    <div class="activity-node"><strong>${t.time}</strong> - ${t.text}</div>
+                `;
+            });
+
+            // Load Tasks
+            const tasksList = document.getElementById('tasks-list');
+            tasksList.innerHTML = "";
+            config.tasks.forEach((t, idx) => {
+                tasksList.innerHTML += `
+                    <li>
+                        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="showToast('Tarea de control completada')">
+                        ${t.text}
+                    </li>
+                `;
+            });
+
+            // Load Quick Access modules grid
+            const modulesGrid = document.getElementById('modules-quick-grid');
+            modulesGrid.innerHTML = "";
+            config.quickModules.forEach((m, idx) => {
+                let targetSec = "dash";
+                if (idx === 1) targetSec = "crud";
+                else if (idx === 3) targetSec = "charts";
+                else if (idx === 4) targetSec = "cal";
+                modulesGrid.innerHTML += `
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            ${m.icon}
+                        </div>
+                        <h4>${m.title}</h4>
+                        <p>${m.desc}</p>
+                        <button class="btn-ir" onclick="switchActiveSection('${targetSec}')">Ir</button>
+                    </div>
+                `;
+            });
+
+            // Render Table structure
+            renderTable();
+
+            // Load Calendar
+            renderCalendar();
+
+            // Load Phone Simulator Screen
+            document.getElementById('phone-app-subtitle').innerText = config.phoneTitle;
+            switchPhoneTab('home');
+
+            // Load Tips and Quotes
+            const tipsContainer = document.getElementById('tips-list');
+            tipsContainer.innerHTML = "";
+            config.tips.forEach(tip => {
+                tipsContainer.innerHTML += `<li><span>▸</span> ${tip}</li>`;
+            });
+            document.getElementById('motivational-quote-text').innerText = `"${config.quote}"`;
+
+            // Show success toast
+            showToast(`Módulo ${config.title} cargado con éxito`);
+        }
+
+        // Apply Custom style themes
+        function applyStyleTheme(theme) {
+            document.body.classList.remove('theme-dark', 'theme-neon');
+            document.getElementById('btn-t-light').classList.remove('active');
+            document.getElementById('btn-t-dark').classList.remove('active');
+            document.getElementById('btn-t-neon').classList.remove('active');
+
+            const phoneView = document.getElementById('p-view');
+            phoneView.style.background = "";
+            phoneView.style.color = "";
+
+            if (theme === 'dark') {
+                document.body.classList.add('theme-dark');
+                document.getElementById('btn-t-dark').classList.add('active');
+                phoneView.style.background = "#292524";
+                phoneView.style.color = "#F5F5F4";
+            } else if (theme === 'neon') {
+                document.body.classList.add('theme-neon');
+                document.getElementById('btn-t-neon').classList.add('active');
+                phoneView.style.background = "#1E293B";
+                phoneView.style.color = "#F8FAFC";
+            } else {
+                document.getElementById('btn-t-light').classList.add('active');
+                phoneView.style.background = "#FAF8F5";
+                phoneView.style.color = "#2C2A29";
+            }
+            showToast(`Tema cambiado a: ${theme}`);
+        }
+
+        function applyStyleFont() {
+            const font = document.getElementById('font-select').value;
+            document.body.classList.remove('font-serif', 'font-mono');
+            if (font === 'serif') document.body.classList.add('font-serif');
+            if (font === 'mono') document.body.classList.add('font-mono');
+            showToast(`Fuente cambiada a: ${font}`);
+        }
+
+        // Module views controller
+        function toggleModuleView(mod) {
+            const checked = document.getElementById(`mod-${mod}`).checked;
+            const tab = document.getElementById(`tab-${mod}`);
+
+            if (checked) {
+                tab.style.display = 'flex';
+            } else {
+                tab.style.display = 'none';
+                if (activeSection === mod) {
+                    switchActiveSection('dash'); // Fallback to dash
+                }
+            }
+            showToast(`Módulo ${mod} modificado`);
+        }
+
+        // Active sections tab selector
+        function switchActiveSection(section) {
+            // Show Skeleton Loader
+            const skel = document.getElementById('skel-view');
+            const sections = document.querySelectorAll('.ws-section');
+            
+            sections.forEach(s => s.style.display = 'none');
+            skel.style.display = 'flex';
+
+            setTimeout(() => {
+                skel.style.display = 'none';
+                
+                // Hide/Show correct tab UI
+                document.querySelectorAll('.workspace-menu-item').forEach(t => t.classList.remove('active'));
+                document.getElementById(`tab-${section}`).classList.add('active');
+                document.getElementById(`sec-${section}`).style.display = 'flex';
+                activeSection = section;
+            }, 400);
+        }
+
+        // CRUD: Render Table with localData
+        function renderTable() {
+            const config = businessConfigs[activeBusiness];
+            const table = document.getElementById('data-table-el');
+            
+            // Header
+            let ths = "";
+            config.headers.forEach(h => {
+                ths += `<th>${h}</th>`;
+            });
+            ths += `<th>Acciones</th>`;
+            table.querySelector('thead').innerHTML = `<tr>${ths}</tr>`;
+
+            // Body
+            let trs = "";
+            localData.forEach((item, idx) => {
+                trs += `
+                    <tr>
+                        <td><strong>${item.f1}</strong></td>
+                        <td>${item.f2}</td>
+                        <td><span class="badge-status ${item.f3}">${item.statusText || 'Completado'}</span></td>
+                        <td>
+                            <button class="btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem; border-radius: 4px" onclick="deleteRecord(${idx})">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            table.querySelector('tbody').innerHTML = trs;
+        }
+
+        // CRUD Actions: Create / Delete
+        function openCreateModal() {
+            const config = businessConfigs[activeBusiness];
+            document.getElementById('modal-title-label').innerText = `Agregar a ${config.title}`;
+            document.getElementById('lbl-field1').innerText = config.fieldLabels[0];
+            document.getElementById('lbl-field2').innerText = config.fieldLabels[1];
+            document.getElementById('lbl-field3').innerText = config.fieldLabels[2];
+
+            // Clear inputs
+            document.getElementById('modal-field1').value = "";
+            document.getElementById('modal-field2').value = "";
+
+            document.getElementById('create-modal').style.display = 'flex';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('create-modal').style.display = 'none';
+        }
+
+        function saveRecord() {
+            const f1Val = document.getElementById('modal-field1').value.trim();
+            const f2Val = document.getElementById('modal-field2').value.trim();
+            const f3Val = document.getElementById('modal-field3').value;
+            const statusText = document.getElementById('modal-field3').options[document.getElementById('modal-field3').selectedIndex].text;
+
+            if (!f1Val || !f2Val) {
+                alert("Completa todos los campos obligatorios.");
+                return;
+            }
+
+            localData.push({
+                f1: f1Val,
+                f2: f2Val,
+                f3: f3Val,
+                statusText: statusText
+            });
+
+            renderTable();
+            closeCreateModal();
+            showToast("Registro guardado con éxito.");
+        }
+
+        function deleteRecord(index) {
+            localData.splice(index, 1);
+            renderTable();
+            showToast("Registro eliminado.");
+        }
+
+        // Live Search Filter
+        function filterCrudData() {
+            const query = document.getElementById('crud-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#data-table-el tbody tr');
+
+            rows.forEach(r => {
+                const text = r.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    r.style.display = "";
+                } else {
+                    r.style.display = "none";
+                }
+            });
+        }
+
+        // Export data to CSV
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Columna1,Columna2,Estado\n";
+
+            localData.forEach(r => {
+                csvContent += `"${r.f1}","${r.f2}","${r.statusText}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `datos_${activeBusiness}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Archivo CSV descargado.");
+        }
+
+        // Render Calendar
+        function renderCalendar() {
+            const cal = document.getElementById('calendar-container');
+            cal.innerHTML = "";
+            for (let i = 1; i <= 31; i++) {
+                const isEvent = i === 12 || i === 24;
+                cal.innerHTML += `
+                    <div class="calendar-cell ${isEvent ? 'has-event' : ''}" onclick="clickCalendarDay(${i})">
+                        ${i}
+                    </div>
+                `;
+            }
+        }
+
+        function clickCalendarDay(day) {
+            showToast(`Citas para el día ${day} cargadas.`);
+        }
+
+        // Phone screen simulator tab manager
+        function switchPhoneTab(tab, btn) {
+            // Find tab button element to set active state
+            const tabsContainer = document.querySelector('.phone-tabs');
+            if (tabsContainer) {
+                const btns = tabsContainer.querySelectorAll('.phone-tab-btn');
+                btns.forEach(b => b.classList.remove('active'));
+            }
+            
+            // Set active state on the button that matches current tab
+            if (btn) {
+                btn.classList.add('active');
+            } else if (tabsContainer) {
+                // Fallback: search by onclick attribute prefix
+                const matchBtn = Array.from(tabsContainer.querySelectorAll('.phone-tab-btn')).find(b => b.getAttribute('onclick').includes(`'${tab}'`));
+                if (matchBtn) matchBtn.classList.add('active');
+            }
+
+            const body = document.getElementById('phone-content-body');
+            const config = businessConfigs[activeBusiness];
+            const phoneView = document.getElementById('p-view');
+
+            if (tab === 'home') {
+                body.style.display = 'flex';
+                body.style.flexDirection = 'column';
+                body.style.gap = '0.6rem';
+                
+                body.innerHTML = `
+                    <!-- Active Room/Service card -->
+                    <div class="phone-card" onclick="switchPhoneTab('reservations')">
+                        ${config.phoneHome}
+                    </div>
+ 
+                    <!-- Title -->
+                    <h5 class="phone-section-title">Funciones Disponibles</h5>
+ 
+                    <!-- Dynamic functions list -->
+                    <div class="phone-list-container">
+                        ${(config.phoneFunctions || []).map(item => `
+                            <div class="phone-row-item" onclick="${item.action}">
+                                <div class="phone-row-icon-box" style="background:${item.bg}; color:${item.color};">${item.icon}</div>
+                                <div class="phone-row-text">
+                                    <strong>${item.title}</strong>
+                                    <p>${item.desc}</p>
+                                </div>
+                                <span class="phone-row-arrow">›</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (tab === 'reservations') {
+                body.innerHTML = `
+                    <div style="font-weight:700; font-size:0.85rem; border-bottom:1px solid var(--border-color); padding-bottom:0.3rem">Mis Reservas Activas</div>
+                    <div class="phone-card" style="margin-top:0.5rem">
+                        <div class="phone-row-text">
+                            <strong>Suite Premium 104</strong>
+                            <p>Fecha: 30 Jun - 03 Jul (3 noches)</p>
+                            <p style="color:#10B981; font-weight:bold; margin-top:0.2rem">✓ Confirmada</p>
+                        </div>
+                    </div>
+                    <div class="phone-card">
+                        <div class="phone-row-text">
+                            <strong>Reserva Futura: Cabaña Glamping</strong>
+                            <p>Fecha: 15 Ago - 18 Ago</p>
+                            <p style="color:#F59E0B; font-weight:bold; margin-top:0.2rem">⏳ Pago Pendiente</p>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="font-size:0.75rem; width:100%" onclick="alert('Redirigiendo al selector de habitaciones en el motor de reservas.')">Nueva Reserva</button>
+                `;
+            } else if (tab === 'services') {
+                body.innerHTML = `
+                    <div style="font-weight:700; font-size:0.85rem; border-bottom:1px solid var(--border-color); padding-bottom:0.3rem">Solicitar Servicios</div>
+                    <div class="phone-list-container" style="margin-top:0.5rem">
+                        <div class="phone-row-item" onclick="alert('Solicitud enviada: Limpieza de habitación agendada.')">
+                            <div class="phone-row-icon-box" style="background:#EEF2FF;">🧹</div>
+                            <div class="phone-row-text"><strong>Limpieza</strong><p>Programar aseo hoy.</p></div>
+                        </div>
+                        <div class="phone-row-item" onclick="alert('Abriendo menú digital de Room Service en el hotel.')">
+                            <div class="phone-row-icon-box" style="background:#FFF7ED;">🍔</div>
+                            <div class="phone-row-text"><strong>Room Service</strong><p>Pedir comida a la habitación.</p></div>
+                        </div>
+                        <div class="phone-row-item" onclick="alert('Solicitud enviada: Recogida de ropa de lavandería agendada.')">
+                            <div class="phone-row-icon-box" style="background:#FFF1F2;">🧺</div>
+                            <div class="phone-row-text"><strong>Lavandería</strong><p>Servicio de lavado y planchado.</p></div>
+                        </div>
+                        <div class="phone-row-item" onclick="alert('Mantenimiento técnico notificado. Iremos en breve.')">
+                            <div class="phone-row-icon-box" style="background:#F0FDF4;">🛠️</div>
+                            <div class="phone-row-text"><strong>Soporte Técnico</strong><p>Reportar fallas en la habitación.</p></div>
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'chat') {
+                body.innerHTML = `
+                    <div style="font-weight:700; font-size:0.85rem; border-bottom:1px solid var(--border-color); padding-bottom:0.3rem">Canal de Recepción</div>
+                    <div class="phone-card" style="height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem" id="phone-chat-stream">
+                        <p style="background:rgba(0,0,0,0.03); padding:0.4rem; border-radius:6px; font-size:0.75rem">Luis Devp (Recepcionista): Hola Andrés, ¿te gustaría que enviemos toallas limpias o agendemos tu check-out?</p>
+                    </div>
+                    <div style="display:flex; gap:0.3rem; margin-top:0.4rem">
+                        <input type="text" id="phone-chat-input" placeholder="Mensaje..." style="flex:1; border:1px solid var(--border-color); padding:0.4rem; border-radius:6px; font-size:0.75rem" onkeypress="handlePhoneChatEnter(event)">
+                        <button class="btn-primary" style="padding:0.4rem; border-radius:6px" onclick="sendPhoneChatMessage()">✓</button>
+                    </div>
+                `;
+            } else if (tab === 'profile') {
+                body.innerHTML = `
+                    <div style="font-weight:700; font-size:0.85rem; border-bottom:1px solid var(--border-color); padding-bottom:0.3rem">Perfil del Huésped</div>
+                    <div style="text-align:center; padding:1rem 0">
+                        <div style="width:50px; height:50px; border-radius:50%; background:var(--accent-color); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto">AM</div>
+                        <h4 style="margin-top:0.5rem; font-weight:800">Andrés Mendoza</h4>
+                        <p style="font-size:0.65rem; color:var(--text-muted)">Huésped VIP - Hab. 104</p>
+                    </div>
+                    <div class="phone-card">
+                        <div class="phone-row-text">
+                            <strong>Detalles de cuenta</strong>
+                            <p>Email: andres@mendoza.com</p>
+                            <p>Check-out: 03 Julio, 11:00 AM</p>
+                        </div>
+                    </div>
+                    <button class="btn-secondary" style="font-size:0.75rem; width:100%; color:red; border-color:rgba(255,0,0,0.15)" onclick="alert('Sesión móvil cerrada.')">Cerrar Sesión</button>
+                `;
+            } else if (tab === 'pay_screen') {
+                body.innerHTML = `
+                    <div style="font-weight:700; font-size:0.85rem; border-bottom:1px solid var(--border-color); padding-bottom:0.3rem">Pagos en Línea</div>
+                    <div class="phone-card" style="display:flex; flex-direction:column; gap:0.4rem; margin-top:0.5rem">
+                        <strong>Stripe Checkout</strong>
+                        <p style="font-size:0.75rem">Total a pagar: $250,000 COP</p>
+                        <input type="text" placeholder="Número de Tarjeta" style="padding:0.4rem; border:1px solid var(--border-color); border-radius:6px; font-size:0.75rem">
+                        <button class="btn-primary" style="font-size:0.75rem; width:100%" onclick="alert('Se simuló el pago móvil de forma segura mediante Stripe.')">Realizar Pago</button>
+                    </div>
+                `;
+            }
+        }
+
+        function handlePhoneChatEnter(e) {
+            if (e.key === 'Enter') sendPhoneChatMessage();
+        }
+
+        function sendPhoneChatMessage() {
+            const input = document.getElementById('phone-chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const stream = document.getElementById('phone-chat-stream');
+            stream.innerHTML += `<p style="align-self:flex-end; background:var(--accent-color); color:#fff; padding:0.4rem; border-radius:6px; font-size:0.75rem">${text}</p>`;
+            input.value = "";
+            stream.scrollTop = stream.scrollHeight;
+
+            setTimeout(() => {
+                stream.innerHTML += `<p style="background:rgba(0,0,0,0.03); padding:0.4rem; border-radius:6px; font-size:0.75rem">Luis Devp: Entendido. Analizaremos tu requerimiento de inmediato.</p>`;
+                stream.scrollTop = stream.scrollHeight;
+            }, 1000);
+        }
+
+        // Contextual AI chatbot manager
+        function toggleContextAIChat() {
+            const chatBox = document.getElementById('ai-context-chat-box');
+            chatBox.classList.toggle('open');
+        }
+
+        function handleContextChatKeyPress(e) {
+            if (e.key === 'Enter') sendContextChatMessage();
+        }
+
+        async function sendContextChatMessage() {
+            const input = document.getElementById('context-chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendCtxMsg(text, 'user');
+            input.value = "";
+
+            try {
+                const res = await fetch('/api/public/ai-chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: `Giro de negocio activo: ${activeBusiness}. Pregunta: ${text}` })
+                });
+                const data = await res.json();
+                appendCtxMsg(data.response, 'bot');
+            } catch (err) {
+                appendCtxMsg("Tuve un problema de red, pero puedo ayudarte a estructurar este software en MongoDB y Spring Boot sin problemas.", "bot");
+            }
+        }
+
+        function appendCtxMsg(text, sender) {
+            const body = document.getElementById('context-chat-messages');
+            const div = document.createElement('div');
+            div.className = `chat-msg ${sender}`;
+            div.innerHTML = text;
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        // Onboarding guided tour steps controller
+        function startTutorial() {
+            tourStepIndex = 0;
+            const overlay = document.getElementById('create-modal'); // hide other things
+            overlay.style.display = 'none';
+            // Start guided tour
+            showToast("Iniciando recorrido guiado...");
+            alert("Recorrido guiado de prueba: usa el panel lateral para elegir entre 10 giros de negocio con base de datos MongoDB en tiempo real.");
+        }
+
+        // Toast notifications manager
+        function showToast(msg) {
+            const wrapper = document.getElementById('toast-wrapper');
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg';
+            toast.innerText = msg;
+            wrapper.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    wrapper.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initial setup on window load
+        window.onload = function() {
+            rebuildSimulator();
+        };
+    </script>
+</body>
+</html>

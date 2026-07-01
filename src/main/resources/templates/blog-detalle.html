@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${blog.title} + ' | Luis Devp'">Artículo | Luis Devp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #FAF9F6;
+            --bg-secondary: #F3F1EC;
+            --accent-color: #8C6D58; /* Warm copper */
+            --accent-hover: #755B49;
+            --text-main: #2C2A29;
+            --text-muted: #7A7571;
+            --border-color: rgba(44, 42, 41, 0.08);
+            --card-bg: #FFFFFF;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* Container */
+        .article-wrapper {
+            max-width: 750px;
+            margin: 3rem auto;
+            width: 100%;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        .btn-back {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .article-header {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .category-tag {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .article-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .article-body {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .article-body p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
+        <ul class="nav-links">
+            <li><a href="/simulador">Simuladores</a></li>
+            <li><a href="/calculadora">Calculadora de Costos</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/cliente" style="background-color: var(--accent-color); color: #fff; padding: 0.5rem 1.1rem; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.9rem;">Portal del Cliente</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main dynamic article view -->
+    <article class="article-wrapper">
+        <a href="/blog" class="btn-back">← Volver al Blog</a>
+
+        <header class="article-header">
+            <div class="article-meta">
+                <span class="category-tag" th:text="${blog.category}">BACKEND</span>
+                <span th:text="'Por ' + ${blog.author}">Luis</span>
+            </div>
+            <h1 th:text="${blog.title}">Título del Post</h1>
+        </header>
+
+        <!-- Unescaped HTML body rendering -->
+        <div class="article-body" th:utext="${blog.content}">
+            Cargando contenido...
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Luis Devp. Artículos de Ingeniería del Software.</p>
+    </footer>
+
+</body>
+</html>
