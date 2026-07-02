@@ -1644,6 +1644,15 @@
                 padding: 1.5rem;
             }
 
+            /* Calculator responsive layouts */
+            .calc-checkboxes {
+                grid-template-columns: 1fr !important;
+                gap: 0.8rem;
+            }
+            .calc-wrapper {
+                padding: 1.5rem !important;
+            }
+
             /* Table mobile wrap safety */
             .comp-table-wrapper {
                 margin: 0 -0.2rem;
@@ -2873,7 +2882,22 @@
         function solicitarCotizacionWhatsApp() {
             const typeText = document.getElementById('calc-type').selectedOptions[0].text;
             const totalText = document.getElementById('calc-total').innerText;
-            const waUrl = `https://wa.me/573005722844?text=Hola%20Luis,%20hice%20una%20cotizaci%C3%B3n%20en%20tu%20calculadora%20r%C3%A1pida:%0A-%20Tipo:%20${encodeURIComponent(typeText)}%0A-%20Estimado:%20${encodeURIComponent(totalText)}`;
+            const usersText = document.getElementById('calc-users').selectedOptions[0].text;
+            
+            // Collect checked modules
+            const modules = [];
+            if (document.getElementById('mod-app').checked) modules.push("App Móvil");
+            if (document.getElementById('mod-ia').checked) modules.push("Inteligencia Artificial");
+            if (document.getElementById('mod-dash').checked) modules.push("Dashboard Premium");
+            if (document.getElementById('mod-rep').checked) modules.push("Reportes PDF/Excel");
+            if (document.getElementById('mod-cloud').checked) modules.push("Despliegue Cloud");
+            if (document.getElementById('mod-whatsapp').checked) modules.push("Envío WhatsApp API");
+            
+            const modulesText = modules.length > 0 ? modules.join(", ") : "Ninguno";
+
+            const message = `🚀 *Luis Devp - Solicitud de Cotización* 🚀\n\nHola Luis, acabo de generar una simulación de presupuesto en tu plataforma:\n\n💻 *Detalles del Proyecto:*\n• Tipo de Software: ${typeText}\n• Módulos seleccionados: ${modulesText}\n• Usuarios: ${usersText}\n\n💵 *Estimación Aproximada:*\n• Valor estimado: ${totalText}\n\nMe gustaría conversar contigo para analizar los detalles a fondo y obtener la propuesta formal. ¡Quedo atento!`;
+
+            const waUrl = `https://wa.me/573005722844?text=${encodeURIComponent(message)}`;
             window.open(waUrl, '_blank');
         }
 
