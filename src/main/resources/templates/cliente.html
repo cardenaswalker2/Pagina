@@ -704,6 +704,309 @@
             background: var(--bg-secondary);
             margin-top: auto;
         }
+
+        /* Interactive Demo Section Styles */
+        .demo-welcome {
+            background: linear-gradient(135deg, #FFF 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border-left: 6px solid var(--accent-color);
+        }
+        .demo-welcome h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            font-family: 'Outfit', sans-serif;
+        }
+        .demo-welcome p {
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            font-size: 1.02rem;
+        }
+        
+        .demo-guide {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .demo-guide-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        .demo-guide-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+        .demo-guide-card h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+        .demo-guide-card p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .business-select-section {
+            margin-bottom: 4rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .business-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+        }
+        .business-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .business-card:hover, .business-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(140, 109, 88, 0.05);
+            transform: translateY(-2px);
+        }
+        .business-card.selected {
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+        .business-card span {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .business-card h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+        }
+        .business-card p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        /* Dual Sandbox Layout (Admin vs Client Mobile) */
+        .simulation-sandbox {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 4rem;
+            align-items: start;
+        }
+        @media(max-width: 900px) {
+            .simulation-sandbox {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                padding: 1.5rem;
+            }
+        }
+        
+        .sandbox-side {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .sandbox-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--bg-secondary);
+            padding-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        /* Simulated Mobile Phone container */
+        .sim-phone {
+            width: 320px;
+            height: 590px;
+            background: #000;
+            border-radius: 40px;
+            padding: 12px 11px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            margin: 0 auto;
+            position: relative;
+            border: 4px solid #2d2623;
+        }
+        .sim-phone-screen {
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-family: var(--font-body);
+            position: relative;
+        }
+        
+        /* Mobile phone header status bar */
+        .sim-phone-status {
+            background: var(--bg-secondary);
+            height: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sim-phone-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--bg-primary);
+        }
+        
+        /* Mini Admin Panel Simulator */
+        .sim-admin-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.8rem;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .admin-order-row {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            animation: slideIn 0.3s ease;
+        }
+        .btn-admin-action {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-admin-action:hover {
+            background: var(--accent-hover);
+        }
+
+        .cta-box-premium {
+            background: var(--text-main);
+            color: #fff;
+            border-radius: var(--radius);
+            padding: 4rem 2.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--accent-color);
+        }
+        .cta-box-premium h2 {
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            font-family: 'Outfit', sans-serif;
+        }
+        .cta-box-premium p {
+            color: var(--bg-secondary);
+            font-size: 1.08rem;
+            max-width: 750px;
+            margin: 0 auto 2.5rem auto;
+            opacity: 0.9;
+        }
+
+        .btn-sim-phone {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .btn-sim-phone:hover {
+            background: var(--accent-hover);
+        }
+        .sim-phone-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        .sim-phone-item strong {
+            display: block;
+            color: var(--accent-color);
+            margin-bottom: 0.2rem;
+        }
+        
+        .sim-phone-alert {
+            background: #D1FAE5;
+            border: 1px solid #A7F3D0;
+            color: #065F46;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: 700;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slideIn {
+            0% { transform: translateY(10px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -722,7 +1025,8 @@
     <div class="workspace">
         <!-- Sidebar controls -->
         <aside class="sidebar">
-            <button class="sidebar-btn active" onclick="switchSection('dashboard', this)">📊 General</button>
+            <button class="sidebar-btn active" onclick="switchSection('demo-interactiva', this)">✨ Demostración Interactiva</button>
+            <button class="sidebar-btn" onclick="switchSection('dashboard', this)">📊 Panel de Proyecto</button>
             <button class="sidebar-btn" onclick="switchSection('timeline', this)">📅 Cronograma</button>
             <button class="sidebar-btn" onclick="switchSection('techs', this)">🛠️ Tecnologías & Módulos</button>
             <button class="sidebar-btn" onclick="switchSection('docs', this)">📚 Documentación</button>
@@ -736,8 +1040,161 @@
         <!-- Dynamic Content Area -->
         <div class="content-area">
             
+            <!-- SECTION 0: DEMOSTRACION INTERACTIVA -->
+            <div class="dashboard-section active" id="sec-demo-interactiva">
+                <!-- Welcome Banner -->
+                <div class="demo-welcome">
+                    <h2>Así vivirán tus clientes la experiencia de tu aplicación</h2>
+                    <p>
+                        Imagina que esta es la aplicación que usarán las personas que compren tus productos, reserven tus servicios o interactúen con tu negocio. En esta demostración interactiva podrás explorar en vivo cómo sería la experiencia desde el punto de vista de tus clientes finales y cómo se sincroniza con tu panel administrativo privado.
+                    </p>
+                    <button class="btn-warm" onclick="document.getElementById('business-selector').scrollIntoView({behavior: 'smooth'})">Comenzar demostración</button>
+                </div>
+
+                <!-- Guía de Módulos Básicos -->
+                <div class="demo-guide">
+                    <div class="demo-guide-card">
+                        <h4>👤 Registro de Clientes</h4>
+                        <p>Aquí tus clientes podrán crear una cuenta en pocos segundos utilizando su información básica de contacto.</p>
+                    </div>
+                    <div class="demo-guide-card">
+                        <h4>🔑 Inicio de Sesión</h4>
+                        <p>Ingreso seguro a la aplicación móvil o web para consultar estados y beneficios personalizados.</p>
+                    </div>
+                    <div class="demo-guide-card">
+                        <h4>💼 Perfil de Usuario</h4>
+                        <p>Un espacio donde cada usuario puede actualizar su información personal o de sus mascotas/vehículos.</p>
+                    </div>
+                    <div class="demo-guide-card">
+                        <h4>📅 Módulo de Reservas</h4>
+                        <p>Donde tus clientes agendan citas, compran productos o contratan tus servicios directamente.</p>
+                    </div>
+                    <div class="demo-guide-card">
+                        <h4>📜 Historial Operativo</h4>
+                        <p>Espacio para consultar los servicios anteriores, compras o tratamientos de forma directa.</p>
+                    </div>
+                </div>
+
+                <!-- Selección de Negocio -->
+                <div class="business-select-section" id="business-selector">
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 0.5rem;">¿Quieres ver cómo utilizarían la aplicación tus clientes?</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Cada negocio es diferente. Selecciona uno de los tipos de negocio a continuación para adaptar la aplicación móvil del cliente a ese sector específico.</p>
+                    
+                    <div class="business-select-grid">
+                        <div class="business-card selected" onclick="selectBusinessDemo('restaurante', this)">
+                            <span>🍔</span>
+                            <h4>Restaurante</h4>
+                            <p>Menú digital y pedidos</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('veterinaria', this)">
+                            <span>🐶</span>
+                            <h4>Veterinaria</h4>
+                            <p>Citas de mascotas y vacunas</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('hotel', this)">
+                            <span>🏨</span>
+                            <h4>Hotel</h4>
+                            <p>Reservas y servicios extra</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('clinica', this)">
+                            <span>🩺</span>
+                            <h4>Clínica Médica</h4>
+                            <p>Consultas y recetas</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('gimnasio', this)">
+                            <span>💪</span>
+                            <h4>Gimnasio</h4>
+                            <p>Clases y membresías</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('barberia', this)">
+                            <span>💈</span>
+                            <h4>Barbería / Estética</h4>
+                            <p>Agenda de turnos y estilistas</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('tienda', this)">
+                            <span>👕</span>
+                            <h4>Tienda de Ropa</h4>
+                            <p>Catálogo y compras en línea</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('taller', this)">
+                            <span>🔧</span>
+                            <h4>Taller Automotriz</h4>
+                            <p>Reparaciones y fotos repuestos</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('colegio', this)">
+                            <span>🎓</span>
+                            <h4>Colegio / Academia</h4>
+                            <p>Calificaciones y comunicados</p>
+                        </div>
+                        <div class="business-card" onclick="selectBusinessDemo('transporte', this)">
+                            <span>🚌</span>
+                            <h4>Empresa de Transporte</h4>
+                            <p>Boletos y rutas en vivo</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-warm" style="margin-top: 1.5rem; width: 100%;" onclick="startSimSandbox()">Ver Demostración Adaptada</button>
+                </div>
+
+                <!-- Simulation Sandbox (Admin Panel vs Client Phone Mockup) -->
+                <div class="simulation-sandbox" id="simulation-sandbox-element" style="display: none;">
+                    
+                    <!-- Left: Admin Panel Simulator -->
+                    <div class="sandbox-side">
+                        <div class="sandbox-title">🛠️ Así trabaja tu negocio (Panel Administrativo)</div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top:-0.8rem;">
+                            Desde este panel, tú y tus empleados controlan las operaciones. Cuando el cliente hace una acción en su celular (derecha), aparecerá aquí de inmediato.
+                        </p>
+                        
+                        <div class="sim-admin-panel">
+                            <h4 style="font-family:'Outfit', sans-serif; font-size:0.95rem; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem;">
+                                📋 Solicitudes Entrantes (Tiempo Real)
+                            </h4>
+                            <div class="modules-list" id="admin-requests-list">
+                                <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding: 2rem 0;">Ninguna solicitud por el momento. Interactúa con el celular de la derecha para enviar una.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Client Mobile App Simulator -->
+                    <div class="sandbox-side">
+                        <div class="sandbox-title">📱 Así lo verán tus clientes (Aplicación del Cliente)</div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top:-0.8rem;">
+                            Interactúa con los botones del celular para enviar órdenes o registrar citas. ¡Es 100% interactivo!
+                        </p>
+                        
+                        <div class="sim-phone">
+                            <div class="sim-phone-screen">
+                                <div class="sim-phone-status">
+                                    <span>Luis App</span>
+                                    <span>07:32 PM</span>
+                                </div>
+                                <div class="sim-phone-body" id="phone-app-screen">
+                                    <!-- Dynamic content rendered by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Final CTA Box -->
+                <div class="cta-box-premium">
+                    <h2>¿Te imaginas una aplicación como esta personalizada para tu negocio?</h2>
+                    <p>
+                        Podemos desarrollar la plataforma, app móvil o software administrativo que tu empresa necesita para sistematizar sus procesos, sin importar el tipo de negocio.
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap;">
+                        <a href="https://wa.me/573005722844?text=Hola%20Luis%20Devp,%20estuve%20probando%20la%20demostracion%20interactiva%20y%20quiero%20cotizar%20mi%20app." target="_blank" class="btn-wa-cta">
+                            💬 Hablar con un asesor por WhatsApp
+                        </a>
+                        <a href="mailto:info@luisdevp.com" class="btn-outline" style="border-color:#fff; color:#fff !important;">Solicitar una Asesoría Gratuita</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- SECTION 1: GENERAL DASHBOARD -->
-            <div class="dashboard-section active" id="sec-dashboard">
+            <div class="dashboard-section" id="sec-dashboard">
                 <!-- Welcome Banner -->
                 <div class="welcome-banner">
                     <h2 th:text="'Bienvenido, ' + (${user != null} ? ${user.username} : 'Cliente')">Bienvenido, Cliente</h2>
@@ -1185,6 +1642,257 @@
             bubble.innerHTML = text;
             board.appendChild(bubble);
             board.scrollTop = board.scrollHeight;
+        }
+
+        // Interactive Demo States
+        let currentDemoBusiness = 'restaurante';
+        let simulatedOrders = [];
+        let simulatedCites = [];
+        let simulatedRooms = [];
+
+        function selectBusinessDemo(type, cardEl) {
+            // Remove selection state
+            const cards = document.querySelectorAll('.business-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            
+            // Set selection
+            cardEl.classList.add('selected');
+            currentDemoBusiness = type;
+        }
+
+        function startSimSandbox() {
+            // Show sandbox element
+            const sandbox = document.getElementById('simulation-sandbox-element');
+            sandbox.style.display = 'grid';
+            sandbox.scrollIntoView({ behavior: 'smooth' });
+            
+            // Clear lists
+            simulatedOrders = [];
+            simulatedCites = [];
+            simulatedRooms = [];
+            
+            // Clear simulated orders list
+            const adminList = document.getElementById('admin-requests-list');
+            adminList.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding: 2rem 0;">Ninguna solicitud por el momento. Interactúa con el celular de la derecha para enviar una.</p>';
+            
+            // Render mobile phone UI based on selected business
+            renderSimMobilePhone();
+        }
+
+        function renderSimMobilePhone() {
+            const container = document.getElementById('phone-app-screen');
+            let content = '';
+            
+            if (currentDemoBusiness === 'restaurante') {
+                content = `
+                    <div style="text-align:center; font-family:'Outfit', sans-serif; font-size:1rem; font-weight:700; color:var(--accent-color)">🍔 Luis Burguer App</div>
+                    <p style="font-size:0.75rem; text-align:center; color:var(--text-muted)">Menú e historial en tiempo real</p>
+                    
+                    <div class="sim-phone-item">
+                        <strong>Hamburguesa Criolla</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Carne 150g, queso, huevo y papas.</p>
+                        <button class="btn-sim-phone" style="margin-top:0.4rem" onclick="sendOrderSim('Hamburguesa Criolla', 15000)">Pedir - $15,000</button>
+                    </div>
+                    
+                    <div class="sim-phone-item">
+                        <strong>Malteada de Caramelo</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Helado premium de crema y salsa.</p>
+                        <button class="btn-sim-phone" style="margin-top:0.4rem" onclick="sendOrderSim('Malteada de Caramelo', 8000)">Pedir - $8,000</button>
+                    </div>
+
+                    <div id="sim-phone-status-box"></div>
+                `;
+            } else if (currentDemoBusiness === 'veterinaria') {
+                content = `
+                    <div style="text-align:center; font-family:'Outfit', sans-serif; font-size:1rem; font-weight:700; color:var(--accent-color)">🐶 VetClinic App</div>
+                    <p style="font-size:0.75rem; text-align:center; color:var(--text-muted)">Citas y control de vacunas</p>
+                    
+                    <div class="sim-phone-item">
+                        <strong>🐾 Agendar Consulta Médica</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Elige fecha y médico para tu mascota.</p>
+                        <button class="btn-sim-phone" style="margin-top:0.4rem" onclick="bookVetAppointmentSim('Consulta General')">Agendar Cita</button>
+                    </div>
+                    
+                    <div class="sim-phone-item">
+                        <strong>💉 Registro de Vacunación</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Historial de dosis aplicadas.</p>
+                        <ul style="font-size:0.68rem; padding-left:1rem; margin-top:0.3rem; color:var(--text-muted)">
+                            <li>Rabia: Aplicada ✅</li>
+                            <li>Parvovirus: Pendiente ⚠️</li>
+                        </ul>
+                    </div>
+
+                    <div id="sim-phone-status-box"></div>
+                `;
+            } else if (currentDemoBusiness === 'hotel') {
+                content = `
+                    <div style="text-align:center; font-family:'Outfit', sans-serif; font-size:1rem; font-weight:700; color:var(--accent-color)">🏨 Hotel Real Booking</div>
+                    <p style="font-size:0.75rem; text-align:center; color:var(--text-muted)">Reservas de habitaciones y servicios</p>
+                    
+                    <div class="sim-phone-item">
+                        <strong>Suite Vista al Mar</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Habitación con jacuzzi y balcón.</p>
+                        <button class="btn-sim-phone" style="margin-top:0.4rem" onclick="bookHotelRoomSim('Suite Vista al Mar')">Reservar Habitación</button>
+                    </div>
+                    
+                    <div class="sim-phone-item">
+                        <strong>Room Service (Servicio al Cuarto)</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Solicita desayuno o bebidas.</p>
+                        <button class="btn-sim-phone" style="margin-top:0.4rem" onclick="requestRoomServiceSim('Desayuno Americano')">Pedir Desayuno</button>
+                    </div>
+
+                    <div id="sim-phone-status-box"></div>
+                `;
+            } else {
+                // Generic app template fallback
+                content = `
+                    <div style="text-align:center; font-family:'Outfit', sans-serif; font-size:1rem; font-weight:700; color:var(--accent-color)">⚙️ Luis Custom App</div>
+                    <p style="font-size:0.75rem; text-align:center; color:var(--text-muted)">Simulador de requerimientos</p>
+                    
+                    <div class="sim-phone-item">
+                        <strong>Enviar Solicitud al Negocio</strong>
+                        <p style="font-size:0.72rem; color:var(--text-muted)">Prueba cómo se registra un evento.</p>
+                        <button class="btn-sim-phone" style="margin-top:0.4rem" onclick="sendGenericRequestSim('${currentDemoBusiness}')">Enviar Solicitud</button>
+                    </div>
+
+                    <div id="sim-phone-status-box"></div>
+                `;
+            }
+            
+            container.innerHTML = content;
+        }
+
+        // Action simulators
+        function sendOrderSim(item, price) {
+            const orderId = simulatedOrders.length + 101;
+            const newOrder = { id: orderId, name: item, value: '$' + price.toLocaleString('es-CO') + ' COP', status: 'Recibido' };
+            simulatedOrders.push(newOrder);
+            
+            // Show action on mobile phone
+            const statusBox = document.getElementById('sim-phone-status-box');
+            statusBox.innerHTML = `<div class="sim-phone-alert">🍔 Pedido #${orderId} enviado! Estado: Recibido</div>`;
+            
+            // Update admin panel
+            updateAdminRequests();
+        }
+
+        function bookVetAppointmentSim(type) {
+            const citeId = simulatedCites.length + 201;
+            const newCite = { id: citeId, name: 'Cita: ' + type, value: 'Mascota: Toby', status: 'Pendiente' };
+            simulatedCites.push(newCite);
+            
+            const statusBox = document.getElementById('sim-phone-status-box');
+            statusBox.innerHTML = `<div class="sim-phone-alert">🐾 Cita #${citeId} agendada! Estado: Pendiente</div>`;
+            
+            updateAdminRequests();
+        }
+
+        function bookHotelRoomSim(room) {
+            const bookingId = simulatedRooms.length + 301;
+            const newBooking = { id: bookingId, name: 'Reserva: ' + room, value: 'Habitación 402', status: 'Pendiente' };
+            simulatedRooms.push(newBooking);
+            
+            const statusBox = document.getElementById('sim-phone-status-box');
+            statusBox.innerHTML = `<div class="sim-phone-alert">🏨 Reserva #${bookingId} solicitada! Estado: Pendiente</div>`;
+            
+            updateAdminRequests();
+        }
+
+        function requestRoomServiceSim(service) {
+            const bookingId = simulatedRooms.length + 351;
+            const newBooking = { id: bookingId, name: 'Room Service: ' + service, value: 'Habitación 402', status: 'Recibido' };
+            simulatedRooms.push(newBooking);
+            
+            const statusBox = document.getElementById('sim-phone-status-box');
+            statusBox.innerHTML = `<div class="sim-phone-alert">🍳 Servicio al cuarto #${bookingId} solicitado!</div>`;
+            
+            updateAdminRequests();
+        }
+
+        function sendGenericRequestSim(business) {
+            const reqId = Math.floor(Math.random() * 1000) + 500;
+            const newReq = { id: reqId, name: 'Solicitud: ' + business, value: 'Acción de demostración', status: 'Pendiente' };
+            simulatedOrders.push(newReq);
+            
+            const statusBox = document.getElementById('sim-phone-status-box');
+            statusBox.innerHTML = `<div class="sim-phone-alert">⚙️ Solicitud #${reqId} enviada!</div>`;
+            
+            updateAdminRequests();
+        }
+
+        // Sync admin list
+        function updateAdminRequests() {
+            const list = document.getElementById('admin-requests-list');
+            list.innerHTML = '';
+            
+            // Concat arrays
+            const allItems = [...simulatedOrders, ...simulatedCites, ...simulatedRooms];
+            
+            if (allItems.length === 0) {
+                list.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding: 2rem 0;">Ninguna solicitud por el momento. Interactúa con el celular de la derecha para enviar una.</p>';
+                return;
+            }
+            
+            // Loop items
+            allItems.reverse().forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'admin-order-row';
+                
+                let actionBtn = '';
+                if (item.status === 'Recibido' || item.status === 'Pendiente') {
+                    actionBtn = `<button class="btn-admin-action" onclick="approveAdminItem(${item.id})">Aprobar / Confirmar</button>`;
+                } else if (item.status === 'Aprobado' || item.status === 'Confirmada') {
+                    actionBtn = `<span style="font-weight:700; color:var(--success-color)">Aprobado ✅</span>`;
+                }
+                
+                row.innerHTML = `
+                    <div>
+                        <strong>#${item.id} - ${item.name}</strong>
+                        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Detalle: ${item.value} | Estado: <strong>${item.status}</strong></p>
+                    </div>
+                    <div>
+                        ${actionBtn}
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        // Administrative action confirmation (sends state back to mobile phone mockup)
+        function approveAdminItem(id) {
+            // Find in orders
+            let found = simulatedOrders.find(i => i.id === id);
+            if (found) {
+                found.status = 'Aprobado';
+                // Trigger success visual state on phone mockup
+                const statusBox = document.getElementById('sim-phone-status-box');
+                if (statusBox) {
+                    statusBox.innerHTML = `<div class="sim-phone-alert" style="background:#D1FAE5; border-color:#A7F3D0; color:#065F46;">🎉 ¡Tu pedido #${id} ha sido Aprobado por el Administrador!</div>`;
+                }
+            }
+            
+            // Find in cites
+            found = simulatedCites.find(i => i.id === id);
+            if (found) {
+                found.status = 'Confirmada';
+                const statusBox = document.getElementById('sim-phone-status-box');
+                if (statusBox) {
+                    statusBox.innerHTML = `<div class="sim-phone-alert" style="background:#D1FAE5; border-color:#A7F3D0; color:#065F46;">🐾 ¡Tu Cita #${id} ha sido Confirmada! ¡Te esperamos!</div>`;
+                }
+            }
+
+            // Find in rooms
+            found = simulatedRooms.find(i => i.id === id);
+            if (found) {
+                found.status = 'Confirmada';
+                const statusBox = document.getElementById('sim-phone-status-box');
+                if (statusBox) {
+                    statusBox.innerHTML = `<div class="sim-phone-alert" style="background:#D1FAE5; border-color:#A7F3D0; color:#065F46;">🏨 ¡Reserva #${id} Confirmada con Éxito!</div>`;
+                }
+            }
+            
+            // Re-render list
+            updateAdminRequests();
         }
     </script>
 </body>
