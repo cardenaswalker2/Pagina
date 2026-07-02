@@ -1380,6 +1380,39 @@
             background: var(--accent-hover);
         }
 
+        .ai-chat-suggestions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 0.8rem 1.2rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-primary);
+        }
+        .suggestion-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .suggestion-chip:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+        .suggestion-chip.wa-chip {
+            background: #25D366;
+            border-color: #25D366;
+            color: #fff;
+            font-weight: 700;
+        }
+        .suggestion-chip.wa-chip:hover {
+            background: #128C7E;
+            border-color: #128C7E;
+        }
+
         /* Expanded Footer */
         .footer-grid {
             display: grid;
@@ -2379,10 +2412,10 @@
                 <div class="calc-group">
                     <label class="calc-label">Tipo de Software</label>
                     <select class="calc-select" id="calc-type" onchange="calculateCost()">
-                        <option value="erp">ERP / Plataforma de Gestión ($800,000 COP base)</option>
-                        <option value="app">App Móvil Híbrida ($1,200,000 COP base)</option>
-                        <option value="landing">Landing Page Interactiva ($350,000 COP base)</option>
-                        <option value="custom">Sistema a Medida Avanzado ($1,500,000 COP base)</option>
+                        <option value="erp">ERP / Plataforma de Gestión ($450,000 COP base)</option>
+                        <option value="app">App Móvil Híbrida ($600,000 COP base)</option>
+                        <option value="landing">Landing Page Interactiva ($180,000 COP base)</option>
+                        <option value="custom">Sistema a Medida Avanzado ($800,000 COP base)</option>
                     </select>
                 </div>
                 <div class="calc-group">
@@ -2398,31 +2431,31 @@
                     <label class="calc-label">Módulos Especiales</label>
                     <div class="calc-checkboxes">
                         <label class="calc-check-item">
-                            <input type="checkbox" id="mod-app" onchange="calculateCost()"> App Móvil (+ $400,000)
+                            <input type="checkbox" id="mod-app" onchange="calculateCost()"> App Móvil (+ $150,000)
                         </label>
                         <label class="calc-check-item">
-                            <input type="checkbox" id="mod-ia" onchange="calculateCost()"> Inteligencia Artificial (+ $350,000)
+                            <input type="checkbox" id="mod-ia" onchange="calculateCost()"> Inteligencia Artificial (+ $180,000)
                         </label>
                         <label class="calc-check-item">
-                            <input type="checkbox" id="mod-dash" onchange="calculateCost()"> Dashboard Premium (+ $200,000)
+                            <input type="checkbox" id="mod-dash" onchange="calculateCost()"> Dashboard Premium (+ $100,000)
                         </label>
                         <label class="calc-check-item">
-                            <input type="checkbox" id="mod-rep" onchange="calculateCost()"> Reportes PDF/Excel (+ $150,000)
+                            <input type="checkbox" id="mod-rep" onchange="calculateCost()"> Reportes PDF/Excel (+ $80,000)
                         </label>
                         <label class="calc-check-item">
-                            <input type="checkbox" id="mod-cloud" onchange="calculateCost()"> Despliegue Cloud (+ $250,000)
+                            <input type="checkbox" id="mod-cloud" onchange="calculateCost()"> Despliegue Cloud (+ $120,000)
                         </label>
                         <label class="calc-check-item">
-                            <input type="checkbox" id="mod-whatsapp" onchange="calculateCost()"> Envío WhatsApp (+ $200,000)
+                            <input type="checkbox" id="mod-whatsapp" onchange="calculateCost()"> Envío WhatsApp (+ $90,000)
                         </label>
                     </div>
                 </div>
             </div>
             <div class="calc-result-box">
                 <h4>Estimación Aproximada</h4>
-                <div class="calc-result-price" id="calc-total">$800,000 COP</div>
+                <div class="calc-result-price" id="calc-total">$450,000 COP</div>
                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.5rem">
-                    *Esta es una estimación aproximada en pesos colombianos (COP). El costo final depende del alcance formal del proyecto.
+                    *Esta es una simulación de presupuesto aproximada. Los costos finales y descuentos reales te los daré directamente por WhatsApp según tu alcance.
                 </p>
                 <button class="btn-warm" onclick="solicitarCotizacionWhatsApp()">Solicitar Cotización</button>
             </div>
@@ -2646,7 +2679,7 @@
         <div class="cta-btns">
             <button class="btn-warm" onclick="window.location.href='/cliente'">Ingresar al Portal</button>
             <button class="btn-outline" style="border-color:#fff; color:#fff" onclick="window.location.href='/simulador'">Ver Simuladores</button>
-            <button class="btn-warm" style="background:#25D366" onclick="window.open('https://wa.me/573000000000?text=Hola%20Luis,%20quiero%20cotizar%20un%20software%20a%20medida.')">Hablar por WhatsApp</button>
+            <button class="btn-warm" style="background:#25D366" onclick="window.open('https://wa.me/573005722844?text=Hola%20Luis,%20quiero%20cotizar%20un%20software%20a%20medida.')">Hablar por WhatsApp</button>
         </div>
     </section>
 
@@ -2660,7 +2693,14 @@
             <button style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="toggleChat()">✕</button>
         </div>
         <div class="ai-chat-messages" id="chat-messages">
-            <div class="chat-msg bot">¡Hola! Soy tu asistente de orientación. ¿Te gustaría saber cómo funcionan nuestros simuladores de software o calcular tu cotización en WhatsApp?</div>
+            <div class="chat-msg bot">¡Hola! Soy tu asistente de orientación. Elige una de las preguntas frecuentes o escríbeme directamente si tienes dudas sobre el desarrollo de software.</div>
+        </div>
+        <!-- Sugerencias Fijas -->
+        <div class="ai-chat-suggestions">
+            <div class="suggestion-chip" onclick="clickSuggestion('¿Qué tecnologías utilizas?')">Tecnologías</div>
+            <div class="suggestion-chip" onclick="clickSuggestion('¿Cuál es el tiempo de entrega?')">Tiempos de entrega</div>
+            <div class="suggestion-chip" onclick="clickSuggestion('¿Cómo son los simuladores?')">Sobre simuladores</div>
+            <div class="suggestion-chip wa-chip" onclick="window.open('https://wa.me/573005722844?text=Hola%20Luis,%20vi%20tu%20landing%20page%20y%20quiero%20hablar%20contigo%20sobre%20un%20proyecto.', '_blank')">💬 WhatsApp Directo</div>
         </div>
         <div class="ai-chat-input-area">
             <input type="text" class="ai-chat-input" id="chat-input" placeholder="Pregunta sobre servicios, plazos..." onkeypress="handleKeyPress(event)">
@@ -2708,7 +2748,7 @@
                 <h5>Contacto</h5>
                 <ul>
                     <li><a href="mailto:info@luisdevp.com">info@luisdevp.com</a></li>
-                    <li><a href="https://wa.me/573000000000">WhatsApp Oficial</a></li>
+                    <li><a href="https://wa.me/573005722844">WhatsApp Oficial</a></li>
                     <li><a href="#">Calendario Reuniones</a></li>
                 </ul>
             </div>
@@ -2727,6 +2767,27 @@
         function toggleChat() {
             const chatBox = document.getElementById('ai-chat-box');
             chatBox.classList.toggle('open');
+        }
+
+        function clickSuggestion(text) {
+            appendMessage(text, 'user');
+            
+            setTimeout(() => {
+                let reply = "";
+                const cleanText = text.toLowerCase();
+                if (cleanText.includes("tecnologías")) {
+                    reply = "Utilizamos tecnologías de primer nivel: **Spring Boot (Java)** para backend seguro y escalable, **MongoDB/PostgreSQL** para bases de datos robustas, y **Flutter** para aplicaciones móviles nativas ágiles.";
+                } else if (cleanText.includes("entrega")) {
+                    reply = "Los tiempos de entrega varían según el proyecto. Una Landing Page premium se entrega en 1-2 semanas. Un sistema a medida o App Móvil completa suele requerir entre 4 y 6 semanas.";
+                } else if (cleanText.includes("simuladores")) {
+                    reply = "Nuestros simuladores interactivos te permiten probar el software en tiempo real (por ejemplo, control de comandas para restaurantes o gestión hotelera). Pruébalos arriba en la sección respectiva.";
+                } else {
+                    reply = "Con gusto te asesoro. Cuéntame más sobre tu idea.";
+                }
+                
+                reply += "<br><br>👉 *Si quieres hablar de tu proyecto más a fondo con descuentos especiales, [contáctame directamente por WhatsApp](https://wa.me/573005722844?text=Hola%20Luis,%20vi%20tu%20landing%20page%20y%20quiero%20conversar%20sobre%20un%20proyecto).*";
+                appendMessage(reply, 'bot');
+            }, 600);
         }
 
         function handleKeyPress(e) {
@@ -2768,18 +2829,18 @@
             const type = document.getElementById('calc-type').value;
             const usersMult = parseFloat(document.getElementById('calc-users').value);
             
-            let base = 800000;
-            if (type === 'app') base = 1200000;
-            else if (type === 'landing') base = 350000;
-            else if (type === 'custom') base = 1500000;
+            let base = 450000;
+            if (type === 'app') base = 600000;
+            else if (type === 'landing') base = 180000;
+            else if (type === 'custom') base = 800000;
 
             let add = 0;
-            if (document.getElementById('mod-app').checked) add += 400000;
-            if (document.getElementById('mod-ia').checked) add += 350000;
-            if (document.getElementById('mod-dash').checked) add += 200000;
-            if (document.getElementById('mod-rep').checked) add += 150000;
-            if (document.getElementById('mod-cloud').checked) add += 250000;
-            if (document.getElementById('mod-whatsapp').checked) add += 200000;
+            if (document.getElementById('mod-app').checked) add += 150000;
+            if (document.getElementById('mod-ia').checked) add += 180000;
+            if (document.getElementById('mod-dash').checked) add += 100000;
+            if (document.getElementById('mod-rep').checked) add += 80000;
+            if (document.getElementById('mod-cloud').checked) add += 120000;
+            if (document.getElementById('mod-whatsapp').checked) add += 90000;
 
             const total = Math.round((base + add) * usersMult);
             document.getElementById('calc-total').innerText = `$${total.toLocaleString('es-CO')} COP`;
@@ -2788,7 +2849,7 @@
         function solicitarCotizacionWhatsApp() {
             const typeText = document.getElementById('calc-type').selectedOptions[0].text;
             const totalText = document.getElementById('calc-total').innerText;
-            const waUrl = `https://wa.me/573000000000?text=Hola%20Luis,%20hice%20una%20cotizaci%C3%B3n%20en%20tu%20calculadora%20r%C3%A1pida:%0A-%20Tipo:%20${encodeURIComponent(typeText)}%0A-%20Estimado:%20${encodeURIComponent(totalText)}`;
+            const waUrl = `https://wa.me/573005722844?text=Hola%20Luis,%20hice%20una%20cotizaci%C3%B3n%20en%20tu%20calculadora%20r%C3%A1pida:%0A-%20Tipo:%20${encodeURIComponent(typeText)}%0A-%20Estimado:%20${encodeURIComponent(totalText)}`;
             window.open(waUrl, '_blank');
         }
 
