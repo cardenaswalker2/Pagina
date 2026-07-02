@@ -27,7 +27,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Deshabilitado para simplificar solicitudes de APIs en simuladores y calculadoras
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/sencillo", "/simulador", "/casos", "/api/public/**", "/css/**", "/js/**", "/login", "/registro").permitAll()
+                .requestMatchers("/", "/tecnico", "/simulador", "/casos", "/api/public/**", "/css/**", "/js/**", "/login", "/registro").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/cliente/**").hasAnyRole("CLIENT", "ADMIN")
                 .anyRequest().authenticated()

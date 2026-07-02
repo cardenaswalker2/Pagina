@@ -38,6 +38,12 @@ public class ViewController {
     @GetMapping("/")
     public String index(Model model, Principal principal) {
         model.addAttribute("principal", principal);
+        return "sencillo";
+    }
+
+    @GetMapping("/tecnico")
+    public String tecnico(Model model, Principal principal) {
+        model.addAttribute("principal", principal);
         model.addAttribute("blogs", blogService.getAllBlogs());
         return "index";
     }
@@ -113,11 +119,6 @@ public class ViewController {
         model.addAttribute("leads", allLeads);
         
         return "admin";
-    }
-
-    @GetMapping("/sencillo")
-    public String sencillo() {
-        return "sencillo";
     }
 
 }
