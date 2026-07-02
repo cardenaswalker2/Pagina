@@ -115,4 +115,9 @@ public class ViewController {
         return "admin";
     }
 
+    @GetMapping("/sencillo")
+    public String sencillo() {
+        return "sencillo";
+    }
+
 }
