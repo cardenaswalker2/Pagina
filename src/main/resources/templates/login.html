@@ -44,10 +44,18 @@
 
         .login-container {
             width: 100%;
-            max-width: 480px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                align-items: center;
+            }
         }
 
         .login-card {
@@ -232,6 +240,7 @@
 <body>
 
     <div class="login-container">
+        <!-- Tarjeta de Login (Izquierda) -->
         <div class="login-card">
             <div class="login-header">
                 <div class="logo-login" onclick="window.location.href='/'">Luis Devp</div>
@@ -280,6 +289,46 @@
 
             <p class="link-text">¿Deseas una cuenta? <a href="/registro">Regístrate aquí</a></p>
             <p class="link-text"><a href="/">← Volver al Inicio</a></p>
+        </div>
+
+        <!-- Panel de Información (Derecha) -->
+        <div class="login-card" style="display:flex; flex-direction:column; gap:1.5rem; justify-content:center;">
+            <h3 style="font-size: 1.4rem; font-family: 'Outfit', sans-serif; border-bottom: 2px solid var(--bg-secondary); padding-bottom: 0.8rem;">
+                🔑 ¿Qué es el Portal de Cliente?
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">
+                Es tu área de trabajo privada con nosotros. Cuando contratas tu software o página web, creamos una cuenta para que gestiones todo de forma transparente:
+            </p>
+            <div style="display:flex; flex-direction:column; gap:1.2rem;">
+                <div style="display:flex; gap:0.8rem; align-items:flex-start;">
+                    <span style="font-size:1.3rem;">📈</span>
+                    <div>
+                        <h4 style="font-size:0.95rem; font-weight:700;">Seguimiento en Tiempo Real</h4>
+                        <p style="color:var(--text-muted); font-size:0.8rem;">Monitorea en qué fase está tu proyecto (Diseño, Programación, Pruebas o Publicado).</p>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.8rem; align-items:flex-start;">
+                    <span style="font-size:1.3rem;">📄</span>
+                    <div>
+                        <h4 style="font-size:0.95rem; font-weight:700;">Cotizaciones y Documentos</h4>
+                        <p style="color:var(--text-muted); font-size:0.8rem;">Revisa y descarga tus propuestas comerciales, facturas y contratos del proyecto.</p>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.8rem; align-items:flex-start;">
+                    <span style="font-size:1.3rem;">🎥</span>
+                    <div>
+                        <h4 style="font-size:0.95rem; font-weight:700;">Videos de Capacitación</h4>
+                        <p style="color:var(--text-muted); font-size:0.8rem;">Accede a guías grabadas en video personalizadas para aprender a usar tu nuevo sistema.</p>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.8rem; align-items:flex-start;">
+                    <span style="font-size:1.3rem;">🛠️</span>
+                    <div>
+                        <h4 style="font-size:0.95rem; font-weight:700;">Soporte Técnico Integrado</h4>
+                        <p style="color:var(--text-muted); font-size:0.8rem;">Si tienes dudas o necesitas cambios futuros, reporta tickets directamente desde aquí.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

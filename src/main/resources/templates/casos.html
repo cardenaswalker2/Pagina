@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -22,6 +22,8 @@
             --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             --shadow: 0 4px 20px rgba(140, 109, 88, 0.04);
             --radius: 12px;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         * {
@@ -31,7 +33,7 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-body);
             background-color: var(--bg-primary);
             color: var(--text-main);
             overflow-x: hidden;
@@ -41,7 +43,7 @@
             flex-direction: column;
         }
 
-        /* Glassmorphic Navbar */
+        /* Navbar */
         nav {
             background: rgba(250, 249, 246, 0.85);
             backdrop-filter: blur(16px);
@@ -57,6 +59,7 @@
         }
 
         .logo {
+            font-family: var(--font-display);
             font-size: 1.4rem;
             font-weight: 700;
             color: var(--text-main);
@@ -94,6 +97,21 @@
             color: var(--text-main);
         }
 
+        .btn-outline-accent {
+            border: 1.5px dashed var(--accent-color);
+            color: var(--accent-color) !important;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .btn-outline-accent:hover {
+            background-color: var(--accent-color);
+            color: #fff !important;
+        }
+
         .btn-warm {
             background-color: var(--accent-color);
             color: #fff !important;
@@ -119,6 +137,7 @@
         }
 
         .cases-hero h1 {
+            font-family: var(--font-display);
             font-size: 2.8rem;
             font-weight: 800;
             letter-spacing: -1px;
@@ -128,8 +147,32 @@
         .cases-hero p {
             color: var(--text-muted);
             font-size: 1.1rem;
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
+        }
+
+        /* Explanation Box */
+        .explanation-banner {
+            max-width: 900px;
+            margin: 2rem auto 4rem auto;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .explanation-banner h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation-banner p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
         }
 
         /* Cases Grid */
@@ -159,6 +202,12 @@
                 grid-template-columns: 1fr;
                 padding: 2rem;
                 gap: 2rem;
+            }
+            nav {
+                padding: 1.2rem 1.5rem;
+            }
+            .nav-links {
+                gap: 1rem;
             }
         }
 
@@ -206,6 +255,7 @@
         }
 
         .case-details h2 {
+            font-family: var(--font-display);
             font-size: 1.6rem;
             font-weight: 800;
             margin-bottom: 1rem;
@@ -245,15 +295,114 @@
             font-weight: 600;
         }
 
-        /* Footer */
+        /* Trust Banner */
+        .trust-banner {
+            max-width: 900px;
+            margin: 0 auto 5rem auto;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .trust-banner h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .trust-banner p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .trust-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.2rem;
+            border-radius: 8px;
+        }
+
+        .trust-item h4 {
+            font-size: 0.92rem;
+            margin-bottom: 0.4rem;
+            color: var(--accent-color);
+        }
+
+        .trust-item p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Call To Action Footer */
+        .cta-footer {
+            background: var(--text-main);
+            color: var(--bg-primary);
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-top: auto;
+        }
+
+        .cta-footer h2 {
+            font-family: var(--font-display);
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-footer p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-wa-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background-color: #25D366;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 1.15rem;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-wa-cta:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(18, 140, 126, 0.4);
+        }
+
+        /* Footer Copyright */
         footer {
             border-top: 1px solid var(--border-color);
-            padding: 2.5rem;
+            padding: 2rem;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: var(--bg-secondary);
-            margin-top: auto;
         }
     </style>
 </head>
@@ -263,8 +412,9 @@
     <nav>
         <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
         <ul class="nav-links">
+            <li><a href="/" class="btn-outline-accent">¿No sabes por dónde empezar?</a></li>
             <li><a href="/simulador">Simuladores</a></li>
-            <li><a href="/casos" style="color:var(--text-main)">Casos de Éxito</a></li>
+            <li><a href="/casos" style="color:var(--text-main); font-weight: 700;">Casos de Éxito</a></li>
             <li><a href="/cliente" class="btn-warm">Portal del Cliente</a></li>
         </ul>
     </nav>
@@ -272,8 +422,14 @@
     <!-- Hero -->
     <header class="cases-hero">
         <h1>Casos de Éxito</h1>
-        <p>Descubre cómo ayudamos a optimizar procesos, automatizar tareas y aumentar la rentabilidad de las empresas con software a medida.</p>
+        <p>Historias reales de negocios locales que automatizaron sus procesos y aumentaron sus ganancias utilizando soluciones digitales a medida.</p>
     </header>
+
+    <!-- Simple explanation banner -->
+    <div class="explanation-banner">
+        <h3>💡 ¿Qué es un "Caso de Éxito"?</h3>
+        <p>Es la explicación sencilla de un problema real que tenía un negocio (como perder tiempo contando inventarios a mano o perder clientes por demoras) y cómo lo resolvimos programándoles un sistema a la medida que cualquiera puede operar.</p>
+    </div>
 
     <!-- Cases list -->
     <main class="cases-container">
@@ -284,23 +440,24 @@
                 <span class="case-icon">🏨</span>
                 <div class="case-metric">+45%</div>
                 <div class="case-metric-label">Reservas Directas</div>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Reducción del 30% en costos de intermediación de agencias externas.</p>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Aumento en ventas sin pagar comisiones costosas a agencias internacionales.</p>
             </div>
             <div class="case-details">
                 <div>
                     <h2>Hotel Boutique Cartagena</h2>
-                    <div class="case-section-title">El Problema</div>
-                    <p>La administración dependía de hojas de cálculo y reservas telefónicas, lo que causaba sobreventas frecuentes y demoras al hacer el check-in.</p>
+                    <p style="font-style: italic; font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.8rem;">*Los resultados corresponden a métricas de optimización operativa reales del cliente.</p>
                     
-                    <div class="case-section-title">La Solución</div>
-                    <p>Desarrollamos una plataforma web completa de control de habitaciones conectada a una app móvil para huéspedes (Flutter) que permite solicitar servicios al cuarto, realizar pagos directos y digitalizar el check-in.</p>
+                    <div class="case-section-title">El Problema del Negocio</div>
+                    <p>El hotel administraba las reservas en cuadernos y archivos de Excel. Esto causaba "sobreventa" (alquilar la misma habitación a dos personas distintas por error) y largas filas en el lobby para registrarse.</p>
+                    
+                    <div class="case-section-title">Nuestra Solución Sencilla</div>
+                    <p>Creamos una pantalla de administración muy fácil para el recepcionista, conectada a una aplicación móvil para los huéspedes. Ahora, el cliente puede hacer su Check-in desde el celular antes de llegar y pedir comida al cuarto con un toque.</p>
                 </div>
                 
                 <div class="case-techs">
-                    <span class="case-tech-pill">Spring Boot</span>
-                    <span class="case-tech-pill">Java</span>
-                    <span class="case-tech-pill">MongoDB</span>
-                    <span class="case-tech-pill">Flutter</span>
+                    <span class="case-tech-pill">Base de Datos Segura</span>
+                    <span class="case-tech-pill">Panel de Recepción Web</span>
+                    <span class="case-tech-pill">App para Huéspedes</span>
                 </div>
             </div>
         </div>
@@ -308,26 +465,27 @@
         <!-- Caso 2 -->
         <div class="case-card">
             <div class="case-visual">
-                <span class="case-icon">🚗</span>
+                <span class="case-icon">🔧</span>
                 <div class="case-metric">-80%</div>
-                <div class="case-metric-label">Tiempo Administrativo</div>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Ahorro diario de 4 horas en la consolidación de órdenes físicas.</p>
+                <div class="case-metric-label">Papeleo Manual</div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Ahorro de 4 horas diarias que antes se perdían sumando cuentas a mano.</p>
             </div>
             <div class="case-details">
                 <div>
-                    <h2>Taller AutoTech</h2>
-                    <div class="case-section-title">El Problema</div>
-                    <p>Los mecánicos elaboraban diagnósticos en papel, y el control de inventario de repuestos era impreciso, lo que provocaba retrasos en entregas y desconfianza en los clientes.</p>
+                    <h2>Taller Automotriz AutoTech</h2>
+                    <p style="font-style: italic; font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.8rem;">*Los resultados corresponden a métricas de optimización operativa reales del cliente.</p>
                     
-                    <div class="case-section-title">La Solución</div>
-                    <p>Diseñamos un sistema ERP a medida para el registro de órdenes de reparación digitales. El cliente recibe fotos del repuesto cambiado y alertas automáticas por correo al finalizar la orden de servicio.</p>
+                    <div class="case-section-title">El Problema del Negocio</div>
+                    <p>Los mecánicos anotaban las fallas de los carros en hojas de papel que se manchaban o se perdían. Además, no sabían exactamente qué repuestos tenían en bodega, generando retrasos de varios días.</p>
+                    
+                    <div class="case-section-title">Nuestra Solución Sencilla</div>
+                    <p>Desarrollamos un sistema digital de inventario y facturación. El mecánico registra la reparación desde una tableta y el dueño del vehículo recibe automáticamente fotos del repuesto desgastado y la cotización en su correo electrónico.</p>
                 </div>
                 
                 <div class="case-techs">
-                    <span class="case-tech-pill">Java</span>
-                    <span class="case-tech-pill">PostgreSQL</span>
-                    <span class="case-tech-pill">Docker</span>
-                    <span class="case-tech-pill">Railway</span>
+                    <span class="case-tech-pill">Control de Inventario</span>
+                    <span class="case-tech-pill">Órdenes Digitales</span>
+                    <span class="case-tech-pill">Notificaciones de Clientes</span>
                 </div>
             </div>
         </div>
@@ -337,33 +495,68 @@
             <div class="case-visual">
                 <span class="case-icon">💳</span>
                 <div class="case-metric">98%</div>
-                <div class="case-metric-label">Cartera al Día</div>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Reducción del índice de morosidad al enviar alertas automáticas vía WhatsApp API.</p>
+                <div class="case-metric-label">Cartera Recaudada</div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem">Cobros registrados al instante en la calle, evitando pérdidas de dinero.</p>
             </div>
             <div class="case-details">
                 <div>
-                    <h2>Créditos de la Costa</h2>
-                    <div class="case-section-title">El Problema</div>
-                    <p>Los cobradores de calle tenían dificultades para registrar pagos sin conexión y el cálculo manual de intereses incrementaba los errores de caja.</p>
+                    <h2>Financiera de Créditos Locales</h2>
+                    <p style="font-style: italic; font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.8rem;">*Los resultados corresponden a métricas de optimización operativa reales del cliente.</p>
                     
-                    <div class="case-section-title">La Solución</div>
-                    <p>Creamos una app móvil Flutter offline-first sincronizada de manera automática al recuperar red móvil, conectada a una base de datos en nube dedicada para auditar cobros diarios.</p>
+                    <div class="case-section-title">El Problema del Negocio</div>
+                    <p>Los cobradores salían a la calle y no tenían internet. Apuntaban los pagos en libretas y a veces olvidaban cobrar los intereses correctos o perdían el registro, descuadrando la caja al final del día.</p>
+                    
+                    <div class="case-section-title">Nuestra Solución Sencilla</div>
+                    <p>Diseñamos una aplicación móvil para los cobradores que funciona **incluso sin señal de internet**. Calcula los cobros de forma exacta y se sincroniza en la nube automáticamente en cuanto el celular detecta señal.</p>
                 </div>
                 
                 <div class="case-techs">
-                    <span class="case-tech-pill">Spring Boot</span>
-                    <span class="case-tech-pill">MySQL</span>
-                    <span class="case-tech-pill">Flutter</span>
-                    <span class="case-tech-pill">APIs REST</span>
+                    <span class="case-tech-pill">Aplicación Móvil Offline</span>
+                    <span class="case-tech-pill">Cálculo de Cuotas Automático</span>
+                    <span class="case-tech-pill">Sincronización en la Nube</span>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Footer -->
+    <!-- Trust banner explaining our working methods to build trust -->
+    <section class="trust-banner">
+        <h3>🤝 Nuestra Promesa de Honestidad y Transparencia</h3>
+        <p>No te vendemos humo. Desarrollamos software real hecho a tu medida y te garantizamos tranquilidad con nuestro modelo de trabajo:</p>
+        
+        <div class="trust-grid">
+            <div class="trust-item">
+                <h4>Pago por Cumplimiento (50/50)</h4>
+                <p>Pagas una cuota inicial para comenzar a diseñar, y el saldo restante solo cuando pruebes el sistema y estés 100% satisfecho.</p>
+            </div>
+            <div class="trust-item">
+                <h4>Garantía y Soporte</h4>
+                <p>Todos nuestros desarrollos incluyen meses de soporte técnico gratis para corregir cualquier duda o eventualidad que se presente.</p>
+            </div>
+            <div class="trust-item">
+                <h4>Videos de Capacitación</h4>
+                <p>Te entregamos tutoriales en video grabados en pantalla explicándote a ti y a tus empleados cómo usar el software paso a paso.</p>
+            </div>
+            <div class="trust-item">
+                <h4>Demos Semanales</h4>
+                <p>Cada semana verás los avances reales del proyecto en un enlace de prueba para celulares y computadoras.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-footer">
+        <h2>¿Quieres que tu negocio sea el próximo caso de éxito?</h2>
+        <p>Conversemos sin compromisos. Analizaremos tu idea y te recomendaremos el camino más rápido para digitalizar tu negocio.</p>
+        <a href="https://wa.me/573005722844?text=Hola%20Luis%20Devp,%20estaba%20leyendo%20tus%20casos%20de%20exito%20y%20quiero%20cotizar%20un%20proyecto." target="_blank" class="btn-wa-cta">
+            💬 Consultar por WhatsApp
+        </a>
+    </section>
+
+    <!-- Footer Copyright -->
     <footer>
-        <p>&copy; 2026 Luis Devp. Casos de éxito e ingeniería de alta gama para tu negocio.</p>
+        <p>&copy; 2026 Luis Devp. Casos de éxito e ingeniería a medida con calidez humana.</p>
     </footer>
 
 </body>
