@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Proyectos | Luis Devp</title>
+    <title>Estimador Inteligente de Proyectos | Luis Devp</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -20,7 +20,10 @@
             --border-color: rgba(44, 42, 41, 0.08);
             --card-bg: #FFFFFF;
             --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            --shadow: 0 4px 15px rgba(140, 109, 88, 0.04);
+            --shadow: 0 4px 20px rgba(140, 109, 88, 0.04);
+            --radius: 12px;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         * {
@@ -30,20 +33,23 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-body);
             background-color: var(--bg-primary);
             color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Glassmorphic Navbar */
+        /* Navbar */
         nav {
             background: rgba(250, 249, 246, 0.85);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
-            padding: 1.2rem 2rem;
+            padding: 1.2rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,6 +59,7 @@
         }
 
         .logo {
+            font-family: var(--font-display);
             font-size: 1.4rem;
             font-weight: 700;
             color: var(--text-main);
@@ -90,210 +97,559 @@
             color: var(--text-main);
         }
 
-        /* Wrapper */
-        .calculator-container {
-            max-width: 750px;
+        .btn-warm {
+            background-color: var(--accent-color);
+            color: #fff !important;
+            padding: 0.5rem 1.1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-warm:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Container */
+        .estimator-container {
+            max-width: 900px;
             margin: 3rem auto;
             width: 100%;
             padding: 0 1.5rem;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
-        .calc-header {
+        .estimator-header {
             text-align: center;
-            margin-bottom: 2.5rem;
         }
 
-        .calc-header h1 {
-            font-size: 2.2rem;
+        .estimator-header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw + 1.2rem, 2.8rem);
             font-weight: 800;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
             margin-bottom: 0.5rem;
         }
 
-        .calc-header p {
+        .estimator-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .tracker-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 800;
             color: var(--text-muted);
         }
 
-        /* Indicators */
-        .steps-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .steps-nav::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--border-color);
-            z-index: 1;
-            transform: translateY(-50%);
-        }
-
-        .step-node {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+        .tracker-bar-bg {
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            z-index: 2;
-            transition: var(--transition);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .step-node.active {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            color: #fff;
+        .tracker-bar-fill {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            height: 100%;
+            width: 14%;
+            transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Step cards */
-        .calc-box {
+        /* Steps Boxes */
+        .step-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: var(--radius);
             padding: 2.5rem;
             box-shadow: var(--shadow);
             display: none;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.8rem;
+            min-height: 380px;
+            animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .calc-box.active {
+        .step-box.active {
             display: flex;
         }
 
-        .box-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+        .step-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
 
-        /* Options grid */
-        .grid-options {
+        .step-description {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: -1.2rem;
+        }
+
+        /* Grid Options (Tesla/Apple Style) */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
         }
 
-        .option-item {
+        .cards-grid.wide {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .option-card {
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            border: 2px solid transparent;
             border-radius: 8px;
             padding: 1.5rem;
             cursor: pointer;
             text-align: center;
             transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            user-select: none;
         }
 
-        .option-item:hover {
+        .option-card:hover {
+            border-color: var(--border-color);
+            background: var(--card-bg);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
             border-color: var(--accent-color);
+            background: rgba(140, 109, 88, 0.04);
+            box-shadow: var(--shadow);
         }
 
-        .option-item.selected {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            color: #fff;
+        .option-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.2rem;
         }
 
-        .option-item.selected p {
-            color: rgba(255, 255, 255, 0.8);
+        .option-card h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
 
-        .option-item h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .option-item p {
-            font-size: 0.85rem;
+        .option-card p {
+            font-size: 0.78rem;
             color: var(--text-muted);
+            line-height: 1.4;
         }
 
-        /* Form groups */
+        /* Checkbox grid for Paso 3 */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.8rem;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+        }
+
+        .checkbox-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .checkbox-card:hover {
+            border-color: var(--accent-color);
+            background: var(--bg-secondary);
+        }
+
+        .checkbox-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(140, 109, 88, 0.05);
+        }
+
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-color);
+            pointer-events: none;
+        }
+
+        /* Form Controls */
         .form-group {
             display: flex;
             flex-direction: column;
             gap: 0.4rem;
         }
 
-        label {
+        .form-group label {
             font-size: 0.85rem;
+            font-weight: 800;
             color: var(--text-muted);
-            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        input, select {
+        .form-group input {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            color: var(--text-main);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
             font-family: inherit;
+            color: var(--text-main);
             outline: none;
+            font-size: 0.95rem;
             transition: var(--transition);
         }
 
-        input:focus, select:focus {
+        .form-group input:focus {
             border-color: var(--accent-color);
+            background: #fff;
         }
 
-        /* Summary box */
-        .summary-box {
+        /* Cost Tracker Floating / Footer */
+        .live-cost-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--text-main);
+            color: #fff;
+            padding: 1.2rem 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            font-weight: 800;
+            margin-top: 1rem;
+        }
+
+        .live-cost-label {
+            font-size: 0.9rem;
+            color: var(--bg-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .live-cost-val {
+            font-size: 1.5rem;
+            color: #fff;
+            font-family: var(--font-display);
+        }
+
+        /* Result Panel */
+        .result-panel {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+
+        .result-main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .result-summary-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 1.2rem;
-            font-size: 0.95rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
         }
 
-        /* Control buttons */
-        .action-nav {
+        .result-summary-line {
             display: flex;
             justify-content: space-between;
-            margin-top: 1.5rem;
+            font-size: 0.88rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 0.4rem;
         }
 
-        .btn-action {
-            background: var(--accent-color);
-            border: none;
-            padding: 0.7rem 1.6rem;
+        .result-summary-line strong {
+            color: var(--accent-color);
+        }
+
+        .result-disclaimer {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            background: #FFFBEB;
+            border: 1px solid #FEF3C7;
+            padding: 1rem;
             border-radius: 6px;
-            color: #fff;
-            font-weight: 600;
+            color: #B45309;
+        }
+
+        .confidence-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .confidence-badge {
+            background: #F0FDF4;
+            border: 1px solid #DCFCE7;
+            color: #15803D;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        /* Navigation Buttons */
+        .nav-actions-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .btn-nav-action {
+            padding: 0.9rem 1.8rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            border-radius: 24px;
             cursor: pointer;
             transition: var(--transition);
+            border: none;
+            min-height: 48px;
         }
 
-        .btn-action:hover {
+        .btn-nav-action.primary {
+            background: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(140, 109, 88, 0.2);
+        }
+
+        .btn-nav-action.primary:hover {
             background: var(--accent-hover);
         }
 
-        .btn-action.btn-secondary {
+        .btn-nav-action.primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-nav-action.secondary {
             background: transparent;
-            border: 1px solid var(--border-color);
+            border: 1.5px solid var(--border-color);
             color: var(--text-main);
         }
 
-        .btn-action.btn-secondary:hover {
+        .btn-nav-action.secondary:hover {
             background: var(--bg-secondary);
         }
 
+        .btn-whatsapp-large {
+            background: #25D366;
+            color: #fff;
+            font-weight: 800;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.25);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-whatsapp-large:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+
+        /* Before vs After */
+        .before-after-section {
+            max-width: 900px;
+            margin: 4rem auto 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .compare-card {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .compare-card.before { background: #FFF5F5; border-color: rgba(239, 68, 68, 0.1); color: #7F1D1D; }
+        .compare-card.after { background: #F0FDF4; border-color: rgba(16, 185, 129, 0.1); color: #14532D; }
+
+        .compare-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .compare-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        /* FAQs */
+        .faq-section {
+            max-width: 800px;
+            margin: 3rem auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: none;
+            border: none;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+            border-top-color: var(--border-color);
+        }
+
+        .faq-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Footer Copyright */
         footer {
             border-top: 1px solid var(--border-color);
             padding: 2rem;
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            background: var(--bg-secondary);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* RESPONSIVE LAYOUT */
+        @media (max-width: 900px) {
+            nav {
+                padding: 1rem 1.5rem !important;
+            }
+
+            .estimator-container {
+                margin: 1.5rem auto;
+            }
+
+            .step-box {
+                padding: 1.5rem !important;
+            }
+
+            .result-panel {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem;
+            }
+
+            .compare-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
     </style>
 </head>
@@ -304,172 +660,525 @@
         <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
         <ul class="nav-links">
             <li><a href="/simulador">Simuladores</a></li>
-            <li><a href="/calculadora" style="color:var(--text-main)">Calculadora de Costos</a></li>
+            <li><a href="/calculadora" style="color:var(--text-main); font-weight:700;">Calculadora de Costos</a></li>
             <li><a href="/blog">Blog</a></li>
-            <li><a href="/cliente" class="btn-action" style="box-shadow:none; padding: 0.5rem 1.1rem; border-radius: 6px; font-size: 0.9rem;">Portal del Cliente</a></li>
+            <li><a href="/cliente" class="btn-warm">Portal del Cliente</a></li>
         </ul>
     </nav>
 
-    <!-- Main Container -->
-    <div class="calculator-container">
-        <header class="calc-header">
-            <h1>Configura tu Software a Medida</h1>
-            <p>Selecciona los módulos, plazos y requerimientos de tu proyecto para cotizar directamente por WhatsApp.</p>
+    <!-- Estimator Wrapper -->
+    <div class="estimator-container">
+        
+        <!-- Header -->
+        <header class="estimator-header">
+            <h1>Diseña tu Aplicación Ideal</h1>
+            <p>Estimador Inteligente de Proyectos. Configura tu solución modular paso a paso de manera transparente.</p>
         </header>
 
-        <!-- Progress Indicator -->
-        <div class="steps-nav">
-            <div class="step-node active" id="node-1">1</div>
-            <div class="step-node" id="node-2">2</div>
-            <div class="step-node" id="node-3">3</div>
-            <div class="step-node" id="node-4">4</div>
-        </div>
-
-        <!-- Step 1: Type selection -->
-        <div class="calc-box active" id="box-1">
-            <h3 class="box-title">1. ¿Qué plataforma deseas desarrollar?</h3>
-            <div class="grid-options">
-                <div class="option-item selected" onclick="selectType('Sitio Web / Cloud', this)">
-                    <h4>Sitio Web / Cloud</h4>
-                    <p>Portales interactivos o ERP.</p>
-                </div>
-                <div class="option-item" onclick="selectType('App Móvil', this)">
-                    <h4>App Móvil</h4>
-                    <p>Desarrollo móvil nativo con Flutter.</p>
-                </div>
-                <div class="option-item" onclick="selectType('Sistema a Medida', this)">
-                    <h4>Sistema a Medida</h4>
-                    <p>Clínicas, restaurantes o inventarios.</p>
-                </div>
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="tracker-info">
+                <span id="tracker-step-lbl">Paso 1 de 7</span>
+                <span id="tracker-percent">14% Completado</span>
+            </div>
+            <div class="tracker-bar-bg">
+                <div class="tracker-bar-fill" id="tracker-bar"></div>
             </div>
         </div>
 
-        <!-- Step 2: Modules selection -->
-        <div class="calc-box" id="box-2">
-            <h3 class="box-title">2. ¿Qué funcionalidades principales necesitas?</h3>
-            <div class="grid-options">
-                <div class="option-item" onclick="toggleModule('Seguridad & Roles', this)">
-                    <h4>Seguridad y Roles</h4>
-                    <p>Autenticación segura de usuarios.</p>
+        <!-- STEP 1: GIRO DEL NEGOCIO -->
+        <div class="step-box active" id="box-1">
+            <h3 class="step-title">1. ¿Para qué tipo de negocio deseas tu aplicación?</h3>
+            <p class="step-description">Selecciona el sector de tu negocio para sugerirte las mejores tecnologías.</p>
+            <div class="cards-grid">
+                <div class="option-card selected" onclick="selectBusiness('restaurante', '🍔 Restaurante', this)">
+                    <span class="option-card-icon">🍔</span>
+                    <h4>Restaurante</h4>
+                    <p>Menús digitales, comandas y pedidos.</p>
                 </div>
-                <div class="option-item" onclick="toggleModule('Pagos Online', this)">
-                    <h4>Pagos Online</h4>
-                    <p>Pasarela Stripe / PayPal.</p>
+                <div class="option-card" onclick="selectBusiness('hotel', '🏨 Hotel', this)">
+                    <span class="option-card-icon">🏨</span>
+                    <h4>Hotel / Glamping</h4>
+                    <p>Reservas directas de habitaciones y check-in.</p>
                 </div>
-                <div class="option-item" onclick="toggleModule('Chatbot de Soporte', this)">
-                    <h4>Asistente Integrado</h4>
-                    <p>Chats inteligentes automáticos.</p>
+                <div class="option-card" onclick="selectBusiness('veterinaria', '🐶 Veterinaria', this)">
+                    <span class="option-card-icon">🐶</span>
+                    <h4>Veterinaria</h4>
+                    <p>Citas de mascotas e historial clínico.</p>
                 </div>
-                <div class="option-item" onclick="toggleModule('Reportes en PDF', this)">
-                    <h4>Reportes de Ventas</h4>
-                    <p>Estadísticas y descargas.</p>
+                <div class="option-card" onclick="selectBusiness('barberia', '💈 Barbería / Estética', this)">
+                    <span class="option-card-icon">💈</span>
+                    <h4>Barbería / Salón</h4>
+                    <p>Agenda de turnos y profesionales.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('tienda', '🛒 Tienda / E-commerce', this)">
+                    <span class="option-card-icon">🛒</span>
+                    <h4>Tienda Local</h4>
+                    <p>Catálogo digital y cobros online.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('gimnasio', '🏋️ Gimnasio', this)">
+                    <span class="option-card-icon">🏋️</span>
+                    <h4>Gimnasio</h4>
+                    <p>Control de accesos y membresías.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('transporte', '🚕 Transporte', this)">
+                    <span class="option-card-icon">🚕</span>
+                    <h4>Transporte</h4>
+                    <p>Rutas, boletos y geolocalización.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('clinica', '🏥 Clínica Médica', this)">
+                    <span class="option-card-icon">🏥</span>
+                    <h4>Clínica</h4>
+                    <p>Expedientes y recetas electrónicas.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('empresa', '🏢 Empresa / Oficina', this)">
+                    <span class="option-card-icon">🏢</span>
+                    <h4>Empresa</h4>
+                    <p>ERP interno y bases de datos.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('academia', '🎓 Academia / Colegio', this)">
+                    <span class="option-card-icon">🎓</span>
+                    <h4>Academia</h4>
+                    <p>Calificaciones y comunicados.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('distribuidora', '📦 Distribuidora', this)">
+                    <span class="option-card-icon">📦</span>
+                    <h4>Distribuidora</h4>
+                    <p>Logística y despachos mayoristas.</p>
+                </div>
+                <div class="option-card" onclick="selectBusiness('otro', '📱 Otro negocio', this)">
+                    <span class="option-card-icon">📱</span>
+                    <h4>Otro negocio</h4>
+                    <p>Soluciones a la medida según tu idea.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Step 3: Users & Urgency -->
-        <div class="calc-box" id="box-3">
-            <h3 class="box-title">3. Escala y Plazos del Proyecto</h3>
-            <div class="form-group">
-                <label for="users-range">Cantidad Estimada de Usuarios</label>
-                <select id="users-range">
-                    <option value="Menos de 10 usuarios">Menos de 10 usuarios</option>
-                    <option value="10 a 50 usuarios">Entre 10 y 50 usuarios</option>
-                    <option value="Más de 50 usuarios">Más de 50 usuarios concurrentes</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="urgency">Plazo de Entrega Requerido</label>
-                <select id="urgency">
-                    <option value="Estándar (Recomendado)">Estándar (Recomendado)</option>
-                    <option value="Alta Prioridad">Alta Prioridad (Urgente)</option>
-                    <option value="Crítica (Inmediata)">Crítica (Inmediata)</option>
-                </select>
+        <!-- STEP 2: TIPO DE APLICACIÓN -->
+        <div class="step-box" id="box-2">
+            <h3 class="step-title">2. ¿Qué tipo de aplicación necesitas?</h3>
+            <p class="step-description">Elige el canal principal para tus clientes finales o administración interna.</p>
+            <div class="cards-grid wide">
+                <div class="option-card selected" onclick="selectAppType('App Móvil (Flutter)', 350000, this)">
+                    <span class="option-card-icon">📱</span>
+                    <h4>Aplicación Móvil</h4>
+                    <p>Desplegable en Android e iOS, ideal para fidelización rápida.</p>
+                </div>
+                <div class="option-card" onclick="selectAppType('Sistema Web en la Nube', 300000, this)">
+                    <span class="option-card-icon">💻</span>
+                    <h4>Sistema Web Administrativo</h4>
+                    <p>Acceso desde navegadores con panel de control multiusuario.</p>
+                </div>
+                <div class="option-card" onclick="selectAppType('Página Web Corporativa', 150000, this)">
+                    <span class="option-card-icon">🌐</span>
+                    <h4>Página Web de Ventas</h4>
+                    <p>Landing page informativa enfocada en captar prospectos.</p>
+                </div>
+                <div class="option-card" onclick="selectAppType('E-commerce / Tienda Virtual', 280000, this)">
+                    <span class="option-card-icon">🛒</span>
+                    <h4>Tienda Virtual Autogestionable</h4>
+                    <p>Venta directa de productos con carrito e inventario integrado.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Step 4: Contact form & WhatsApp Redirect -->
-        <div class="calc-box" id="box-4">
-            <h3 class="box-title">4. Completa tu Información para Cotizar</h3>
-            <div class="form-group">
-                <label for="client-name">Nombre Completo</label>
-                <input type="text" id="client-name" placeholder="Ej. Carlos Gómez" required>
+        <!-- STEP 3: MÓDULOS Y FUNCIONES (Suma dinámica de costos) -->
+        <div class="step-box" id="box-3">
+            <h3 class="step-title">3. Selecciona las funciones de tu sistema</h3>
+            <p class="step-description">Elige los módulos necesarios. Cada función suma un valor aproximado de desarrollo.</p>
+            <div class="checkbox-grid">
+                <div class="checkbox-card" onclick="toggleModule('registro-usuarios', 30000, this)"><input type="checkbox" class="checkbox-input"> Registro de usuarios</div>
+                <div class="checkbox-card" onclick="toggleModule('inicio-sesion', 20000, this)"><input type="checkbox" class="checkbox-input"> Inicio de sesión seguro</div>
+                <div class="checkbox-card" onclick="toggleModule('recuperar-clave', 15000, this)"><input type="checkbox" class="checkbox-input"> Recuperar contraseña</div>
+                <div class="checkbox-card" onclick="toggleModule('dashboard-admin', 80000, this)"><input type="checkbox" class="checkbox-input"> Panel Administrativo / Dashboard</div>
+                <div class="checkbox-card" onclick="toggleModule('agenda-reservas', 70000, this)"><input type="checkbox" class="checkbox-input"> Calendario de Reservas / Agenda</div>
+                <div class="checkbox-card" onclick="toggleModule('inventario-stock', 60000, this)"><input type="checkbox" class="checkbox-input"> Control de Inventarios</div>
+                <div class="checkbox-card" onclick="toggleModule('facturacion-pos', 50000, this)"><input type="checkbox" class="checkbox-input"> Facturación / POS digital</div>
+                <div class="checkbox-card" onclick="toggleModule('reportes-graficas', 40000, this)"><input type="checkbox" class="checkbox-input"> Reportes y Gráficas de Ventas</div>
+                <div class="checkbox-card" onclick="toggleModule('pagos-online', 80000, this)"><input type="checkbox" class="checkbox-input"> Pasarela de Pagos (PSE, Tarjetas)</div>
+                <div class="checkbox-card" onclick="toggleModule('google-maps', 30000, this)"><input type="checkbox" class="checkbox-input"> Geolocalización / Google Maps</div>
+                <div class="checkbox-card" onclick="toggleModule('notificaciones-push', 25000, this)"><input type="checkbox" class="checkbox-input"> Alertas al celular (Notificaciones)</div>
+                <div class="checkbox-card" onclick="toggleModule('alertas-whatsapp', 25000, this)"><input type="checkbox" class="checkbox-input"> Envío automático de WhatsApp</div>
+                <div class="checkbox-card" onclick="toggleModule('correos-automatizados', 20000, this)"><input type="checkbox" class="checkbox-input"> Correo electrónico automatizado</div>
+                <div class="checkbox-card" onclick="toggleModule('subida-archivos', 25000, this)"><input type="checkbox" class="checkbox-input"> Subida de archivos / Fotos</div>
+                <div class="checkbox-card" onclick="toggleModule('escaner-qr', 35000, this)"><input type="checkbox" class="checkbox-input"> Escáner QR o código de barras</div>
+                <div class="checkbox-card" onclick="toggleModule('roles-usuarios', 45000, this)"><input type="checkbox" class="checkbox-input"> Multiusuario y Roles (Permisos)</div>
+                <div class="checkbox-card" onclick="toggleModule('chat-interno', 50000, this)"><input type="checkbox" class="checkbox-input"> Chat de soporte en vivo</div>
+                <div class="checkbox-card" onclick="toggleModule('asistente-ia', 120000, this)"><input type="checkbox" class="checkbox-input"> Inteligencia Artificial integrada</div>
+                <div class="checkbox-card" onclick="toggleModule('generador-pdf', 30000, this)"><input type="checkbox" class="checkbox-input"> Generación automática de PDFs</div>
+                <div class="checkbox-card" onclick="toggleModule('firma-digital', 60000, this)"><input type="checkbox" class="checkbox-input"> Firma electrónica / Digital</div>
+                <div class="checkbox-card" onclick="toggleModule('modo-oscuro', 15000, this)"><input type="checkbox" class="checkbox-input"> Interfaz en Modo Oscuro</div>
+                <div class="checkbox-card" onclick="toggleModule('app-android', 100000, this)"><input type="checkbox" class="checkbox-input"> Compilación nativa Android</div>
+                <div class="checkbox-card" onclick="toggleModule('app-ios', 120000, this)"><input type="checkbox" class="checkbox-input"> Compilación nativa iPhone (iOS)</div>
+                <div class="checkbox-card" onclick="toggleModule('pwa-soporte', 40000, this)"><input type="checkbox" class="checkbox-input"> Soporte para instalación PWA</div>
+                <div class="checkbox-card" onclick="toggleModule('tiempo-real', 60000, this)"><input type="checkbox" class="checkbox-input"> Sincronización en tiempo real</div>
             </div>
+        </div>
+
+        <!-- STEP 4: NIVEL VISUAL -->
+        <div class="step-box" id="box-4">
+            <h3 class="step-title">4. Elige el estilo de diseño visual</h3>
+            <p class="step-description">Elige qué tan personalizada y pulida deseas la interfaz de tu aplicación.</p>
+            <div class="cards-grid wide">
+                <div class="option-card selected" onclick="selectDesignLevel('Diseño Básico', 0, this)">
+                    <span class="option-card-icon">🎨</span>
+                    <h4>Diseño Básico</h4>
+                    <p>Limpio, utilizando plantillas predefinidas y componentes estándar.</p>
+                </div>
+                <div class="option-card" onclick="selectDesignLevel('Diseño Profesional', 100000, this)">
+                    <span class="option-card-icon">✨</span>
+                    <h4>Diseño Profesional</h4>
+                    <p>Personalización de colores de marca, tipografía moderna y buenas animaciones.</p>
+                </div>
+                <div class="option-card" onclick="selectDesignLevel('Diseño Premium', 200000, this)">
+                    <span class="option-card-icon">💎</span>
+                    <h4>Diseño Premium</h4>
+                    <p>Diseño detallado a medida, transiciones suaves y estética premium tipo Stripe.</p>
+                </div>
+                <div class="option-card" onclick="selectDesignLevel('Diseño Exclusivo', 350000, this)">
+                    <span class="option-card-icon">👑</span>
+                    <h4>Diseño Exclusivo</h4>
+                    <p>Experiencia de usuario avanzada, ilustraciones personalizadas y micro-interacciones únicas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: PLAZOS DE ENTREGA -->
+        <div class="step-box" id="box-5">
+            <h3 class="step-title">5. ¿Cuándo necesitas el proyecto finalizado?</h3>
+            <p class="step-description">El tiempo de desarrollo afecta la prioridad en nuestro flujo de ingeniería.</p>
+            <div class="cards-grid">
+                <div class="option-card" onclick="selectUrgency('Lo antes posible (Urgente)', 200000, this)">
+                    <span class="option-card-icon">⚡</span>
+                    <h4>Urgente</h4>
+                    <p>Prioridad crítica en nuestro desarrollo diario.</p>
+                </div>
+                <div class="option-card" onclick="selectUrgency('30 días', 100000, this)">
+                    <span class="option-card-icon">📅</span>
+                    <h4>30 Días</h4>
+                    <p>Plazo ágil ideal para lanzamientos rápidos.</p>
+                </div>
+                <div class="option-card selected" onclick="selectUrgency('60 días (Estándar)', 0, this)">
+                    <span class="option-card-icon">🗓️</span>
+                    <h4>60 Días</h4>
+                    <p>Plazo estándar de desarrollo y pruebas de calidad.</p>
+                </div>
+                <div class="option-card" onclick="selectUrgency('90 días (Sin prisa)', -50000, this)">
+                    <span class="option-card-icon">☕</span>
+                    <h4>90 Días o más</h4>
+                    <p>Plazo flexible. Incluye un pequeño descuento en la inversión.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 6: CAPTURA DE DATOS (LEAD FORM) -->
+        <div class="step-box" id="box-6">
+            <h3 class="step-title">6. Ingresa tus datos para ver el estimador</h3>
+            <p class="step-description">Tus datos nos permiten enviarte la cotización detallada de manera formal.</p>
+            
             <div class="form-group">
-                <label for="client-email">Correo Electrónico</label>
+                <label for="client-name">Nombre completo</label>
+                <input type="text" id="client-name" placeholder="Ej. Carlos Mendoza" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="client-email">Correo electrónico</label>
                 <input type="email" id="client-email" placeholder="carlos@empresa.com" required>
             </div>
+            
             <div class="form-group">
-                <label for="client-phone">Número de WhatsApp</label>
-                <input type="text" id="client-phone" placeholder="Ej. +54 9 11 2345-6789">
-            </div>
-
-            <div class="summary-box" id="summary-details">
-                <strong>Resumen de Configuración:</strong>
-                <p id="summary-text" style="color:var(--text-muted); font-size:0.85rem; margin-top:0.4rem"></p>
+                <label for="client-phone">Número de Celular / WhatsApp</label>
+                <input type="tel" id="client-phone" placeholder="Ej. +57 300 123 4567" required>
             </div>
         </div>
 
-        <!-- Navigation Buttons -->
-        <div class="action-nav">
-            <button class="btn-action btn-secondary" id="prev-btn" onclick="prevStep()" style="display:none">Anterior</button>
-            <button class="btn-action" id="next-btn" onclick="nextStep()">Siguiente</button>
+        <!-- STEP 7: RESULTADO Y SIMULACIÓN DE INVERSIÓN -->
+        <div class="step-box" id="box-7">
+            <h3 class="step-title">📋 Simulación de Inversión</h3>
+            <p class="step-description">Este es un desglose técnico estimado para tu proyecto.</p>
+
+            <div class="result-panel">
+                <div class="result-main">
+                    <div class="result-summary-card">
+                        <div class="result-summary-line"><span>Giro de Negocio:</span><strong id="res-business">Hotel</strong></div>
+                        <div class="result-summary-line"><span>Canal del Sistema:</span><strong id="res-type">App Móvil</strong></div>
+                        <div class="result-summary-line"><span>Nivel de Diseño:</span><strong id="res-design">Premium</strong></div>
+                        <div class="result-summary-line"><span>Tiempo Estimado:</span><strong id="res-time">4 a 6 semanas</strong></div>
+                        <div class="result-summary-line"><span>Complejidad:</span><strong id="res-complexity">Media</strong></div>
+                        <div class="result-summary-line"><span>Tecnologías Sugeridas:</span><strong id="res-techs">Spring Boot, MongoDB, Flutter</strong></div>
+                    </div>
+
+                    <div class="result-disclaimer">
+                        ⚠️ <strong>Nota Importante:</strong> Este valor es únicamente una estimación inteligente basada en las características seleccionadas. El costo real puede variar dependiendo de detalles adicionales. Nuestro objetivo es ofrecer soluciones accesibles y transparentes para todo tipo de negocios locales.
+                    </div>
+
+                    <div class="confidence-badges">
+                        <span class="confidence-badge">✅ Sin compromiso</span>
+                        <span class="confidence-badge">✅ Cotización gratis</span>
+                        <span class="confidence-badge">✅ Atención personalizada</span>
+                        <span class="confidence-badge">✅ Sin cargos ocultos</span>
+                    </div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:1.2rem; justify-content:center; align-items:center;">
+                    <div style="text-align:center;">
+                        <span class="live-cost-label">Inversión Estimada</span>
+                        <div class="live-cost-val" id="res-total" style="color:var(--accent-color); font-size:2.2rem; font-weight:800; margin-top:0.4rem;">$0 COP</div>
+                    </div>
+
+                    <button class="btn-whatsapp-large" onclick="submitLeadAndRedirect()">
+                        💬 Solicitar Cotización Formal
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <!-- Live Cost Sticky Banner (Visible steps 1-5) -->
+        <div class="live-cost-banner" id="live-cost-banner">
+            <span class="live-cost-label">Inversión Estimada</span>
+            <span class="live-cost-val" id="live-cost-val">$350.000 COP</span>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="nav-actions-row">
+            <button class="btn-nav-action secondary" id="prev-btn" onclick="prevStep()" style="visibility: hidden;">Atrás</button>
+            <button class="btn-nav-action primary" id="next-btn" onclick="nextStep()">Siguiente</button>
+        </div>
+
     </div>
 
-    <!-- Footer -->
+    <!-- Section: Comparativa de Productividad (Antes vs Después) -->
+    <section class="before-after-section reveal">
+        <div style="text-align:center; margin-bottom:2rem;">
+            <h2 style="font-family:var(--font-display); font-size:1.8rem; font-weight:800;">¿Cuánto Ahorras Automatizando?</h2>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-top:0.3rem">Compara cómo funciona un negocio tradicional frente a uno sistematizado.</p>
+        </div>
+        <div class="compare-grid">
+            <div class="compare-card before">
+                <h4>❌ Operación Sin Sistema</h4>
+                <ul class="compare-list">
+                    <li>🔴 Sumas e inventarios a mano en cuadernos.</li>
+                    <li>🔴 Errores de cobro y cuadres que tardan horas.</li>
+                    <li>🔴 Pérdida de reservas y clientes por demora en chat.</li>
+                    <li>🔴 Dependencia del local para saber el estado de caja.</li>
+                </ul>
+            </div>
+            <div class="compare-card after">
+                <h4>✅ Con Nuestro Sistema</h4>
+                <ul class="compare-list">
+                    <li>🟢 Control digital de repuestos, stock y comandas.</li>
+                    <li>🟢 Facturas impresas o enviadas en 1 clic.</li>
+                    <li>🟢 Reservas automáticas 24/7 sin intermediarios.</li>
+                    <li>🟢 Reportes de ventas en vivo en tu celular.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: FAQ Accordion -->
+    <section class="faq-section reveal">
+        <div style="text-align:center; margin-bottom:2rem;">
+            <h2 style="font-family:var(--font-display); font-size:1.8rem; font-weight:800;">Preguntas Frecuentes</h2>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Resolvemos tus dudas sobre el modelo de cotización transparente.</p>
+        </div>
+        <div class="faq-accordion">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Por qué es una simulación?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Esta herramienta te da un rango estimado para que puedas planificar tu presupuesto. El precio final oficial siempre lo acordamos en una videollamada o chat tras entender las pantallas específicas de tu negocio.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿El precio puede cambiar?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    El precio estimado sirve como base sólida. Si añades funciones avanzadas como lectores biométricos o bases de datos excesivamente grandes, conversaremos sobre las opciones más económicas.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿La asesoría tiene algún costo?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    No. Toda la consultoría previa, la llamada para revisar el alcance de tu proyecto y la propuesta en PDF que te enviamos son 100% gratuitas y sin compromiso.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Puedo pagar el desarrollo por cuotas?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Sí, trabajamos bajo un modelo transparente de pago por cumplimiento (50% de inicio y 50% al entregar y probar el software a satisfacción), o planes diferidos de cuotas para proyectos a medida de gran escala.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Copyright -->
     <footer>
-        <p>&copy; 2026 Luis Devp. Cotizaciones ágiles vía WhatsApp.</p>
+        <p>&copy; 2026 Luis Devp. Ingeniería de software con calidez humana y precios transparentes.</p>
     </footer>
 
-    <!-- Interactive script triggers -->
+    <!-- Interactive Cotizador Scripts -->
     <script>
+        // Estimator state
         let currentStep = 1;
-        let selectedType = 'Sitio Web / Cloud';
+        let totalSteps = 7;
+        
+        let businessName = '🍔 Restaurante';
+        let appTypeName = 'App Móvil (Flutter)';
+        let basePrice = 350000;
+        
         let selectedModules = [];
+        let modulesPrice = 0;
+        
+        let designName = 'Diseño Básico';
+        let designPrice = 0;
+        
+        let urgencyName = '60 días (Estándar)';
+        let urgencyPrice = 0;
 
-        function selectType(type, element) {
-            const items = element.parentElement.querySelectorAll('.option-item');
-            items.forEach(i => i.classList.remove('selected'));
+        function updateLiveCost() {
+            const currentTotal = basePrice + modulesPrice + designPrice + urgencyPrice;
+            const formatted = '$' + currentTotal.toLocaleString('es-CO') + ' COP';
+            document.getElementById('live-cost-val').innerText = formatted;
+            document.getElementById('res-total').innerText = formatted;
+        }
+
+        // Selection handlers
+        function selectBusiness(type, label, element) {
+            const cards = element.parentElement.querySelectorAll('.option-card');
+            cards.forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
-            selectedType = type;
+            businessName = label;
         }
 
-        function toggleModule(moduleName, element) {
+        function selectAppType(name, price, element) {
+            const cards = element.parentElement.querySelectorAll('.option-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            appTypeName = name;
+            basePrice = price;
+            updateLiveCost();
+        }
+
+        function toggleModule(id, element) {
             element.classList.toggle('selected');
+            const checkbox = element.querySelector('.checkbox-input');
+            const price = parseInt(element.getAttribute('onclick').match(/,\s*(\d+)/)[1]);
+
             if (element.classList.contains('selected')) {
-                selectedModules.push(moduleName);
+                checkbox.checked = true;
+                selectedModules.push({ id: id, price: price });
             } else {
-                selectedModules = selectedModules.filter(m => m !== moduleName);
+                checkbox.checked = false;
+                selectedModules = selectedModules.filter(m => m.id !== id);
             }
+
+            // Sum modules
+            modulesPrice = selectedModules.reduce((acc, cur) => acc + cur.price, 0);
+            updateLiveCost();
         }
 
-        function updateSummary() {
-            const users = document.getElementById('users-range').value;
-            const urgency = document.getElementById('urgency').value;
-            
-            const modulesText = selectedModules.length > 0 ? selectedModules.join(', ') : 'Ninguno seleccionado';
-            
-            document.getElementById('summary-text').innerHTML = `
-                • Plataforma: <strong>${selectedType}</strong><br>
-                • Módulos: <strong>${modulesText}</strong><br>
-                • Escala: <strong>${users}</strong><br>
-                • Plazo: <strong>${urgency}</strong>
-            `;
+        function selectDesignLevel(name, price, element) {
+            const cards = element.parentElement.querySelectorAll('.option-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            designName = name;
+            designPrice = price;
+            updateLiveCost();
         }
 
+        function selectUrgency(name, price, element) {
+            const cards = element.parentElement.querySelectorAll('.option-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            urgencyName = name;
+            urgencyPrice = price;
+            updateLiveCost();
+        }
+
+        // Navigation controls
         function showStep(step) {
-            document.querySelectorAll('.calc-box').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.step-box').forEach(b => b.classList.remove('active'));
             document.getElementById(`box-${step}`).classList.add('active');
 
-            // Dot states
-            document.querySelectorAll('.step-node').forEach((n, idx) => {
-                if (idx < step) n.classList.add('active');
-                else n.classList.remove('active');
-            });
+            // Update Progress Tracker
+            const percent = Math.round((step / totalSteps) * 100);
+            document.getElementById('tracker-step-lbl').innerText = `Paso ${step} de ${totalSteps}`;
+            document.getElementById('tracker-percent').innerText = `${percent}% Completado`;
+            document.getElementById('tracker-bar').style.width = `${percent}%`;
 
-            document.getElementById('prev-btn').style.display = step > 1 ? 'block' : 'none';
-            document.getElementById('next-btn').innerText = step === 4 ? 'Guardar y Cotizar en WhatsApp' : 'Siguiente';
+            // Prev button visibility
+            document.getElementById('prev-btn').style.visibility = step > 1 ? 'visible' : 'hidden';
+
+            // Next button text
+            const nextBtn = document.getElementById('next-btn');
+            if (step === 6) {
+                nextBtn.innerText = 'Calcular Presupuesto';
+            } else if (step === 7) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.innerText = 'Siguiente';
+                nextBtn.style.display = 'block';
+            }
+
+            // Live cost banner visibility
+            const costBanner = document.getElementById('live-cost-banner');
+            costBanner.style.display = step < 7 ? 'flex' : 'none';
+        }
+
+        function nextStep() {
+            if (currentStep === 6) {
+                const name = document.getElementById('client-name').value.trim();
+                const email = document.getElementById('client-email').value.trim();
+                const phone = document.getElementById('client-phone').value.trim();
+
+                if (!name || !email || !phone) {
+                    alert('Por favor, ingresa tu nombre, correo y celular para calcular tu estimación.');
+                    return;
+                }
+                
+                // Set results view details
+                document.getElementById('res-business').innerText = businessName;
+                document.getElementById('res-type').innerText = appTypeName;
+                document.getElementById('res-design').innerText = designName;
+                
+                // suggest tech stack
+                let techs = 'Java, HTML, CSS';
+                let complexity = 'Baja';
+                let devTime = '2 a 3 semanas';
+
+                if (appTypeName.includes('App Móvil')) {
+                    techs = 'Flutter, Spring Boot, MongoDB';
+                    complexity = 'Media';
+                    devTime = '4 a 6 semanas';
+                } else if (appTypeName.includes('Sistema Web')) {
+                    techs = 'Spring Boot, Java, MySQL';
+                    complexity = 'Media';
+                    devTime = '5 a 7 semanas';
+                } else if (appTypeName.includes('Tienda')) {
+                    techs = 'React, Node.js, MongoDB';
+                    complexity = 'Media';
+                    devTime = '4 a 5 semanas';
+                }
+                
+                document.getElementById('res-techs').innerText = techs;
+                document.getElementById('res-complexity').innerText = complexity;
+                document.getElementById('res-time').innerText = devTime;
+            }
+
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
         }
 
         function prevStep() {
@@ -479,57 +1188,80 @@
             }
         }
 
-        async function nextStep() {
-            if (currentStep < 4) {
-                currentStep++;
-                if (currentStep === 4) updateSummary();
-                showStep(currentStep);
-            } else {
-                // Submit lead to DB and redirect to WhatsApp
-                const name = document.getElementById('client-name').value.trim();
-                const email = document.getElementById('client-email').value.trim();
-                const phone = document.getElementById('client-phone').value.trim();
+        // Submit to API and open WhatsApp
+        async function submitLeadAndRedirect() {
+            const name = document.getElementById('client-name').value.trim();
+            const email = document.getElementById('client-email').value.trim();
+            const phone = document.getElementById('client-phone').value.trim();
+            
+            const modulesStr = selectedModules.map(m => m.id).join(', ');
+            const finalCost = basePrice + modulesPrice + designPrice + urgencyPrice;
+            const finalCostStr = '$' + finalCost.toLocaleString('es-CO') + ' COP';
 
-                if (!name || !email) {
-                    alert('Por favor rellena tu nombre y correo.');
-                    return;
-                }
+            const payload = {
+                clientName: name,
+                clientEmail: email,
+                projectType: appTypeName,
+                modules: selectedModules.map(m => m.id),
+                usersCount: 1,
+                urgency: urgencyName
+            };
 
-                const users = document.getElementById('users-range').value;
-                const urgency = document.getElementById('urgency').value;
-                
-                const payload = {
-                    clientName: name,
-                    clientEmail: email,
-                    projectType: selectedType,
-                    modules: selectedModules,
-                    usersCount: 1, // Placeholder
-                    urgency: urgency
-                };
+            try {
+                // Post lead payload to backend
+                await fetch('/api/public/cotizacion', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.log('Error logging proposal in backend database:', err);
+            }
 
-                try {
-                    // Guardar cotización
-                    await fetch('/api/public/cotizacion', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    // Armar mensaje WhatsApp
-                    const modulesStr = selectedModules.length > 0 ? selectedModules.join(', ') : 'Ninguno';
-                    const messageText = `Hola Luis Devp! Acabo de configurar una propuesta en tu plataforma para un proyecto de tipo *${selectedType}* con los siguientes módulos: *${modulesStr}*, para una escala de *${users}* y prioridad de entrega *${urgency}*. Mi nombre es *${name}* y mi correo es *${email}*. ¡Quedo atento a tus comentarios para definir el presupuesto!`;
-                    
-                    const encodedMsg = encodeURIComponent(messageText);
-                    const whatsappUrl = `https://wa.me/5491123456789?text=${encodedMsg}`; // Reemplazar con el número del programador
-                    
-                    // Abrir WhatsApp en pestaña nueva
-                    window.open(whatsappUrl, '_blank');
-                    window.location.href = '/';
-                } catch (err) {
-                    alert('Hubo un error al guardar la propuesta. Redirigiendo igualmente a WhatsApp.');
-                }
+            // Build dynamic WhatsApp link
+            const message = `Hola Luis Devp!\nAcabo de realizar la simulación en tu página.\n\nMi proyecto es:\n- Tipo: *${appTypeName}*\n- Negocio: *${businessName}*\n- Diseño: *${designName}*\n- Plazo: *${urgencyName}*\n- Funciones: *${modulesStr || 'Ninguna'}*\n- Costo estimado: *${finalCostStr}*\n\nQuisiera recibir una cotización personalizada de mi idea. Mi nombre es *${name}* y mi correo es *${email}*.`;
+            
+            const encodedMsg = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/573005722844?text=${encodedMsg}`;
+
+            window.open(whatsappUrl, '_blank');
+            window.location.href = '/';
+        }
+
+        // FAQ accordion toggle
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            if (!isActive) {
+                item.classList.add('active');
+                const answer = item.querySelector('.faq-answer');
+                answer.style.maxHeight = answer.scrollHeight + "px";
             }
         }
+
+        // Scroll Reveal implementation
+        document.addEventListener("DOMContentLoaded", function() {
+            updateLiveCost();
+
+            const reveals = document.querySelectorAll(".reveal");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            }, {
+                threshold: 0.05
+            });
+
+            reveals.forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 </html>
