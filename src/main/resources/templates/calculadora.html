@@ -189,8 +189,8 @@
             display: none;
             flex-direction: column;
             gap: 1.8rem;
-            min-height: 380px;
             animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            height: auto;
         }
 
         .step-box.active {
@@ -267,49 +267,365 @@
             line-height: 1.4;
         }
 
-        /* Checkbox grid for Paso 3 */
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.8rem;
-            max-height: 320px;
-            overflow-y: auto;
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-primary);
+        /* STEP 3 DESIGN SYSTEM IMPROVEMENTS */
+        .step3-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .checkbox-card {
-            background: var(--card-bg);
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-icon-inside {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .search-functions-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            background: var(--bg-secondary);
             transition: var(--transition);
+        }
+
+        .search-functions-input:focus {
+            background: #fff;
+            border-color: var(--accent-color);
+            box-shadow: var(--shadow);
+        }
+
+        .step3-status-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        .selected-count-badge {
+            background: var(--accent-color);
+            color: #fff;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        /* Accordion Categorized Categories */
+        .categories-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cat-group {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .cat-group-header {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            border: none;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
             user-select: none;
         }
 
-        .checkbox-card:hover {
-            border-color: var(--accent-color);
+        .cat-group-header:hover {
+            background: #EDEAE4;
+        }
+
+        .cat-group-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+            color: var(--accent-color);
+        }
+
+        .cat-group.open .cat-group-arrow {
+            transform: rotate(180deg);
+        }
+
+        .cat-group-content {
+            display: none;
+            padding: 1.5rem;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .cat-group.open .cat-group-content {
+            display: flex;
+        }
+
+        /* Interactive Premium Feature Cards */
+        .feature-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .interactive-feature-card {
             background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            user-select: none;
+            overflow: hidden;
         }
 
-        .checkbox-card.selected {
-            border-color: var(--accent-color);
+        .interactive-feature-card:hover {
+            background: var(--card-bg);
+            border-color: var(--border-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .interactive-feature-card.selected {
             background: rgba(140, 109, 88, 0.05);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(140, 109, 88, 0.1);
         }
 
-        .checkbox-input {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent-color);
-            pointer-events: none;
+        .feature-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feature-card-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-display);
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .feature-card-icon {
+            font-size: 1.4rem;
+        }
+
+        .feature-check-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: transparent;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .interactive-feature-card.selected .feature-check-circle {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .feature-card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .feature-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.3rem;
+        }
+
+        .feature-card-price {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+
+        .feature-card-tooltip-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.2rem;
+            transition: var(--transition);
+        }
+
+        .feature-card-tooltip-btn:hover {
+            color: var(--text-main);
+        }
+
+        /* Floating Summary Panel (Netflix style always-on screen indicator) */
+        .floating-summary-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(44, 42, 41, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 1.2rem 2.5rem;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .floating-summary-panel.active {
+            display: flex;
+        }
+
+        .floating-summary-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .floating-sum-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .floating-sum-lbl {
+            font-size: 0.72rem;
+            color: #A39E9A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .floating-sum-val {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .floating-sum-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 24px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-sum-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .floating-sum-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Tooltip dialog overlays */
+        .tooltip-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .tooltip-dialog-overlay.active {
+            display: flex;
+        }
+
+        .tooltip-dialog {
+            background: #fff;
+            border-radius: var(--radius);
+            max-width: 420px;
+            width: 100%;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .tooltip-dialog-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .tooltip-dialog-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .tooltip-dialog-close-btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            align-self: flex-end;
+        }
+
+        .tooltip-dialog-close-btn:hover {
+            background: var(--accent-hover);
         }
 
         /* Form Controls */
@@ -651,6 +967,29 @@
                 grid-template-columns: 1fr !important;
             }
         }
+
+        /* PHONE OPTIMIZED STEPS ACCORDION LIST WRAPPERS */
+        @media (max-width: 768px) {
+            .feature-cards-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
+
+            .interactive-feature-card {
+                padding: 1.5rem;
+                min-height: 90px;
+                border-radius: var(--radius);
+                background: #FAF8F5;
+            }
+
+            .floating-summary-panel {
+                padding: 1rem 1.5rem !important;
+            }
+
+            .floating-sum-val {
+                font-size: 1.15rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -782,36 +1121,387 @@
             </div>
         </div>
 
-        <!-- STEP 3: MÓDULOS Y FUNCIONES (Suma dinámica de costos) -->
+        <!-- STEP 3: MÓDULOS Y FUNCIONES (Suma dinámica de costos - Rediseñado) -->
         <div class="step-box" id="box-3">
             <h3 class="step-title">3. Selecciona las funciones de tu sistema</h3>
-            <p class="step-description">Elige los módulos necesarios. Cada función suma un valor aproximado de desarrollo.</p>
-            <div class="checkbox-grid">
-                <div class="checkbox-card" onclick="toggleModule('registro-usuarios', 30000, this)"><input type="checkbox" class="checkbox-input"> Registro de usuarios</div>
-                <div class="checkbox-card" onclick="toggleModule('inicio-sesion', 20000, this)"><input type="checkbox" class="checkbox-input"> Inicio de sesión seguro</div>
-                <div class="checkbox-card" onclick="toggleModule('recuperar-clave', 15000, this)"><input type="checkbox" class="checkbox-input"> Recuperar contraseña</div>
-                <div class="checkbox-card" onclick="toggleModule('dashboard-admin', 80000, this)"><input type="checkbox" class="checkbox-input"> Panel Administrativo / Dashboard</div>
-                <div class="checkbox-card" onclick="toggleModule('agenda-reservas', 70000, this)"><input type="checkbox" class="checkbox-input"> Calendario de Reservas / Agenda</div>
-                <div class="checkbox-card" onclick="toggleModule('inventario-stock', 60000, this)"><input type="checkbox" class="checkbox-input"> Control de Inventarios</div>
-                <div class="checkbox-card" onclick="toggleModule('facturacion-pos', 50000, this)"><input type="checkbox" class="checkbox-input"> Facturación / POS digital</div>
-                <div class="checkbox-card" onclick="toggleModule('reportes-graficas', 40000, this)"><input type="checkbox" class="checkbox-input"> Reportes y Gráficas de Ventas</div>
-                <div class="checkbox-card" onclick="toggleModule('pagos-online', 80000, this)"><input type="checkbox" class="checkbox-input"> Pasarela de Pagos (PSE, Tarjetas)</div>
-                <div class="checkbox-card" onclick="toggleModule('google-maps', 30000, this)"><input type="checkbox" class="checkbox-input"> Geolocalización / Google Maps</div>
-                <div class="checkbox-card" onclick="toggleModule('notificaciones-push', 25000, this)"><input type="checkbox" class="checkbox-input"> Alertas al celular (Notificaciones)</div>
-                <div class="checkbox-card" onclick="toggleModule('alertas-whatsapp', 25000, this)"><input type="checkbox" class="checkbox-input"> Envío automático de WhatsApp</div>
-                <div class="checkbox-card" onclick="toggleModule('correos-automatizados', 20000, this)"><input type="checkbox" class="checkbox-input"> Correo electrónico automatizado</div>
-                <div class="checkbox-card" onclick="toggleModule('subida-archivos', 25000, this)"><input type="checkbox" class="checkbox-input"> Subida de archivos / Fotos</div>
-                <div class="checkbox-card" onclick="toggleModule('escaner-qr', 35000, this)"><input type="checkbox" class="checkbox-input"> Escáner QR o código de barras</div>
-                <div class="checkbox-card" onclick="toggleModule('roles-usuarios', 45000, this)"><input type="checkbox" class="checkbox-input"> Multiusuario y Roles (Permisos)</div>
-                <div class="checkbox-card" onclick="toggleModule('chat-interno', 50000, this)"><input type="checkbox" class="checkbox-input"> Chat de soporte en vivo</div>
-                <div class="checkbox-card" onclick="toggleModule('asistente-ia', 120000, this)"><input type="checkbox" class="checkbox-input"> Inteligencia Artificial integrada</div>
-                <div class="checkbox-card" onclick="toggleModule('generador-pdf', 30000, this)"><input type="checkbox" class="checkbox-input"> Generación automática de PDFs</div>
-                <div class="checkbox-card" onclick="toggleModule('firma-digital', 60000, this)"><input type="checkbox" class="checkbox-input"> Firma electrónica / Digital</div>
-                <div class="checkbox-card" onclick="toggleModule('modo-oscuro', 15000, this)"><input type="checkbox" class="checkbox-input"> Interfaz en Modo Oscuro</div>
-                <div class="checkbox-card" onclick="toggleModule('app-android', 100000, this)"><input type="checkbox" class="checkbox-input"> Compilación nativa Android</div>
-                <div class="checkbox-card" onclick="toggleModule('app-ios', 120000, this)"><input type="checkbox" class="checkbox-input"> Compilación nativa iPhone (iOS)</div>
-                <div class="checkbox-card" onclick="toggleModule('pwa-soporte', 40000, this)"><input type="checkbox" class="checkbox-input"> Soporte para instalación PWA</div>
-                <div class="checkbox-card" onclick="toggleModule('tiempo-real', 60000, this)"><input type="checkbox" class="checkbox-input"> Sincronización en tiempo real</div>
+            <p class="step-description">Personaliza la funcionalidad de tu sistema táctil eligiendo las características deseadas.</p>
+            
+            <div class="step3-controls">
+                <!-- Search feature input -->
+                <div class="search-box-wrapper">
+                    <span class="search-icon-inside">🔍</span>
+                    <input type="text" class="search-functions-input" id="search-functions-box" oninput="filterFunctionsList()" placeholder="Buscar función (ej: WhatsApp, Login, Inventario)...">
+                </div>
+
+                <!-- Info summary count -->
+                <div class="step3-status-info">
+                    <span id="features-selected-lbl">Has seleccionado 0 funciones</span>
+                    <span class="selected-count-badge" id="features-count-badge">0 / 25</span>
+                </div>
+
+                <!-- Categories Accordion List -->
+                <div class="categories-accordion">
+                    
+                    <!-- Category 1: Acceso y Seguridad -->
+                    <div class="cat-group open" id="cat-acceso">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-acceso')">
+                            <span>👤 Acceso & Seguridad</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="registro-usuarios" onclick="togglePremiumModule('registro-usuarios', 30000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📝</span> Registro</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Permite a tus clientes y miembros registrarse en la base de datos.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$30,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('registro-usuarios', 'Registro de Usuarios', 'Permite crear un flujo de onboarding donde los usuarios pueden crear sus credenciales e información de contacto de forma autónoma.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="inicio-sesion" onclick="togglePremiumModule('inicio-sesion', 20000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🔑</span> Login</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Inicio de sesión encriptado con protección de fuerza bruta.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$20,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('inicio-sesion', 'Inicio de Sesión', 'Acceso seguro al sistema validando credenciales de usuario mediante sesiones persistentes o tokens encriptados JWT.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="recuperar-clave" onclick="togglePremiumModule('recuperar-clave', 15000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🔄</span> Recuperar clave</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Restablecimiento de contraseña por email de forma segura.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$15,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('recuperar-clave', 'Recuperar Contraseña', 'Envía un enlace único de recuperación con fecha de expiración directamente al correo electrónico del usuario.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="roles-usuarios" onclick="togglePremiumModule('roles-usuarios', 45000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🛡️</span> Roles & Permisos</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Segmentación de acceso (Administrador, Empleado, Cliente).</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$45,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('roles-usuarios', 'Roles y Permisos', 'Restringe el acceso de cajeros, dependientes o socios a pantallas administrativas sensibles, asegurando el control.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="firma-digital" onclick="togglePremiumModule('firma-digital', 60000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">✍️</span> Firma digital</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Permite firmar contratos o consentimientos en la pantalla.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$60,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('firma-digital', 'Firma Digital', 'Captura firmas manuscritas directamente sobre tabletas o celulares para autorizaciones y actas oficiales sin papel.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 2: Inventario y POS -->
+                    <div class="cat-group" id="cat-inventario">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-inventario')">
+                            <span>📦 Inventario & POS</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="inventario-stock" onclick="togglePremiumModule('inventario-stock', 60000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📦</span> Inventario</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Control de stock de repuestos, alertas de existencias bajas.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$60,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('inventario-stock', 'Control de Inventarios', 'Módulo para auditar entradas, salidas y traslados de bodega con avisos cuando hay escasez de mercancías.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="facturacion-pos" onclick="togglePremiumModule('facturacion-pos', 50000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🏪</span> POS & Ventas</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Punto de venta físico, facturación y cierre de caja.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$50,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('facturacion-pos', 'Punto de Venta POS', 'Registra ventas rápidamente, genera tickets de cobro en impresora térmica y controla el arqueo diario.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="escaner-qr" onclick="togglePremiumModule('escaner-qr', 35000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🏷️</span> Lector QR / Barra</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Lectura de códigos mediante la cámara del móvil.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$35,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('escaner-qr', 'Escáner QR y Barras', 'Permite escanear códigos de barras de repuestos o códigos QR de reservas usando la cámara del teléfono móvil.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="subida-archivos" onclick="togglePremiumModule('subida-archivos', 25000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📁</span> Subir archivos</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Subida de fotos de insumos, archivos y documentos PDF.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$25,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('subida-archivos', 'Subida de Archivos', 'Guarda imágenes de repuestos, contratos PDF o recibos físicos del cliente en servidores de nube integrados.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 3: Reservas y Agenda -->
+                    <div class="cat-group" id="cat-reservas">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-reservas')">
+                            <span>📅 Reservas & Agenda</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="agenda-reservas" onclick="togglePremiumModule('agenda-reservas', 70000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📅</span> Agenda</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Calendario mensual y turnos asignados automáticamente.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$70,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('agenda-reservas', 'Calendario de Reservas', 'Visualización mensual, semanal y por profesional de citas para consultorios, veterinarias o barberías.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="tiempo-real" onclick="togglePremiumModule('tiempo-real', 60000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">⚡</span> Tiempo Real</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Sincronización instantánea de reservas concurrentes.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$60,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('tiempo-real', 'Tiempo Real', 'Evita sobreventas bloqueando horarios reservados de forma inmediata en las pantallas de todos los usuarios.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="google-maps" onclick="togglePremiumModule('google-maps', 30000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🗺️</span> Google Maps</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Geolocalización de clientes, despachos o sucursales.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$30,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('google-maps', 'Geolocalización Maps', 'Integra mapas interactivos para trazar direcciones de entrega o marcar la sucursal más cercana.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 4: Pagos y Finanzas -->
+                    <div class="cat-group" id="cat-pagos">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-pagos')">
+                            <span>💳 Pagos & Finanzas</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="pagos-online" onclick="togglePremiumModule('pagos-online', 80000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">💳</span> Pasarela online</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Pagos seguros con PSE, tarjetas de crédito, Wompi o Stripe.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$80,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('pagos-online', 'Pasarela de Pagos', 'Habilita a tus clientes para pagar en línea, confirmando la venta de forma automatizada e inmediata.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="generador-pdf" onclick="togglePremiumModule('generador-pdf', 30000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📄</span> Exportar PDF</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Generación automática de recibos y facturas en formato PDF.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$30,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('generador-pdf', 'Generación de PDFs', 'Descarga reportes mensuales, facturas a nombre del cliente o cotizaciones con plantilla corporativa.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 5: Notificaciones y Chat -->
+                    <div class="cat-group" id="cat-comunicaciones">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-comunicaciones')">
+                            <span>💬 Comunicaciones</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="alertas-whatsapp" onclick="togglePremiumModule('alertas-whatsapp', 25000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">💬</span> WhatsApp API</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Envío de notificaciones automáticas y alertas a chats.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$25,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('alertas-whatsapp', 'WhatsApp Automático', 'Envía recordatorios de reservas o confirmación de compras directamente a los chats de tus clientes.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="correos-automatizados" onclick="togglePremiumModule('correos-automatizados', 20000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">✉️</span> Emails automáticos</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Envío automático de notificaciones del sistema por correo.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$20,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('correos-automatizados', 'Correos Automatizados', 'Envío de correos por SMTP ante eventos clave, como la bienvenida, alertas de deudas o reportes.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="notificaciones-push" onclick="togglePremiumModule('notificaciones-push', 25000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🔔</span> Notificaciones push</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Alertas directas a la pantalla principal del móvil.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$25,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('notificaciones-push', 'Notificaciones Push', 'Mensajes tipo app nativa que se muestran al cliente en su barra superior incluso con la app cerrada.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="chat-interno" onclick="togglePremiumModule('chat-interno', 50000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">💬</span> Chat Soporte</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Canal de comunicación directa entre el cliente y el negocio.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$50,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('chat-interno', 'Chat Integrado', 'Chat en vivo privado donde el cliente final puede chatear en tiempo real con recepción o soporte del local.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 6: Inteligencia y Panel -->
+                    <div class="cat-group" id="cat-inteligencia">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-inteligencia')">
+                            <span>📊 Inteligencia & Panel</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="dashboard-admin" onclick="togglePremiumModule('dashboard-admin', 80000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📊</span> Panel central</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Resumen analítico con métricas clave del negocio en vivo.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$80,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('dashboard-admin', 'Dashboard Central', 'Pantalla principal de administración que unifica gráficos, ventas del día, deudas e indicadores generales.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="reportes-graficas" onclick="togglePremiumModule('reportes-graficas', 40000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">📈</span> Gráficas</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Filtros interactivos de fechas y estadísticas visuales.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$40,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('reportes-graficas', 'Gráficos de Ventas', 'Compara el rendimiento mensual de tu local con gráficos de barras, líneas y sectores interactivos.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="asistente-ia" onclick="togglePremiumModule('asistente-ia', 120000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🤖</span> Inteligencia Artificial</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Integración de Chatbot inteligente para atención al cliente.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$120,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('asistente-ia', 'Inteligencia Artificial', 'Autónomo de atención por WhatsApp o web capaz de responder dudas basándose en tu inventario y horarios.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 7: Plataforma y Apariencia -->
+                    <div class="cat-group" id="cat-plataforma">
+                        <button class="cat-group-header" onclick="toggleCategoryAccordion('cat-plataforma')">
+                            <span>⚙️ Plataforma & Apariencia</span>
+                            <span class="cat-group-arrow">▼</span>
+                        </button>
+                        <div class="cat-group-content">
+                            <div class="feature-cards-grid">
+                                <div class="interactive-feature-card" data-fid="modo-oscuro" onclick="togglePremiumModule('modo-oscuro', 15000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🌗</span> Modo Oscuro</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Paleta visual oscura para descanso visual en la noche.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$15,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('modo-oscuro', 'Modo Oscuro', 'Cambia la paleta de colores del sistema para evitar fatiga ocular a los dependientes o cajeros del local.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="app-android" onclick="togglePremiumModule('app-android', 100000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🤖</span> App Android</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Compilación nativa e instalador APK para Google Play.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$100,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('app-android', 'Compilación Android', 'Compila el software en un instalador nativo .apk subido directamente a tu cuenta de Google Play Store.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="app-ios" onclick="togglePremiumModule('app-ios', 120000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🍏</span> App iOS</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Compilación para iPhone subida a App Store de Apple.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$120,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('app-ios', 'Compilación iPhone iOS', 'Compila el código de forma compatible con dispositivos iOS y lo publica en la App Store de Apple.', event)">❓</button>
+                                    </div>
+                                </div>
+                                <div class="interactive-feature-card" data-fid="pwa-soporte" onclick="togglePremiumModule('pwa-soporte', 40000, this)">
+                                    <div class="feature-card-header">
+                                        <span class="feature-card-title-row"><span class="feature-card-icon">🕸️</span> Soporte PWA</span>
+                                        <div class="feature-check-circle">✓</div>
+                                    </div>
+                                    <p class="feature-card-desc">Acceso rápido instalable en el inicio del celular sin peso.</p>
+                                    <div class="feature-card-footer">
+                                        <span class="feature-card-price">+$40,000</span>
+                                        <button class="feature-card-tooltip-btn" onclick="showFidTooltip('pwa-soporte', 'Instalación PWA', 'Permite a los usuarios instalar la aplicación directamente desde el navegador Chrome o Safari sin descargar tiendas.', event)">❓</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -933,7 +1623,7 @@
             </div>
         </div>
 
-        <!-- Live Cost Sticky Banner (Visible steps 1-5) -->
+        <!-- Live Cost Sticky Banner (Visible steps 1-5, desktop only) -->
         <div class="live-cost-banner" id="live-cost-banner">
             <span class="live-cost-label">Inversión Estimada</span>
             <span class="live-cost-val" id="live-cost-val">$350.000 COP</span>
@@ -945,6 +1635,30 @@
             <button class="btn-nav-action primary" id="next-btn" onclick="nextStep()">Siguiente</button>
         </div>
 
+    </div>
+
+    <!-- Netflix Style Mobile FFixed/Sticky Summary (Paso 3 specific) -->
+    <div class="floating-summary-panel" id="step3-floating-panel">
+        <div class="floating-summary-info">
+            <div class="floating-sum-col">
+                <span class="floating-sum-lbl">Funciones</span>
+                <span class="floating-sum-val" id="floating-selected-count">0</span>
+            </div>
+            <div class="floating-sum-col">
+                <span class="floating-sum-lbl">Inversión aprox.</span>
+                <span class="floating-sum-val" id="floating-total-cost">$350,000 COP</span>
+            </div>
+        </div>
+        <button class="floating-sum-btn" onclick="nextStep()">Continuar →</button>
+    </div>
+
+    <!-- Tooltip Dialog Overlay -->
+    <div class="tooltip-dialog-overlay" id="fid-tooltip-overlay" onclick="closeFidTooltip()">
+        <div class="tooltip-dialog" onclick="event.stopPropagation()">
+            <div class="tooltip-dialog-title" id="tooltip-title">Registro de Usuarios</div>
+            <div class="tooltip-dialog-desc" id="tooltip-desc">Esta función permite a los clientes registrarse.</div>
+            <button class="tooltip-dialog-close-btn" onclick="closeFidTooltip()">Entendido</button>
+        </div>
     </div>
 
     <!-- Section: Comparativa de Productividad (Antes vs Después) -->
@@ -1050,6 +1764,7 @@
             const formatted = '$' + currentTotal.toLocaleString('es-CO') + ' COP';
             document.getElementById('live-cost-val').innerText = formatted;
             document.getElementById('res-total').innerText = formatted;
+            document.getElementById('floating-total-cost').innerText = formatted;
         }
 
         // Selection handlers
@@ -1069,22 +1784,101 @@
             updateLiveCost();
         }
 
-        function toggleModule(id, element) {
+        // REDESIGNED Premium select card functions (Paso 3)
+        function togglePremiumModule(id, price, element) {
             element.classList.toggle('selected');
-            const checkbox = element.querySelector('.checkbox-input');
-            const price = parseInt(element.getAttribute('onclick').match(/,\s*(\d+)/)[1]);
-
+            
             if (element.classList.contains('selected')) {
-                checkbox.checked = true;
-                selectedModules.push({ id: id, price: price });
+                // Haptic feedback if supported
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+                selectedModules.push({ id: id, price: price, element: element });
             } else {
-                checkbox.checked = false;
                 selectedModules = selectedModules.filter(m => m.id !== id);
             }
 
-            // Sum modules
+            // Recalculate Sum
             modulesPrice = selectedModules.reduce((acc, cur) => acc + cur.price, 0);
             updateLiveCost();
+
+            // Update badge numbers
+            const count = selectedModules.length;
+            document.getElementById('features-selected-lbl').innerText = `Has seleccionado ${count} ${count === 1 ? 'función' : 'funciones'}`;
+            document.getElementById('features-count-badge').innerText = `${count} / 25`;
+            document.getElementById('floating-selected-count').innerText = count;
+        }
+
+        // Accordion Category Toggles
+        function toggleCategoryAccordion(catId) {
+            // In mobile view (viewport < 768px), collapse all other categories and only open the selected one
+            const isMobile = window.innerWidth <= 768;
+            const targetGroup = document.getElementById(catId);
+            const isOpen = targetGroup.classList.contains('open');
+
+            if (isMobile) {
+                document.querySelectorAll('.cat-group').forEach(group => {
+                    group.classList.remove('open');
+                });
+            }
+
+            if (!isOpen) {
+                targetGroup.classList.add('open');
+            } else {
+                targetGroup.classList.remove('open');
+            }
+        }
+
+        // Filter search logic
+        function filterFunctionsList() {
+            const query = document.getElementById('search-functions-box').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.interactive-feature-card');
+            const groups = document.querySelectorAll('.cat-group');
+
+            if (!query) {
+                // Reset search (show all cards and keep only the first category open)
+                cards.forEach(c => c.style.display = 'flex');
+                groups.forEach((g, idx) => {
+                    if (idx === 0) g.classList.add('open');
+                    else g.classList.remove('open');
+                });
+                return;
+            }
+
+            // Loop cards and test query
+            cards.forEach(c => {
+                const title = c.querySelector('.feature-card-title-row').innerText.toLowerCase();
+                const desc = c.querySelector('.feature-card-desc').innerText.toLowerCase();
+                if (title.includes(query) || desc.includes(query)) {
+                    c.style.display = 'flex';
+                } else {
+                    c.style.display = 'none';
+                }
+            });
+
+            // Expand matching categories and collapse empty ones
+            groups.forEach(g => {
+                const visibleCardsInGroup = g.querySelectorAll('.interactive-feature-card[style="display: flex;"]');
+                if (visibleCardsInGroup.length > 0) {
+                    g.classList.add('open');
+                    g.style.display = 'block';
+                } else {
+                    g.classList.remove('open');
+                    g.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal tooltip handlers
+        function showFidTooltip(fid, title, description, e) {
+            e.stopPropagation(); // Avoid selecting card when clicking tooltip icon
+            document.getElementById('tooltip-title').innerText = title;
+            document.getElementById('tooltip-desc').innerText = description;
+            document.getElementById('fid-tooltip-overlay').classList.add('active');
+        }
+
+        function closeFidTooltip() {
+            document.getElementById('fid-tooltip-overlay').classList.remove('active');
         }
 
         function selectDesignLevel(name, price, element) {
@@ -1130,9 +1924,20 @@
                 nextBtn.style.display = 'block';
             }
 
-            // Live cost banner visibility
+            // Normal scroll action
+            window.scrollTo({ top: 180, behavior: 'smooth' });
+
+            // Live cost banner visibility (Desktop/Tablet)
             const costBanner = document.getElementById('live-cost-banner');
-            costBanner.style.display = step < 7 ? 'flex' : 'none';
+            costBanner.style.display = (step < 7 && step !== 3) ? 'flex' : 'none';
+
+            // Sticky/fixed footer panel specific to Step 3
+            const floatingPanel = document.getElementById('step3-floating-panel');
+            if (step === 3) {
+                floatingPanel.classList.add('active');
+            } else {
+                floatingPanel.classList.remove('active');
+            }
         }
 
         function nextStep() {
