@@ -97,6 +97,10 @@
             color: var(--text-main);
         }
 
+        .nav-toggle {
+            display: none;
+        }
+
         .btn-outline-accent {
             border: 1.5px dashed var(--accent-color);
             color: var(--accent-color) !important;
@@ -134,11 +138,21 @@
             text-align: center;
             padding: 5rem 1.5rem 3rem 1.5rem;
             background: radial-gradient(circle at 50% 30%, rgba(140, 109, 88, 0.03) 0%, transparent 70%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-illustration {
+            font-size: 3rem;
+            animation: pulse 2s infinite ease-in-out;
+            margin-bottom: 0.5rem;
         }
 
         .cases-hero h1 {
             font-family: var(--font-display);
-            font-size: 2.8rem;
+            font-size: clamp(2rem, 5vw + 1.5rem, 3.2rem);
             font-weight: 800;
             letter-spacing: -1px;
             margin-bottom: 0.8rem;
@@ -146,7 +160,7 @@
 
         .cases-hero p {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2vw + 0.85rem, 1.2rem);
             max-width: 650px;
             margin: 0 auto;
         }
@@ -175,6 +189,27 @@
             color: var(--text-muted);
         }
 
+        /* Section Layouts */
+        .section-title-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 1.5rem;
+        }
+
+        .section-title-container h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw + 1.2rem, 2.4rem);
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .section-title-container p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
         /* Cases Grid */
         .cases-container {
             max-width: 1100px;
@@ -182,7 +217,7 @@
             padding: 0 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 3rem;
+            gap: 4rem;
         }
 
         .case-card {
@@ -197,23 +232,10 @@
             transition: var(--transition);
         }
 
-        @media(max-width: 800px) {
-            .case-card {
-                grid-template-columns: 1fr;
-                padding: 2rem;
-                gap: 2rem;
-            }
-            nav {
-                padding: 1.2rem 1.5rem;
-            }
-            .nav-links {
-                gap: 1rem;
-            }
-        }
-
         .case-card:hover {
+            transform: translateY(-4px);
             border-color: var(--accent-color);
-            box-shadow: 0 8px 30px rgba(140, 109, 88, 0.08);
+            box-shadow: 0 12px 40px rgba(140, 109, 88, 0.08);
         }
 
         .case-visual {
@@ -223,18 +245,18 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2.5rem;
+            padding: 2.5rem 1.5rem;
             text-align: center;
             border: 1px solid var(--border-color);
         }
 
         .case-icon {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             margin-bottom: 1rem;
         }
 
         .case-metric {
-            font-size: 2.4rem;
+            font-size: 2.8rem;
             font-weight: 800;
             color: var(--accent-color);
             margin: 0.5rem 0;
@@ -256,10 +278,26 @@
 
         .case-details h2 {
             font-family: var(--font-display);
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             letter-spacing: -0.5px;
+        }
+
+        .case-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .case-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
         .case-section-title {
@@ -279,11 +317,38 @@
             margin-bottom: 0.8rem;
         }
 
+        .case-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .case-stat-box {
+            text-align: center;
+        }
+
+        .case-stat-val {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .case-stat-lbl {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
         .case-techs {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
             margin-top: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .case-tech-pill {
@@ -293,6 +358,439 @@
             padding: 0.25rem 0.6rem;
             border-radius: 4px;
             font-weight: 600;
+        }
+
+        .case-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Before & After */
+        .compare-section {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .compare-card {
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .compare-card.before {
+            background: #FFF5F5;
+            border-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .compare-card.after {
+            background: #F0FDF4;
+            border-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .compare-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compare-card.before h3 { color: #DC2626; }
+        .compare-card.after h3 { color: #16A34A; }
+
+        .compare-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .compare-list li {
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .compare-card.before li { color: #7F1D1D; }
+        .compare-card.after li { color: #14532D; }
+
+        /* Timeline Section */
+        .timeline-section {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--bg-secondary);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-step {
+            text-align: center;
+            background: var(--bg-primary);
+            padding: 1rem 0.5rem;
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2.5px solid var(--accent-color);
+            color: var(--accent-color);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.8rem auto;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .timeline-step:hover .step-num {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .step-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        /* Benefits Grid */
+        .benefits-section {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .benefit-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2.5rem 1.8rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+
+        .benefit-icon {
+            font-size: 2.6rem;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .benefit-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .test-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--accent-color);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .test-meta h4 {
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .test-meta p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .test-stars {
+            color: #FFC107;
+            font-size: 0.95rem;
+        }
+
+        .test-body {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        /* Technologies */
+        .techs-section {
+            max-width: 1100px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .techs-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+        }
+
+        .tech-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .tech-card:hover {
+            border-color: var(--accent-color);
+            background: var(--bg-secondary);
+        }
+
+        /* FAQ Accordion */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto 5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: none;
+            border: none;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+            border-top-color: var(--border-color);
+        }
+
+        .faq-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Call To Action Footer */
+        .cta-footer {
+            background: var(--text-main);
+            color: var(--bg-primary);
+            text-align: center;
+            padding: 5rem 2rem;
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .cta-footer h2 {
+            font-family: var(--font-display);
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-footer p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .btn-wa-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background-color: #25D366;
+            color: #fff;
+            padding: 0.9rem 1.8rem;
+            border-radius: 24px;
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.2);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-wa-cta:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
         }
 
         /* Trust Banner */
@@ -347,54 +845,6 @@
             margin: 0;
         }
 
-        /* Call To Action Footer */
-        .cta-footer {
-            background: var(--text-main);
-            color: var(--bg-primary);
-            text-align: center;
-            padding: 4rem 2rem;
-            margin-top: auto;
-        }
-
-        .cta-footer h2 {
-            font-family: var(--font-display);
-            color: #fff;
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta-footer p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .btn-wa-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            background-color: #25D366;
-            color: #fff;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-weight: 800;
-            text-decoration: none;
-            font-size: 1.15rem;
-            transition: var(--transition);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-wa-cta:hover {
-            background-color: #128C7E;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(18, 140, 126, 0.4);
-        }
-
         /* Footer Copyright */
         footer {
             border-top: 1px solid var(--border-color);
@@ -404,6 +854,213 @@
             font-size: 0.85rem;
             background: var(--bg-secondary);
         }
+
+        /* Scroll Reveal Animation Styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* RESPONSIVE BREAKPOINTS */
+
+        /* DESKTOP STYLES (min-width: 993px) */
+        @media (min-width: 993px) {
+            .nav-toggle {
+                display: none !important;
+            }
+        }
+
+        /* TABLETS & MOBILE STYLES (max-width: 992px) */
+        @media (max-width: 992px) {
+            body {
+                overflow-x: hidden;
+            }
+            * {
+                max-width: 100%;
+            }
+
+            /* Navbar hamburguesa */
+            nav {
+                padding: 0.8rem 1.5rem !important;
+                height: 60px;
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .logo {
+                font-size: 1.15rem !important;
+            }
+            .nav-toggle {
+                display: flex !important;
+                background: none;
+                border: none;
+                cursor: pointer;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 24px;
+                height: 18px;
+                z-index: 101;
+                padding: 0;
+            }
+            .hamburger-bar {
+                width: 24px;
+                height: 2px;
+                background-color: var(--text-main);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--card-bg);
+                border-bottom: 1px solid var(--border-color);
+                padding: 2rem 1.5rem;
+                gap: 1.5rem;
+                box-shadow: var(--shadow);
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                z-index: 99;
+            }
+            .nav-links.open {
+                display: flex !important;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .nav-toggle.open .hamburger-bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .nav-toggle.open .hamburger-bar:nth-child(2) {
+                opacity: 0;
+            }
+            .nav-toggle.open .hamburger-bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            /* Hero */
+            .cases-hero {
+                padding: 3.5rem 1.2rem 2rem 1.2rem;
+            }
+
+            /* Case Cards */
+            .case-card {
+                grid-template-columns: 1fr !important;
+                padding: 1.8rem !important;
+                gap: 1.8rem;
+            }
+            .case-stats-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.8rem;
+            }
+
+            /* Stats Grid */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem;
+            }
+
+            /* Before & After */
+            .compare-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.2rem;
+            }
+
+            /* Timeline process */
+            .timeline-line {
+                display: none !important;
+            }
+            .timeline-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem;
+            }
+            .timeline-step {
+                display: flex;
+                align-items: center;
+                gap: 1.2rem;
+                text-align: left;
+                padding: 1.2rem;
+                background: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+            }
+            .step-num {
+                margin: 0 !important;
+                flex-shrink: 0;
+            }
+
+            /* Benefits Grid */
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1.2rem;
+            }
+
+            /* Testimonials Grid */
+            .testimonials-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.2rem;
+            }
+
+            /* Technologies Grid */
+            .techs-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 0.8rem;
+            }
+
+            /* CTA buttons */
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            .cta-buttons .btn-warm, .cta-buttons .btn-outline-accent, .cta-buttons .btn-wa-cta {
+                width: 100% !important;
+                min-height: 48px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 24px !important;
+            }
+        }
+
+        /* SMALL TABLETS & PHONES (max-width: 768px) */
+        @media (max-width: 768px) {
+            .benefits-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* SMARTPHONES (max-width: 576px) { */
+        @media (max-width: 576px) {
+            .techs-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .case-stats-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -411,31 +1068,41 @@
     <!-- Header Navigation -->
     <nav>
         <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
-        <ul class="nav-links">
-            <li><a href="/" class="btn-outline-accent">¿No sabes por dónde empezar?</a></li>
-            <li><a href="/simulador">Simuladores</a></li>
-            <li><a href="/casos" style="color:var(--text-main); font-weight: 700;">Casos de Éxito</a></li>
-            <li><a href="/cliente" class="btn-warm">Portal del Cliente</a></li>
+        <button class="nav-toggle" aria-label="Abrir menú" onclick="toggleMobileNav()">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </button>
+        <ul class="nav-links" id="main-nav-links">
+            <li><a href="/" class="btn-outline-accent" onclick="closeMobileNav()">¿No sabes por dónde empezar?</a></li>
+            <li><a href="/simulador" onclick="closeMobileNav()">Simuladores</a></li>
+            <li><a href="/casos" style="color:var(--text-main); font-weight: 700;" onclick="closeMobileNav()">Casos de Éxito</a></li>
+            <li><a href="/cliente" class="btn-warm" onclick="closeMobileNav()">Portal del Cliente</a></li>
         </ul>
     </nav>
 
     <!-- Hero -->
     <header class="cases-hero">
+        <div class="hero-illustration">📈</div>
         <h1>Casos de Éxito</h1>
-        <p>Historias reales de negocios locales que automatizaron sus procesos y aumentaron sus ganancias utilizando soluciones digitales a medida.</p>
+        <p>Historias de negocios locales que automatizaron sus procesos y aumentaron ganancias con sistemas a medida.</p>
     </header>
 
     <!-- Simple explanation banner -->
-    <div class="explanation-banner">
+    <div class="explanation-banner reveal">
         <h3>💡 ¿Qué es un "Caso de Éxito"?</h3>
         <p>Es la explicación sencilla de un problema real que tenía un negocio (como perder tiempo contando inventarios a mano o perder clientes por demoras) y cómo lo resolvimos programándoles un sistema a la medida que cualquiera puede operar.</p>
     </div>
 
-    <!-- Cases list -->
+    <!-- Section: Casos de Éxito -->
     <main class="cases-container">
-        
+        <div class="section-title-container reveal">
+            <h2>Nuestros Sistemas en Funcionamiento</h2>
+            <p>Conoce los resultados operativos reales que hemos entregado a nuestros clientes.</p>
+        </div>
+
         <!-- Caso 1 -->
-        <div class="case-card">
+        <div class="case-card reveal">
             <div class="case-visual">
                 <span class="case-icon">🏨</span>
                 <div class="case-metric">+45%</div>
@@ -445,7 +1112,11 @@
             <div class="case-details">
                 <div>
                     <h2>Hotel Boutique Cartagena</h2>
-                    <p style="font-style: italic; font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.8rem;">*Los resultados corresponden a métricas de optimización operativa reales del cliente.</p>
+                    <div class="case-meta">
+                        <span>🏷️ Giro: Hospedaje Turístico</span>
+                        <span>⏱️ Dev: 5 Semanas</span>
+                        <span>🟢 Estado: Producción</span>
+                    </div>
                     
                     <div class="case-section-title">El Problema del Negocio</div>
                     <p>El hotel administraba las reservas en cuadernos y archivos de Excel. Esto causaba "sobreventa" (alquilar la misma habitación a dos personas distintas por error) y largas filas en el lobby para registrarse.</p>
@@ -453,17 +1124,36 @@
                     <div class="case-section-title">Nuestra Solución Sencilla</div>
                     <p>Creamos una pantalla de administración muy fácil para el recepcionista, conectada a una aplicación móvil para los huéspedes. Ahora, el cliente puede hacer su Check-in desde el celular antes de llegar y pedir comida al cuarto con un toque.</p>
                 </div>
+
+                <div class="case-stats-grid">
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">+45%</div>
+                        <div class="case-stat-lbl">Ventas Directas</div>
+                    </div>
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">-90%</div>
+                        <div class="case-stat-lbl">Sobreventas</div>
+                    </div>
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">300+</div>
+                        <div class="case-stat-lbl">Huéspedes Felices</div>
+                    </div>
+                </div>
                 
                 <div class="case-techs">
                     <span class="case-tech-pill">Base de Datos Segura</span>
                     <span class="case-tech-pill">Panel de Recepción Web</span>
                     <span class="case-tech-pill">App para Huéspedes</span>
                 </div>
+
+                <div class="case-actions">
+                    <a href="/simulador" class="btn-warm" style="width:100%; text-align:center; padding: 0.8rem 1.2rem;">Ver simulación interactiva</a>
+                </div>
             </div>
         </div>
 
         <!-- Caso 2 -->
-        <div class="case-card">
+        <div class="case-card reveal">
             <div class="case-visual">
                 <span class="case-icon">🔧</span>
                 <div class="case-metric">-80%</div>
@@ -473,7 +1163,11 @@
             <div class="case-details">
                 <div>
                     <h2>Taller Automotriz AutoTech</h2>
-                    <p style="font-style: italic; font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.8rem;">*Los resultados corresponden a métricas de optimización operativa reales del cliente.</p>
+                    <div class="case-meta">
+                        <span>🏷️ Giro: Servicio Técnico</span>
+                        <span>⏱️ Dev: 4 Semanas</span>
+                        <span>🟢 Estado: Producción</span>
+                    </div>
                     
                     <div class="case-section-title">El Problema del Negocio</div>
                     <p>Los mecánicos anotaban las fallas de los carros en hojas de papel que se manchaban o se perdían. Además, no sabían exactamente qué repuestos tenían en bodega, generando retrasos de varios días.</p>
@@ -481,17 +1175,36 @@
                     <div class="case-section-title">Nuestra Solución Sencilla</div>
                     <p>Desarrollamos un sistema digital de inventario y facturación. El mecánico registra la reparación desde una tableta y el dueño del vehículo recibe automáticamente fotos del repuesto desgastado y la cotización en su correo electrónico.</p>
                 </div>
+
+                <div class="case-stats-grid">
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">-80%</div>
+                        <div class="case-stat-lbl">Papel y Sumas</div>
+                    </div>
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">+25%</div>
+                        <div class="case-stat-lbl">Ventas Repuestos</div>
+                    </div>
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">500+</div>
+                        <div class="case-stat-lbl">Autos Reparados</div>
+                    </div>
+                </div>
                 
                 <div class="case-techs">
                     <span class="case-tech-pill">Control de Inventario</span>
                     <span class="case-tech-pill">Órdenes Digitales</span>
                     <span class="case-tech-pill">Notificaciones de Clientes</span>
                 </div>
+
+                <div class="case-actions">
+                    <a href="/simulador" class="btn-warm" style="width:100%; text-align:center; padding: 0.8rem 1.2rem;">Ver simulación interactiva</a>
+                </div>
             </div>
         </div>
 
         <!-- Caso 3 -->
-        <div class="case-card">
+        <div class="case-card reveal">
             <div class="case-visual">
                 <span class="case-icon">💳</span>
                 <div class="case-metric">98%</div>
@@ -501,7 +1214,11 @@
             <div class="case-details">
                 <div>
                     <h2>Financiera de Créditos Locales</h2>
-                    <p style="font-style: italic; font-size: 0.85rem; color: var(--accent-color); margin-bottom: 0.8rem;">*Los resultados corresponden a métricas de optimización operativa reales del cliente.</p>
+                    <div class="case-meta">
+                        <span>🏷️ Giro: Microcréditos</span>
+                        <span>⏱️ Dev: 6 Semanas</span>
+                        <span>🟢 Estado: Producción</span>
+                    </div>
                     
                     <div class="case-section-title">El Problema del Negocio</div>
                     <p>Los cobradores salían a la calle y no tenían internet. Apuntaban los pagos en libretas y a veces olvidaban cobrar los intereses correctos o perdían el registro, descuadrando la caja al final del día.</p>
@@ -509,19 +1226,293 @@
                     <div class="case-section-title">Nuestra Solución Sencilla</div>
                     <p>Diseñamos una aplicación móvil para los cobradores que funciona **incluso sin señal de internet**. Calcula los cobros de forma exacta y se sincroniza en la nube automáticamente en cuanto el celular detecta señal.</p>
                 </div>
+
+                <div class="case-stats-grid">
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">98%</div>
+                        <div class="case-stat-lbl">Cartera Cobrada</div>
+                    </div>
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">-95%</div>
+                        <div class="case-stat-lbl">Errores de Cuenta</div>
+                    </div>
+                    <div class="case-stat-box">
+                        <div class="case-stat-val">1200+</div>
+                        <div class="case-stat-lbl">Créditos al Día</div>
+                    </div>
+                </div>
                 
                 <div class="case-techs">
                     <span class="case-tech-pill">Aplicación Móvil Offline</span>
                     <span class="case-tech-pill">Cálculo de Cuotas Automático</span>
                     <span class="case-tech-pill">Sincronización en la Nube</span>
                 </div>
+
+                <div class="case-actions">
+                    <a href="/simulador" class="btn-warm" style="width:100%; text-align:center; padding: 0.8rem 1.2rem;">Ver simulación interactiva</a>
+                </div>
             </div>
         </div>
-
     </main>
 
+    <!-- Section: Resultados Globales -->
+    <section class="stats-section reveal">
+        <div class="section-title-container">
+            <h2>Resultados Obtenidos</h2>
+            <p>Impacto real medido en los negocios que confían en nuestro desarrollo de software.</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num">+120</div>
+                <div class="stat-label">Procesos Automatizados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">+98%</div>
+                <div class="stat-label">Clientes Satisfechos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">+75%</div>
+                <div class="stat-label">Reducción de Tiempo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">+300%</div>
+                <div class="stat-label">Mayor Organización</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Antes y Después -->
+    <section class="compare-section reveal">
+        <div class="section-title-container">
+            <h2>Antes y Después</h2>
+            <p>La transformación operativa e informática de tu negocio con nuestro software.</p>
+        </div>
+        <div class="compare-grid">
+            <div class="compare-card before">
+                <h3>❌ ANTES</h3>
+                <ul class="compare-list">
+                    <li>🔴 Inventarios manuales en papel</li>
+                    <li>🔴 Clientes esperando en salas o líneas</li>
+                    <li>🔴 Desorden de registros y sobreventas</li>
+                    <li>🔴 Pérdidas de dinero por errores humanos</li>
+                </ul>
+            </div>
+            <div class="compare-card after">
+                <h3>✅ DESPUÉS</h3>
+                <ul class="compare-list">
+                    <li>🟢 Sistema y bases de datos automatizados</li>
+                    <li>🟢 Auto-gestión de citas y solicitudes rápidas</li>
+                    <li>🟢 Información centralizada en la nube</li>
+                    <li>🟢 Reportes detallados y cuadres perfectos</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Línea del Tiempo -->
+    <section class="timeline-section reveal">
+        <div class="section-title-container">
+            <h2>Proceso de Desarrollo</h2>
+            <p>El paso a paso ordenado para estructurar tu solución ideal sin rodeos.</p>
+        </div>
+        <div class="timeline-wrapper">
+            <div class="timeline-line"></div>
+            <div class="timeline-grid">
+                <div class="timeline-step">
+                    <div class="step-num">1</div>
+                    <div class="step-title">Contacto</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">2</div>
+                    <div class="step-title">Análisis</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">3</div>
+                    <div class="step-title">Diseño</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">4</div>
+                    <div class="step-title">Desarrollo</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">5</div>
+                    <div class="step-title">Pruebas</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">6</div>
+                    <div class="step-title">Entrega</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">7</div>
+                    <div class="step-title">Soporte</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Beneficios -->
+    <section class="benefits-section reveal">
+        <div class="section-title-container">
+            <h2>Beneficios de Trabajar Juntos</h2>
+            <p>Las ventajas competitivas y la tranquilidad de modernizarte de nuestra mano.</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <span class="benefit-icon">🚀</span>
+                <h4>Mayor productividad</h4>
+                <p>Tu equipo deja el trabajo manual rutinario para enfocarse en hacer crecer tus ventas.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">💰</span>
+                <h4>Más ganancias</h4>
+                <p>Reduce costos fijos eliminando errores y atrae más reservas directas sin pagar intermediarios.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">📈</span>
+                <h4>Mejor organización</h4>
+                <p>Visualiza en tiempo real gráficos, métricas y cierres diarios de caja para tomar el control.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🔒</span>
+                <h4>Información segura</h4>
+                <p>Copias de seguridad programadas de forma automática en infraestructuras seguras de la nube.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">📱</span>
+                <h4>Acceso ubicuo</h4>
+                <p>Monitorea y opera tu negocio desde el celular, tableta o computadora en cualquier lugar.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">⚡</span>
+                <h4>Procesos rápidos</h4>
+                <p>Fideliza al cliente final entregando tiquetes digitales y respuestas automáticas al instante.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Testimonios -->
+    <section class="testimonials-section reveal">
+        <div class="section-title-container">
+            <h2>Qué Dicen Nuestros Clientes</h2>
+            <p>Opiniones reales de empresarios que transformaron su jornada laboral diaria.</p>
+        </div>
+        <div class="testimonials-grid">
+            <!-- Testimonio 1 -->
+            <div class="testimonial-card">
+                <div class="test-header">
+                    <div class="test-avatar">AM</div>
+                    <div class="test-meta">
+                        <h4>Andrés Mendoza</h4>
+                        <p>Dueño, Hotel Boutique Cartagena</p>
+                    </div>
+                </div>
+                <div class="test-stars">⭐⭐⭐⭐⭐</div>
+                <p class="test-body">"Las sobreventas nos hacían perder clientes y reputación. El sistema a medida solucionó todo. Mis recepcionistas aprendieron a usarlo en un solo día y las reservas directas se dispararon."</p>
+            </div>
+            <!-- Testimonio 2 -->
+            <div class="testimonial-card">
+                <div class="test-header">
+                    <div class="test-avatar">DO</div>
+                    <div class="test-meta">
+                        <h4>Diego Ortega</h4>
+                        <p>Gerente, Taller AutoTech</p>
+                    </div>
+                </div>
+                <div class="test-stars">⭐⭐⭐⭐⭐</div>
+                <p class="test-body">"Antes pasábamos 4 horas diarias buscando repuestos o sumando facturas. Ahora tenemos control de stock exacto y el cliente recibe cotizaciones por correo al instante. Excelente servicio."</p>
+            </div>
+            <!-- Testimonio 3 -->
+            <div class="testimonial-card">
+                <div class="test-header">
+                    <div class="test-avatar">MS</div>
+                    <div class="test-meta">
+                        <h4>Mariana Silva</h4>
+                        <p>Directora, Financiera de Créditos</p>
+                    </div>
+                </div>
+                <div class="test-stars">⭐⭐⭐⭐⭐</div>
+                <p class="test-body">"Nuestros cobradores tenían problemas por falta de señal en calle. La app offline que nos programó Luis resolvió esto al 100%. Las cuentas ahora nos cuadran perfectamente al final del día."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Tecnologías -->
+    <section class="techs-section reveal">
+        <div class="section-title-container">
+            <h2>Nuestra Caja de Herramientas</h2>
+            <p>Tecnologías modernas y robustas que aseguran la máxima velocidad y escalabilidad de tu software.</p>
+        </div>
+        <div class="techs-grid">
+            <div class="tech-card">Spring Boot</div>
+            <div class="tech-card">Java</div>
+            <div class="tech-card">MongoDB</div>
+            <div class="tech-card">MySQL</div>
+            <div class="tech-card">HTML / CSS</div>
+            <div class="tech-card">JavaScript</div>
+            <div class="tech-card">Bootstrap</div>
+            <div class="tech-card">Render</div>
+            <div class="tech-card">Cloud</div>
+            <div class="tech-card">Git / GitHub</div>
+        </div>
+    </section>
+
+    <!-- Section: FAQ Accordion -->
+    <section class="faq-section reveal">
+        <div class="section-title-container">
+            <h2>Preguntas Frecuentes</h2>
+            <p>Respuestas claras a dudas comunes antes de dar el paso de digitalizar tu negocio.</p>
+        </div>
+        <div class="faq-accordion">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Cuánto tarda un sistema?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    El tiempo promedio de desarrollo para un sistema a la medida va de 4 a 6 semanas, dependiendo enteramente de las funciones, módulos o integraciones que requiera tu negocio.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Puedo usarlo desde el celular?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Sí, absolutamente. Todos los desarrollos son adaptables a pantallas móviles y tabletas para que puedas operar de forma ágil desde el bolsillo.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Tiene soporte técnico?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Claro que sí. Ofrecemos varios meses de soporte técnico gratis post-entrega para corregir cualquier incidencia, aclarar dudas o realizar ajustes mínimos.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Se adapta a cualquier negocio?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Por supuesto. Al ser software escrito a medida, podemos moldear la base de datos, flujos de trabajo e interfaces al giro específico de tu negocio en Cartagena.
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    ¿Se puede modificar después de entregado?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    Sí. Entregamos el código fuente limpio y bien documentado, permitiendo agregar nuevos módulos, integraciones o reportes en el futuro de forma escalable.
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Trust banner explaining our working methods to build trust -->
-    <section class="trust-banner">
+    <section class="trust-banner reveal">
         <h3>🤝 Nuestra Promesa de Honestidad y Transparencia</h3>
         <p>No te vendemos humo. Desarrollamos software real hecho a tu medida y te garantizamos tranquilidad con nuestro modelo de trabajo:</p>
         
@@ -549,9 +1540,17 @@
     <section class="cta-footer">
         <h2>¿Quieres que tu negocio sea el próximo caso de éxito?</h2>
         <p>Conversemos sin compromisos. Analizaremos tu idea y te recomendaremos el camino más rápido para digitalizar tu negocio.</p>
-        <a href="https://wa.me/573005722844?text=Hola%20Luis%20Devp,%20estaba%20leyendo%20tus%20casos%20de%20exito%20y%20quiero%20cotizar%20un%20proyecto." target="_blank" class="btn-wa-cta">
-            💬 Consultar por WhatsApp
-        </a>
+        <div class="cta-buttons">
+            <a href="https://wa.me/573005722844?text=Hola%20Luis%20Devp,%20estaba%20leyendo%20tus%20casos%20de%20exito%20y%20quiero%20cotizar%20un%20proyecto." target="_blank" class="btn-wa-cta">
+                💬 Consultar por WhatsApp
+            </a>
+            <a href="/simulador" class="btn-warm" style="padding: 0.9rem 1.8rem; border-radius: 24px; display: inline-flex; align-items: center; justify-content: center;">
+                💻 Ver simuladores
+            </a>
+            <a href="/" class="btn-outline-accent" style="padding: 0.9rem 1.8rem; border-radius: 24px; display: inline-flex; align-items: center; justify-content: center;">
+                📋 Solicitar Demostración
+            </a>
+        </div>
     </section>
 
     <!-- Footer Copyright -->
@@ -559,5 +1558,58 @@
         <p>&copy; 2026 Luis Devp. Casos de éxito e ingeniería a medida con calidez humana.</p>
     </footer>
 
+    <!-- Interactive scripts -->
+    <script>
+        // Mobile Navigation controls
+        function toggleMobileNav() {
+            const navLinks = document.getElementById('main-nav-links');
+            const navToggle = document.querySelector('.nav-toggle');
+            navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open');
+        }
+
+        function closeMobileNav() {
+            const navLinks = document.getElementById('main-nav-links');
+            const navToggle = document.querySelector('.nav-toggle');
+            if (navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+            }
+        }
+
+        // FAQ accordion controls
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all first for accordion behavior
+            document.querySelectorAll('.faq-item').forEach(el => {
+                el.classList.remove('active');
+                el.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            if (!isActive) {
+                item.classList.add('active');
+                const answer = item.querySelector('.faq-answer');
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            }
+        }
+
+        // Scroll Reveal implementation using Intersection Observer
+        document.addEventListener("DOMContentLoaded", function() {
+            const reveals = document.querySelectorAll(".reveal");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            }, {
+                threshold: 0.05
+            });
+
+            reveals.forEach(el => observer.observe(el));
+        });
+    </script>
 </body>
 </html>
