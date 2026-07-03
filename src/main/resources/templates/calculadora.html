@@ -41,15 +41,16 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-bottom: 90px; /* Space for sticky panel */
         }
 
-        /* Navbar */
+        /* Navbar responsiva */
         nav {
             background: rgba(250, 249, 246, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
-            padding: 1.2rem 2.5rem;
+            padding: 1rem 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -60,8 +61,8 @@
 
         .logo {
             font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: clamp(1.1rem, 2.5vw + 0.6rem, 1.4rem);
+            font-weight: 800;
             color: var(--text-main);
             text-decoration: none;
             display: flex;
@@ -72,8 +73,8 @@
 
         .logo::before {
             content: '';
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: var(--accent-color);
             border-radius: 50%;
         }
@@ -88,7 +89,7 @@
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.95rem;
             transition: var(--transition);
         }
@@ -114,81 +115,238 @@
             background-color: var(--accent-hover);
         }
 
-        /* Container */
+        /* Hamburguesa Menú */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 200;
+        }
+
+        .nav-toggle span {
+            width: 100%;
+            height: 2.5px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .nav-toggle.open span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .nav-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.open span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Drawer / Sidebar Lateral para móviles */
+        .sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 140;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-backdrop.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100vh;
+            background: var(--card-bg);
+            z-index: 150;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            padding: 5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            transition: right 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .mobile-drawer.open {
+            right: 0;
+        }
+
+        .mobile-drawer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-drawer-links a {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: var(--transition);
+        }
+
+        .mobile-drawer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Estimator Wrapper */
         .estimator-container {
             max-width: 900px;
-            margin: 3rem auto;
+            margin: 2rem auto;
             width: 100%;
             padding: 0 1.5rem;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 1.8rem;
         }
 
-        .estimator-header {
-            text-align: center;
-        }
-
-        .estimator-header h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 5vw + 1.2rem, 2.8rem);
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .estimator-header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Progress Tracker */
-        .progress-tracker {
+        /* Hero Compacto */
+        .estimator-hero {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
-            background: var(--card-bg);
+            align-items: center;
+            text-align: center;
+            background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             padding: 1.5rem;
+            gap: 0.6rem;
             box-shadow: var(--shadow);
         }
 
-        .tracker-info {
+        .sim-badge {
+            background: #E0F2FE;
+            color: #0369A1;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .estimator-hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw + 0.8rem, 2.2rem);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+        }
+
+        .estimator-hero p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            max-width: 600px;
+        }
+
+        /* Barra de Progreso Onboarding Estilo Conectores */
+        .onboarding-tracker {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .tracker-top-lbls {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            align-items: center;
+            font-size: 0.82rem;
             font-weight: 800;
             color: var(--text-muted);
         }
 
-        .tracker-bar-bg {
-            background: var(--bg-secondary);
-            height: 8px;
-            border-radius: 10px;
-            overflow: hidden;
+        .tracker-steps-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin: 0 0.5rem;
         }
 
-        .tracker-bar-fill {
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
-            height: 100%;
-            width: 14%;
+        .tracker-steps-line::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-secondary);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .tracker-line-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 3px;
+            background: var(--accent-color);
+            z-index: 2;
+            transform: translateY(-50%);
+            width: 0%;
             transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Steps Boxes */
+        .tracker-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2.5px solid #fff;
+            box-shadow: 0 0 0 2px var(--border-color);
+            z-index: 3;
+            transition: var(--transition);
+        }
+
+        .tracker-dot.active {
+            background: var(--accent-color);
+            box-shadow: 0 0 0 2.5px var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        .tracker-dot.completed {
+            background: var(--accent-hover);
+            box-shadow: 0 0 0 2px var(--accent-hover);
+        }
+
+        /* Step Boxes */
         .step-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 2.5rem;
+            padding: 2rem;
             box-shadow: var(--shadow);
             display: none;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 1.5rem;
             animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             height: auto;
         }
@@ -197,43 +355,67 @@
             display: flex;
         }
 
-        .step-title {
+        .step-header-block {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .step-header-icon {
+            font-size: 2rem;
+            background: var(--bg-secondary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-title-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .step-box-title {
             font-family: var(--font-display);
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--text-main);
         }
 
-        .step-description {
-            font-size: 0.9rem;
+        .step-box-desc {
+            font-size: 0.85rem;
             color: var(--text-muted);
-            margin-top: -1.2rem;
         }
 
-        /* Grid Options (Tesla/Apple Style) */
+        /* Step 1 & 2 Cards Grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
         }
 
         .cards-grid.wide {
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         }
 
         .option-card {
             background: var(--bg-secondary);
-            border: 2px solid transparent;
-            border-radius: 8px;
+            border: 2.5px solid transparent;
+            border-radius: var(--radius);
             padding: 1.5rem;
             cursor: pointer;
-            text-align: center;
             transition: var(--transition);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-            position: relative;
+            text-align: center;
+            gap: 0.6rem;
             user-select: none;
         }
 
@@ -241,22 +423,22 @@
             border-color: var(--border-color);
             background: var(--card-bg);
             transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
 
         .option-card.selected {
             border-color: var(--accent-color);
-            background: rgba(140, 109, 88, 0.04);
+            background: rgba(140, 109, 88, 0.05);
             box-shadow: var(--shadow);
         }
 
         .option-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.2rem;
+            font-size: 2.2rem;
         }
 
         .option-card h4 {
             font-family: var(--font-display);
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: var(--text-main);
         }
@@ -267,7 +449,7 @@
             line-height: 1.4;
         }
 
-        /* STEP 3 DESIGN SYSTEM IMPROVEMENTS */
+        /* Step 3: Categorized accordion grids */
         .step3-controls {
             display: flex;
             flex-direction: column;
@@ -310,7 +492,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: var(--text-muted);
         }
@@ -320,15 +502,13 @@
             color: #fff;
             padding: 0.25rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.8rem;
-            transition: var(--transition);
+            font-size: 0.78rem;
         }
 
-        /* Accordion Categorized Categories */
         .categories-accordion {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         .cat-group {
@@ -341,23 +521,18 @@
 
         .cat-group-header {
             width: 100%;
-            padding: 1.2rem 1.5rem;
+            padding: 1rem 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--bg-secondary);
             border: none;
             font-family: var(--font-display);
-            font-size: 1.05rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: var(--text-main);
             cursor: pointer;
-            text-align: left;
             user-select: none;
-        }
-
-        .cat-group-header:hover {
-            background: #EDEAE4;
         }
 
         .cat-group-arrow {
@@ -372,9 +547,9 @@
 
         .cat-group-content {
             display: none;
-            padding: 1.5rem;
+            padding: 1.2rem;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
             background: var(--card-bg);
             border-top: 1px solid var(--border-color);
         }
@@ -383,26 +558,24 @@
             display: flex;
         }
 
-        /* Interactive Premium Feature Cards */
         .feature-cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 0.8rem;
         }
 
         .interactive-feature-card {
             background: var(--bg-secondary);
             border: 2px solid transparent;
             border-radius: 8px;
-            padding: 1.2rem;
+            padding: 1rem;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            position: relative;
+            gap: 0.4rem;
             user-select: none;
-            overflow: hidden;
+            position: relative;
         }
 
         .interactive-feature-card:hover {
@@ -427,26 +600,22 @@
         .feature-card-title-row {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
             font-family: var(--font-display);
-            font-size: 0.98rem;
+            font-size: 0.95rem;
             font-weight: 800;
             color: var(--text-main);
         }
 
-        .feature-card-icon {
-            font-size: 1.4rem;
-        }
-
         .feature-check-circle {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            border: 2px solid var(--text-muted);
+            border: 1.5px solid var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: transparent;
             transition: var(--transition);
             flex-shrink: 0;
@@ -459,7 +628,7 @@
         }
 
         .feature-card-desc {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             line-height: 1.4;
             flex: 1;
@@ -469,11 +638,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 0.3rem;
+            margin-top: 0.2rem;
         }
 
         .feature-card-price {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 800;
             color: var(--accent-color);
         }
@@ -483,7 +652,7 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             padding: 0.2rem;
             transition: var(--transition);
         }
@@ -492,87 +661,13 @@
             color: var(--text-main);
         }
 
-        /* Floating Summary Panel (Netflix style always-on screen indicator) */
-        .floating-summary-panel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(44, 42, 41, 0.96);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 1.2rem 2.5rem;
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        .floating-summary-panel.active {
-            display: flex;
-        }
-
-        .floating-summary-info {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .floating-sum-col {
-            display: flex;
-            flex-direction: column;
-            gap: 0.1rem;
-        }
-
-        .floating-sum-lbl {
-            font-size: 0.72rem;
-            color: #A39E9A;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-        }
-
-        .floating-sum-val {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 800;
-        }
-
-        .floating-sum-btn {
-            background: var(--accent-color);
-            color: #fff;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 24px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: var(--transition);
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .floating-sum-btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .floating-sum-btn:active {
-            transform: scale(0.96);
-        }
-
-        /* Tooltip dialog overlays */
+        /* Tooltip Dialog Overlay */
         .tooltip-dialog-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(4px);
             z-index: 2000;
@@ -624,200 +719,483 @@
             align-self: flex-end;
         }
 
-        .tooltip-dialog-close-btn:hover {
-            background: var(--accent-hover);
-        }
-
-        /* Form Controls */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .form-group label {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            font-family: inherit;
-            color: var(--text-main);
-            outline: none;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus {
-            border-color: var(--accent-color);
-            background: #fff;
-        }
-
-        /* Cost Tracker Floating / Footer */
-        .live-cost-banner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--text-main);
-            color: #fff;
-            padding: 1.2rem 2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            font-weight: 800;
-            margin-top: 1rem;
-        }
-
-        .live-cost-label {
-            font-size: 0.9rem;
-            color: var(--bg-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .live-cost-val {
-            font-size: 1.5rem;
-            color: #fff;
-            font-family: var(--font-display);
-        }
-
-        /* Result Panel */
-        .result-panel {
+        /* Step 4: Estilo visual con representaciones maquetadas */
+        .visual-cards-grid {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
         }
 
-        .result-main {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .result-summary-card {
+        .visual-card-option {
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
+            border: 2.5px solid transparent;
+            border-radius: var(--radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
+            user-select: none;
         }
 
-        .result-summary-line {
+        .visual-card-option:hover {
+            border-color: var(--border-color);
+            background: var(--card-bg);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .visual-card-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(140, 109, 88, 0.05);
+            box-shadow: var(--shadow);
+        }
+
+        .visual-mockup-preview {
+            height: 110px;
+            border-radius: 6px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 0.6rem;
             display: flex;
-            justify-content: space-between;
-            font-size: 0.88rem;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 0.4rem;
+            flex-direction: column;
+            gap: 0.4rem;
+            overflow: hidden;
+            position: relative;
         }
 
-        .result-summary-line strong {
-            color: var(--accent-color);
+        .visual-mockup-header {
+            height: 10px;
+            width: 50%;
+            border-radius: 3px;
+            background: var(--accent-color);
         }
 
-        .result-disclaimer {
-            font-size: 0.78rem;
+        .visual-mockup-body {
+            height: 25px;
+            width: 100%;
+            border-radius: 3px;
+            background: var(--bg-secondary);
+        }
+
+        .visual-mockup-row {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .visual-mockup-circle {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+        }
+
+        /* Mockup level overrides */
+        .professional-mockup .visual-mockup-header {
+            background: linear-gradient(90deg, var(--accent-color) 0%, #3B82F6 100%);
+            width: 70%;
+        }
+
+        .premium-mockup .visual-mockup-preview {
+            background: linear-gradient(135deg, #1E1E1C 0%, #2A2A28 100%);
+            border-color: #3E3E3C;
+        }
+
+        .premium-mockup .visual-mockup-header {
+            background: var(--accent-color);
+            box-shadow: 0 0 10px rgba(140,109,88,0.5);
+        }
+
+        .premium-mockup .visual-mockup-body {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .exclusive-mockup .visual-mockup-preview {
+            background: #09090A;
+            border: 1px solid #1F2937;
+        }
+
+        .exclusive-mockup .visual-mockup-header {
+            background: linear-gradient(90deg, #F59E0B, #EC4899);
+            width: 80%;
+        }
+
+        .exclusive-mockup .visual-mockup-body {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .visual-card-option h4 {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+        .visual-card-option p {
+            font-size: 0.75rem;
             color: var(--text-muted);
             line-height: 1.4;
-            background: #FFFBEB;
-            border: 1px solid #FEF3C7;
-            padding: 1rem;
-            border-radius: 6px;
-            color: #B45309;
         }
 
-        .confidence-badges {
+        /* Step 5: Timeline Calendars */
+        .timeline-container-plazo {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 1.2rem;
+            position: relative;
+        }
+
+        .timeline-container-plazo::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            background: var(--bg-secondary);
+            z-index: 1;
+        }
+
+        .plazo-timeline-item {
+            position: relative;
+            padding-left: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .plazo-timeline-bullet {
+            position: absolute;
+            left: 11px;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px var(--border-color);
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .plazo-timeline-item.selected .plazo-timeline-bullet {
+            background: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-color);
+            transform: scale(1.15);
+        }
+
+        .plazo-timeline-content {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            padding: 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .plazo-timeline-item.selected .plazo-timeline-content {
+            border-color: var(--accent-color);
+            background: rgba(140, 109, 88, 0.05);
+            box-shadow: var(--shadow);
+        }
+
+        .plazo-timeline-content h4 {
+            font-family: var(--font-display);
+            font-size: 0.98rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plazo-timeline-content p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        .calendar-proyection-box {
+            background: #F0F9FF;
+            border: 1px solid #BAE6FD;
+            color: #0369A1;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
             gap: 0.6rem;
             margin-top: 1rem;
         }
 
-        .confidence-badge {
-            background: #F0FDF4;
-            border: 1px solid #DCFCE7;
-            color: #15803D;
-            font-size: 0.78rem;
-            font-weight: 800;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+        /* Step 6: Formulario y Simulación Gráfica de Ahorro */
+        .step6-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
 
-        /* Navigation Buttons */
-        .nav-actions-row {
+        .saving-sim-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .saving-title-row {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .saving-graphic-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 120px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .saving-bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            width: 40%;
+        }
+
+        .saving-bar {
+            width: 100%;
+            background: #EF4444;
+            border-radius: 4px 4px 0 0;
+            height: 90px;
+            transition: height 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+        }
+
+        .saving-bar.optimized {
+            background: #10B981;
+            height: 35px;
+        }
+
+        .saving-bar-val {
+            position: absolute;
+            top: -22px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .saving-bar-lbl {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        .saving-conclusion-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Step 7: Resultado Espectacular Ficha Premium */
+        .invoice-card-premium {
+            background: linear-gradient(135deg, #1E1C1A 0%, #2D2A28 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: #fff;
+            box-shadow: 0 20px 40px rgba(44, 42, 41, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .invoice-card-premium::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(140, 109, 88, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .invoice-header {
             display: flex;
             justify-content: space-between;
-            margin-top: 2rem;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 1rem;
+        }
+
+        .invoice-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .invoice-logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        .invoice-title {
+            font-size: 0.72rem;
+            color: #A39E9A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .invoice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
 
-        .btn-nav-action {
-            padding: 0.9rem 1.8rem;
-            font-size: 0.95rem;
+        .invoice-item-lbl {
+            font-size: 0.72rem;
+            color: #A39E9A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .invoice-item-val {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #FAF9F6;
+        }
+
+        .invoice-cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 1.2rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .invoice-cost-lbl {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .invoice-cost-val {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+
+        /* Persistent Sticky Bottom Summary Panel (Netflix/Uber Eats Style) */
+        .persistent-summary-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(44, 42, 41, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 130;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .persistent-sum-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .persistent-sum-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .persistent-sum-lbl {
+            font-size: 0.68rem;
+            color: #A39E9A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .persistent-sum-val {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .persistent-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .persistent-btn-action {
+            padding: 0.75rem 1.6rem;
+            font-size: 0.9rem;
             font-weight: 800;
             border-radius: 24px;
             cursor: pointer;
             transition: var(--transition);
             border: none;
-            min-height: 48px;
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
         }
 
-        .btn-nav-action.primary {
+        .persistent-btn-action.btn-next {
             background: var(--accent-color);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(140, 109, 88, 0.2);
         }
 
-        .btn-nav-action.primary:hover {
+        .persistent-btn-action.btn-next:hover {
             background: var(--accent-hover);
         }
 
-        .btn-nav-action.primary:active {
-            transform: scale(0.96);
-        }
-
-        .btn-nav-action.secondary {
+        .persistent-btn-action.btn-prev {
             background: transparent;
-            border: 1.5px solid var(--border-color);
-            color: var(--text-main);
-        }
-
-        .btn-nav-action.secondary:hover {
-            background: var(--bg-secondary);
-        }
-
-        .btn-whatsapp-large {
-            background: #25D366;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
-            font-weight: 800;
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            font-size: 1.1rem;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.25);
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            width: 100%;
         }
 
-        .btn-whatsapp-large:hover {
-            background: #128C7E;
-            transform: translateY(-2px);
+        .persistent-btn-action.btn-prev:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Before vs After */
+        /* Trust & Productivity Before/After */
         .before-after-section {
             max-width: 900px;
             margin: 4rem auto 2rem auto;
@@ -934,24 +1312,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
         /* RESPONSIVE LAYOUT */
         @media (max-width: 900px) {
             nav {
-                padding: 1rem 1.5rem !important;
+                padding: 0.8rem 1.5rem !important;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-toggle {
+                display: flex;
             }
 
             .estimator-container {
-                margin: 1.5rem auto;
+                margin: 1rem auto;
             }
 
             .step-box {
-                padding: 1.5rem !important;
+                padding: 1.2rem !important;
             }
 
             .result-panel {
@@ -966,28 +1346,22 @@
             .cards-grid {
                 grid-template-columns: 1fr !important;
             }
-        }
 
-        /* PHONE OPTIMIZED STEPS ACCORDION LIST WRAPPERS */
-        @media (max-width: 768px) {
-            .feature-cards-grid {
+            .step6-split {
                 grid-template-columns: 1fr !important;
-                gap: 1rem;
+                gap: 1.5rem;
             }
 
-            .interactive-feature-card {
-                padding: 1.5rem;
-                min-height: 90px;
-                border-radius: var(--radius);
-                background: #FAF8F5;
+            .persistent-summary-panel {
+                padding: 0.8rem 1.2rem !important;
             }
 
-            .floating-summary-panel {
-                padding: 1rem 1.5rem !important;
+            .persistent-sum-info {
+                gap: 1rem !important;
             }
 
-            .floating-sum-val {
-                font-size: 1.15rem;
+            .persistent-sum-val {
+                font-size: 1rem !important;
             }
         }
     </style>
@@ -999,36 +1373,66 @@
         <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
         <ul class="nav-links">
             <li><a href="/simulador">Simuladores</a></li>
-            <li><a href="/calculadora" style="color:var(--text-main); font-weight:700;">Calculadora de Costos</a></li>
+            <li><a href="/calculadora" style="color:var(--text-main); font-weight:700;">Cotizar Proyecto</a></li>
             <li><a href="/blog">Blog</a></li>
             <li><a href="/cliente" class="btn-warm">Portal del Cliente</a></li>
         </ul>
+        <button class="nav-toggle" aria-label="Abrir menú" onclick="toggleMobileDrawer()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Drawer & Backdrop -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileDrawer()"></div>
+    <div class="mobile-drawer" id="mobile-drawer">
+        <ul class="mobile-drawer-links">
+            <li><a href="/simulador" onclick="toggleMobileDrawer()">Simuladores</a></li>
+            <li><a href="/calculadora" onclick="toggleMobileDrawer()" style="color:var(--accent-color);">Cotizar Proyecto</a></li>
+            <li><a href="/blog" onclick="toggleMobileDrawer()">Blog</a></li>
+            <li><a href="/cliente" class="btn-warm" onclick="toggleMobileDrawer()">Portal del Cliente</a></li>
+        </ul>
+    </div>
 
     <!-- Estimator Wrapper -->
     <div class="estimator-container">
         
-        <!-- Header -->
-        <header class="estimator-header">
-            <h1>Diseña tu Aplicación Ideal</h1>
-            <p>Estimador Inteligente de Proyectos. Configura tu solución modular paso a paso de manera transparente.</p>
+        <!-- Hero Compacto -->
+        <header class="estimator-hero">
+            <div class="sim-badge">🟢 Simulación Inteligente</div>
+            <h1>Configurador de Proyectos</h1>
+            <p>Calcula el costo y alcance técnico estimado de tu idea. Configura tu software a la medida sin compromiso.</p>
         </header>
 
-        <!-- Progress Tracker -->
-        <div class="progress-tracker">
-            <div class="tracker-info">
+        <!-- Barra de Progreso Onboarding -->
+        <div class="onboarding-tracker">
+            <div class="tracker-top-lbls">
                 <span id="tracker-step-lbl">Paso 1 de 7</span>
-                <span id="tracker-percent">14% Completado</span>
+                <span id="tracker-percent">14% Completado | ~3 min</span>
             </div>
-            <div class="tracker-bar-bg">
-                <div class="tracker-bar-fill" id="tracker-bar"></div>
+            <div class="tracker-steps-line">
+                <div class="tracker-line-fill" id="tracker-bar"></div>
+                <div class="tracker-dot active" id="dot-1"></div>
+                <div class="tracker-dot" id="dot-2"></div>
+                <div class="tracker-dot" id="dot-3"></div>
+                <div class="tracker-dot" id="dot-4"></div>
+                <div class="tracker-dot" id="dot-5"></div>
+                <div class="tracker-dot" id="dot-6"></div>
+                <div class="tracker-dot" id="dot-7"></div>
             </div>
         </div>
 
         <!-- STEP 1: GIRO DEL NEGOCIO -->
         <div class="step-box active" id="box-1">
-            <h3 class="step-title">1. ¿Para qué tipo de negocio deseas tu aplicación?</h3>
-            <p class="step-description">Selecciona el sector de tu negocio para sugerirte las mejores tecnologías.</p>
+            <div class="step-header-block">
+                <div class="step-header-icon">💼</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Giro del Negocio</h3>
+                    <span class="step-box-desc">Selecciona el sector de tu negocio para adaptar la propuesta técnica.</span>
+                </div>
+            </div>
+            
             <div class="cards-grid">
                 <div class="option-card selected" onclick="selectBusiness('restaurante', '🍔 Restaurante', this)">
                     <span class="option-card-icon">🍔</span>
@@ -1038,7 +1442,7 @@
                 <div class="option-card" onclick="selectBusiness('hotel', '🏨 Hotel', this)">
                     <span class="option-card-icon">🏨</span>
                     <h4>Hotel / Glamping</h4>
-                    <p>Reservas directas de habitaciones y check-in.</p>
+                    <p>Reservas de habitaciones y check-in.</p>
                 </div>
                 <div class="option-card" onclick="selectBusiness('veterinaria', '🐶 Veterinaria', this)">
                     <span class="option-card-icon">🐶</span>
@@ -1088,20 +1492,26 @@
                 <div class="option-card" onclick="selectBusiness('otro', '📱 Otro negocio', this)">
                     <span class="option-card-icon">📱</span>
                     <h4>Otro negocio</h4>
-                    <p>Soluciones a la medida según tu idea.</p>
+                    <p>Solución a medida personalizada.</p>
                 </div>
             </div>
         </div>
 
         <!-- STEP 2: TIPO DE APLICACIÓN -->
         <div class="step-box" id="box-2">
-            <h3 class="step-title">2. ¿Qué tipo de aplicación necesitas?</h3>
-            <p class="step-description">Elige el canal principal para tus clientes finales o administración interna.</p>
+            <div class="step-header-block">
+                <div class="step-header-icon">🖥️</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Canal del Sistema</h3>
+                    <span class="step-box-desc">Elige el tipo de plataforma o aplicación para desplegar.</span>
+                </div>
+            </div>
+            
             <div class="cards-grid wide">
                 <div class="option-card selected" onclick="selectAppType('App Móvil (Flutter)', 350000, this)">
                     <span class="option-card-icon">📱</span>
                     <h4>Aplicación Móvil</h4>
-                    <p>Desplegable en Android e iOS, ideal para fidelización rápida.</p>
+                    <p>Desplegable nativamente en Android e iOS, ideal para fidelización.</p>
                 </div>
                 <div class="option-card" onclick="selectAppType('Sistema Web en la Nube', 300000, this)">
                     <span class="option-card-icon">💻</span>
@@ -1121,10 +1531,15 @@
             </div>
         </div>
 
-        <!-- STEP 3: MÓDULOS Y FUNCIONES (Suma dinámica de costos - Rediseñado) -->
+        <!-- STEP 3: MÓDULOS Y FUNCIONES -->
         <div class="step-box" id="box-3">
-            <h3 class="step-title">3. Selecciona las funciones de tu sistema</h3>
-            <p class="step-description">Personaliza la funcionalidad de tu sistema táctil eligiendo las características deseadas.</p>
+            <div class="step-header-block">
+                <div class="step-header-icon">⚙️</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Funciones del Sistema</h3>
+                    <span class="step-box-desc">Personaliza las características modales. Cada función suma valor aproximado.</span>
+                </div>
+            </div>
             
             <div class="step3-controls">
                 <!-- Search feature input -->
@@ -1507,157 +1922,245 @@
 
         <!-- STEP 4: NIVEL VISUAL -->
         <div class="step-box" id="box-4">
-            <h3 class="step-title">4. Elige el estilo de diseño visual</h3>
-            <p class="step-description">Elige qué tan personalizada y pulida deseas la interfaz de tu aplicación.</p>
-            <div class="cards-grid wide">
-                <div class="option-card selected" onclick="selectDesignLevel('Diseño Básico', 0, this)">
-                    <span class="option-card-icon">🎨</span>
+            <div class="step-header-block">
+                <div class="step-header-icon">🎨</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Nivel de Diseño Visual</h3>
+                    <span class="step-box-desc">Elige la previsualización y el nivel estético de tu aplicación.</span>
+                </div>
+            </div>
+            
+            <div class="visual-cards-grid">
+                <div class="visual-card-option selected" onclick="selectDesignLevel('Diseño Básico', 0, this)">
+                    <div class="visual-mockup-preview basic-mockup">
+                        <div class="visual-mockup-header" style="background:#6B7280"></div>
+                        <div class="visual-mockup-body"></div>
+                        <div class="visual-mockup-body" style="height:15px"></div>
+                    </div>
                     <h4>Diseño Básico</h4>
-                    <p>Limpio, utilizando plantillas predefinidas y componentes estándar.</p>
+                    <p>Limpio, funcional y rápido de cargar usando componentes estándar.</p>
                 </div>
-                <div class="option-card" onclick="selectDesignLevel('Diseño Profesional', 100000, this)">
-                    <span class="option-card-icon">✨</span>
+                <div class="visual-card-option" onclick="selectDesignLevel('Diseño Profesional', 100000, this)">
+                    <div class="visual-mockup-preview professional-mockup">
+                        <div class="visual-mockup-header"></div>
+                        <div class="visual-mockup-body" style="background:#EFF6FF"></div>
+                        <div class="visual-mockup-row">
+                            <div class="visual-mockup-circle" style="background:#3B82F6"></div>
+                            <div class="visual-mockup-circle" style="background:#60A5FA"></div>
+                        </div>
+                    </div>
                     <h4>Diseño Profesional</h4>
-                    <p>Personalización de colores de marca, tipografía moderna y buenas animaciones.</p>
+                    <p>Paleta a medida, transiciones dinámicas y alineación corporativa.</p>
                 </div>
-                <div class="option-card" onclick="selectDesignLevel('Diseño Premium', 200000, this)">
-                    <span class="option-card-icon">💎</span>
+                <div class="visual-card-option" onclick="selectDesignLevel('Diseño Premium', 200000, this)">
+                    <div class="visual-mockup-preview premium-mockup">
+                        <div class="visual-mockup-header"></div>
+                        <div class="visual-mockup-body"></div>
+                        <div class="visual-mockup-row">
+                            <div class="visual-mockup-circle" style="background:var(--accent-color)"></div>
+                            <div class="visual-mockup-circle" style="background:#3E3E3C"></div>
+                        </div>
+                    </div>
                     <h4>Diseño Premium</h4>
-                    <p>Diseño detallado a medida, transiciones suaves y estética premium tipo Stripe.</p>
+                    <p>Vidrio esmerilado (glassmorphism), sombras suaves y modo oscuro pulido.</p>
                 </div>
-                <div class="option-card" onclick="selectDesignLevel('Diseño Exclusivo', 350000, this)">
-                    <span class="option-card-icon">👑</span>
+                <div class="visual-card-option" onclick="selectDesignLevel('Diseño Exclusivo', 350000, this)">
+                    <div class="visual-mockup-preview exclusive-mockup">
+                        <div class="visual-mockup-header"></div>
+                        <div class="visual-mockup-body"></div>
+                        <div class="visual-mockup-row">
+                            <div class="visual-mockup-circle" style="background:#F59E0B"></div>
+                            <div class="visual-mockup-circle" style="background:#EC4899"></div>
+                        </div>
+                    </div>
                     <h4>Diseño Exclusivo</h4>
-                    <p>Experiencia de usuario avanzada, ilustraciones personalizadas y micro-interacciones únicas.</p>
+                    <p>Ilustraciones interactivas, micro-animaciones personalizadas y estética avanzada.</p>
                 </div>
             </div>
         </div>
 
         <!-- STEP 5: PLAZOS DE ENTREGA -->
         <div class="step-box" id="box-5">
-            <h3 class="step-title">5. ¿Cuándo necesitas el proyecto finalizado?</h3>
-            <p class="step-description">El tiempo de desarrollo afecta la prioridad en nuestro flujo de ingeniería.</p>
-            <div class="cards-grid">
-                <div class="option-card" onclick="selectUrgency('Lo antes posible (Urgente)', 200000, this)">
-                    <span class="option-card-icon">⚡</span>
-                    <h4>Urgente</h4>
-                    <p>Prioridad crítica en nuestro desarrollo diario.</p>
+            <div class="step-header-block">
+                <div class="step-header-icon">🗓️</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Plazo del Proyecto</h3>
+                    <span class="step-box-desc">Línea de tiempo estimada para la entrega e hitos del sistema.</span>
                 </div>
-                <div class="option-card" onclick="selectUrgency('30 días', 100000, this)">
-                    <span class="option-card-icon">📅</span>
-                    <h4>30 Días</h4>
-                    <p>Plazo ágil ideal para lanzamientos rápidos.</p>
+            </div>
+            
+            <div class="timeline-container-plazo">
+                <div class="plazo-timeline-item" onclick="selectUrgency('Lo antes posible (Urgente)', 200000, this)">
+                    <div class="plazo-timeline-bullet"></div>
+                    <div class="plazo-timeline-content">
+                        <h4>⚡ Prioridad Urgente <span style="font-size:0.75rem; color:#EF4444">(+$200,000 COP)</span></h4>
+                        <p>Desarrollo acelerado con ingenieros asignados a tiempo completo de inmediato.</p>
+                    </div>
                 </div>
-                <div class="option-card selected" onclick="selectUrgency('60 días (Estándar)', 0, this)">
-                    <span class="option-card-icon">🗓️</span>
-                    <h4>60 Días</h4>
-                    <p>Plazo estándar de desarrollo y pruebas de calidad.</p>
+                <div class="plazo-timeline-item" onclick="selectUrgency('30 días', 100000, this)">
+                    <div class="plazo-timeline-bullet"></div>
+                    <div class="plazo-timeline-content">
+                        <h4>📅 Entrega en 30 días <span style="font-size:0.75rem; color:#F59E0B">(+$100,000 COP)</span></h4>
+                        <p>Plazo prioritario rápido ideal para validaciones comerciales prontas.</p>
+                    </div>
                 </div>
-                <div class="option-card" onclick="selectUrgency('90 días (Sin prisa)', -50000, this)">
-                    <span class="option-card-icon">☕</span>
-                    <h4>90 Días o más</h4>
-                    <p>Plazo flexible. Incluye un pequeño descuento en la inversión.</p>
+                <div class="plazo-timeline-item selected" onclick="selectUrgency('60 días (Estándar)', 0, this)">
+                    <div class="plazo-timeline-bullet"></div>
+                    <div class="plazo-timeline-content">
+                        <h4>🗓️ Entrega en 60 días <span style="font-size:0.75rem; color:#10B981">(Estándar)</span></h4>
+                        <p>Plazo óptimo para desarrollo, correcciones y control de calidad exhaustivo.</p>
+                    </div>
                 </div>
+                <div class="plazo-timeline-item" onclick="selectUrgency('90 días (Sin prisa)', -50000, this)">
+                    <div class="plazo-timeline-bullet"></div>
+                    <div class="plazo-timeline-content">
+                        <h4>☕ Sin prisa (90+ días) <span style="font-size:0.75rem; color:#3B82F6">(-$50,000 COP Descuento)</span></h4>
+                        <p>Plazo extendido y flexible que recompensa tu paciencia con un descuento.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-proyection-box">
+                <span> Proyección estimada: Tu proyecto estaría completado para el <strong><span id="calendar-proy-date">31 de Agosto de 2026</span></strong>.</span>
             </div>
         </div>
 
-        <!-- STEP 6: CAPTURA DE DATOS (LEAD FORM) -->
+        <!-- STEP 6: CAPTURA DE DATOS Y SIMULACIÓN GRÁFICA -->
         <div class="step-box" id="box-6">
-            <h3 class="step-title">6. Ingresa tus datos para ver el estimador</h3>
-            <p class="step-description">Tus datos nos permiten enviarte la cotización detallada de manera formal.</p>
-            
-            <div class="form-group">
-                <label for="client-name">Nombre completo</label>
-                <input type="text" id="client-name" placeholder="Ej. Carlos Mendoza" required>
+            <div class="step-header-block">
+                <div class="step-header-icon">📈</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Confirmación y Simulación</h3>
+                    <span class="step-box-desc">Ingresa tus datos de contacto y compara el ahorro proyectado de tu negocio.</span>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="client-email">Correo electrónico</label>
-                <input type="email" id="client-email" placeholder="carlos@empresa.com" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="client-phone">Número de Celular / WhatsApp</label>
-                <input type="tel" id="client-phone" placeholder="Ej. +57 300 123 4567" required>
+            <div class="step6-split">
+                <!-- Form fields -->
+                <div style="display:flex; flex-direction:column; gap:1.2rem">
+                    <div class="form-group">
+                        <label for="client-name">Nombre completo</label>
+                        <input type="text" id="client-name" placeholder="Ej. Carlos Mendoza" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client-email">Correo electrónico</label>
+                        <input type="email" id="client-email" placeholder="carlos@empresa.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client-phone">Número de Celular / WhatsApp</label>
+                        <input type="tel" id="client-phone" placeholder="Ej. +57 300 123 4567" required>
+                    </div>
+                </div>
+
+                <!-- Simulación de productividad interactiva -->
+                <div class="saving-sim-box">
+                    <div class="saving-title-row">Horas Pérdidas en Operaciones Semanales</div>
+                    
+                    <div class="saving-graphic-container">
+                        <div class="saving-bar-col">
+                            <div class="saving-bar" id="save-bar-before"><div class="saving-bar-val">24 hrs</div></div>
+                            <span class="saving-bar-lbl">Sin Sistema</span>
+                        </div>
+                        <div class="saving-bar-col">
+                            <div class="saving-bar optimized" id="save-bar-after"><div class="saving-bar-val" style="color:#047857">4 hrs</div></div>
+                            <span class="saving-bar-lbl">Con Sistema</span>
+                        </div>
+                    </div>
+
+                    <div class="saving-conclusion-text" id="saving-conclusion-desc">
+                        Automatizando el rubro de <strong>Restaurante</strong>, estimamos que recuperarás hasta <strong>20 horas semanales</strong> que antes perdías cuadrando inventarios o reservas manuales.
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- STEP 7: RESULTADO Y SIMULACIÓN DE INVERSIÓN -->
+        <!-- STEP 7: RESULTADO ESPECTACULAR FICHA PREMIUM -->
         <div class="step-box" id="box-7">
-            <h3 class="step-title">📋 Simulación de Inversión</h3>
-            <p class="step-description">Este es un desglose técnico estimado para tu proyecto.</p>
-
-            <div class="result-panel">
-                <div class="result-main">
-                    <div class="result-summary-card">
-                        <div class="result-summary-line"><span>Giro de Negocio:</span><strong id="res-business">Hotel</strong></div>
-                        <div class="result-summary-line"><span>Canal del Sistema:</span><strong id="res-type">App Móvil</strong></div>
-                        <div class="result-summary-line"><span>Nivel de Diseño:</span><strong id="res-design">Premium</strong></div>
-                        <div class="result-summary-line"><span>Tiempo Estimado:</span><strong id="res-time">4 a 6 semanas</strong></div>
-                        <div class="result-summary-line"><span>Complejidad:</span><strong id="res-complexity">Media</strong></div>
-                        <div class="result-summary-line"><span>Tecnologías Sugeridas:</span><strong id="res-techs">Spring Boot, MongoDB, Flutter</strong></div>
-                    </div>
-
-                    <div class="result-disclaimer">
-                        ⚠️ <strong>Nota Importante:</strong> Este valor es únicamente una estimación inteligente basada en las características seleccionadas. El costo real puede variar dependiendo de detalles adicionales. Nuestro objetivo es ofrecer soluciones accesibles y transparentes para todo tipo de negocios locales.
-                    </div>
-
-                    <div class="confidence-badges">
-                        <span class="confidence-badge">✅ Sin compromiso</span>
-                        <span class="confidence-badge">✅ Cotización gratis</span>
-                        <span class="confidence-badge">✅ Atención personalizada</span>
-                        <span class="confidence-badge">✅ Sin cargos ocultos</span>
-                    </div>
-                </div>
-
-                <div style="display:flex; flex-direction:column; gap:1.2rem; justify-content:center; align-items:center;">
-                    <div style="text-align:center;">
-                        <span class="live-cost-label">Inversión Estimada</span>
-                        <div class="live-cost-val" id="res-total" style="color:var(--accent-color); font-size:2.2rem; font-weight:800; margin-top:0.4rem;">$0 COP</div>
-                    </div>
-
-                    <button class="btn-whatsapp-large" onclick="submitLeadAndRedirect()">
-                        💬 Solicitar Cotización Formal
-                    </button>
+            <div class="step-header-block">
+                <div class="step-header-icon">📋</div>
+                <div class="step-title-col">
+                    <h3 class="step-box-title">Tu Simulación de Inversión</h3>
+                    <span class="step-box-desc">Aquí tienes el desglose comercial de tu solución interactiva.</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Live Cost Sticky Banner (Visible steps 1-5, desktop only) -->
-        <div class="live-cost-banner" id="live-cost-banner">
-            <span class="live-cost-label">Inversión Estimada</span>
-            <span class="live-cost-val" id="live-cost-val">$350.000 COP</span>
-        </div>
+            <div class="invoice-card-premium">
+                <div class="invoice-header">
+                    <span class="invoice-logo">Luis Devp</span>
+                    <div class="invoice-title">Estimación de Desarrollo</div>
+                </div>
 
-        <!-- Navigation Controls -->
-        <div class="nav-actions-row">
-            <button class="btn-nav-action secondary" id="prev-btn" onclick="prevStep()" style="visibility: hidden;">Atrás</button>
-            <button class="btn-nav-action primary" id="next-btn" onclick="nextStep()">Siguiente</button>
+                <div class="invoice-grid">
+                    <div>
+                        <span class="invoice-item-lbl">Giro del Negocio</span>
+                        <div class="invoice-item-val" id="res-business">Restaurante</div>
+                    </div>
+                    <div>
+                        <span class="invoice-item-lbl">Canal del Sistema</span>
+                        <div class="invoice-item-val" id="res-type">App Móvil (Flutter)</div>
+                    </div>
+                    <div>
+                        <span class="invoice-item-lbl">Estilo de Diseño</span>
+                        <div class="invoice-item-val" id="res-design">Diseño Profesional</div>
+                    </div>
+                    <div>
+                        <span class="invoice-item-lbl">Tiempo de Entrega</span>
+                        <div class="invoice-item-val" id="res-time">4 a 6 semanas</div>
+                    </div>
+                    <div>
+                        <span class="invoice-item-lbl">Complejidad</span>
+                        <div class="invoice-item-val" id="res-complexity">Media</div>
+                    </div>
+                    <div>
+                        <span class="invoice-item-lbl">Tecnologías Recomendadas</span>
+                        <div class="invoice-item-val" id="res-techs">Spring Boot, MongoDB, Flutter</div>
+                    </div>
+                </div>
+
+                <div style="font-size:0.75rem; color:#A39E9A; line-height:1.4; background:rgba(255,255,255,0.06); padding:0.8rem; border-radius:6px; border-left:3px solid var(--accent-color)">
+                    💬 <strong>Beneficio Proyectado:</strong> El sistema liberará hasta un 80% de tus cargas de procesos mecánicos repetitivos y te dará reportes detallados en tu celular 24/7.
+                </div>
+
+                <div class="invoice-cost-row">
+                    <span class="invoice-cost-lbl">Inversión Estimada</span>
+                    <span class="invoice-cost-val" id="res-total">$0 COP</span>
+                </div>
+
+                <div style="font-size:0.68rem; color:#A39E9A; line-height:1.3; text-align:center;">
+                    *Esta simulación de inversión no constituye un contrato final. El precio oficial puede cambiar según especificaciones puntuales y pantallas de tu negocio.
+                </div>
+
+                <div class="confidence-badges" style="justify-content:center">
+                    <span class="confidence-badge" style="background:rgba(255,255,255,0.05); color:#fff; border-color:rgba(255,255,255,0.1)">✅ Sin compromiso</span>
+                    <span class="confidence-badge" style="background:rgba(255,255,255,0.05); color:#fff; border-color:rgba(255,255,255,0.1)">✅ Asesoría gratuita</span>
+                    <span class="confidence-badge" style="background:rgba(255,255,255,0.05); color:#fff; border-color:rgba(255,255,255,0.1)">✅ Sin cargos ocultos</span>
+                </div>
+
+                <button class="btn-whatsapp-large" onclick="submitLeadAndRedirect()">
+                    💬 Continuar Simulación en WhatsApp
+                </button>
+            </div>
         </div>
 
     </div>
 
-    <!-- Netflix Style Mobile FFixed/Sticky Summary (Paso 3 specific) -->
-    <div class="floating-summary-panel" id="step3-floating-panel">
-        <div class="floating-summary-info">
-            <div class="floating-sum-col">
-                <span class="floating-sum-lbl">Funciones</span>
-                <span class="floating-sum-val" id="floating-selected-count">0</span>
+    <!-- Persistent Sticky Summary Panel (Uber Eats / Tesla style navigation) -->
+    <div class="persistent-summary-panel active" id="persistent-summary-panel">
+        <div class="persistent-sum-info">
+            <div class="persistent-sum-col">
+                <span class="persistent-sum-lbl">Proyecto</span>
+                <span class="persistent-sum-val" id="persistent-proj-lbl">Restaurante - App</span>
             </div>
-            <div class="floating-sum-col">
-                <span class="floating-sum-lbl">Inversión aprox.</span>
-                <span class="floating-sum-val" id="floating-total-cost">$350,000 COP</span>
+            <div class="persistent-sum-col">
+                <span class="persistent-sum-lbl">Inversión Aprox</span>
+                <span class="persistent-sum-val" id="persistent-cost-lbl">$350,000 COP</span>
             </div>
         </div>
-        <button class="floating-sum-btn" onclick="nextStep()">Continuar →</button>
-    </div>
-
-    <!-- Tooltip Dialog Overlay -->
-    <div class="tooltip-dialog-overlay" id="fid-tooltip-overlay" onclick="closeFidTooltip()">
-        <div class="tooltip-dialog" onclick="event.stopPropagation()">
-            <div class="tooltip-dialog-title" id="tooltip-title">Registro de Usuarios</div>
-            <div class="tooltip-dialog-desc" id="tooltip-desc">Esta función permite a los clientes registrarse.</div>
-            <button class="tooltip-dialog-close-btn" onclick="closeFidTooltip()">Entendido</button>
+        <div class="persistent-actions">
+            <button class="persistent-btn-action btn-prev" id="persist-prev" onclick="prevStep()" style="display:none">←</button>
+            <button class="persistent-btn-action btn-next" id="persist-next" onclick="nextStep()">Continuar →</button>
         </div>
     </div>
 
@@ -1747,6 +2250,7 @@
         let totalSteps = 7;
         
         let businessName = '🍔 Restaurante';
+        let businessSlug = 'restaurante';
         let appTypeName = 'App Móvil (Flutter)';
         let basePrice = 350000;
         
@@ -1764,7 +2268,7 @@
             const formatted = '$' + currentTotal.toLocaleString('es-CO') + ' COP';
             document.getElementById('live-cost-val').innerText = formatted;
             document.getElementById('res-total').innerText = formatted;
-            document.getElementById('floating-total-cost').innerText = formatted;
+            document.getElementById('persistent-cost-lbl').innerText = formatted;
         }
 
         // Selection handlers
@@ -1773,6 +2277,10 @@
             cards.forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
             businessName = label;
+            businessSlug = type;
+            triggerHapticFeedback();
+            updatePersistentLabels();
+            updateSavingSimDescription();
         }
 
         function selectAppType(name, price, element) {
@@ -1781,18 +2289,17 @@
             element.classList.add('selected');
             appTypeName = name;
             basePrice = price;
+            triggerHapticFeedback();
             updateLiveCost();
+            updatePersistentLabels();
         }
 
-        // REDESIGNED Premium select card functions (Paso 3)
+        // Redesigned Premium select card functions (Paso 3)
         function togglePremiumModule(id, price, element) {
             element.classList.toggle('selected');
             
             if (element.classList.contains('selected')) {
-                // Haptic feedback if supported
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(10);
-                }
+                triggerHapticFeedback();
                 selectedModules.push({ id: id, price: price, element: element });
             } else {
                 selectedModules = selectedModules.filter(m => m.id !== id);
@@ -1806,12 +2313,43 @@
             const count = selectedModules.length;
             document.getElementById('features-selected-lbl').innerText = `Has seleccionado ${count} ${count === 1 ? 'función' : 'funciones'}`;
             document.getElementById('features-count-badge').innerText = `${count} / 25`;
-            document.getElementById('floating-selected-count').innerText = count;
+            updatePersistentLabels();
+        }
+
+        function selectDesignLevel(name, price, element) {
+            const cards = element.parentElement.querySelectorAll('.visual-card-option');
+            cards.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            designName = name;
+            designPrice = price;
+            triggerHapticFeedback();
+            updateLiveCost();
+        }
+
+        function selectUrgency(name, price, element) {
+            const cards = element.parentElement.querySelectorAll('.plazo-timeline-item');
+            cards.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            urgencyName = name;
+            urgencyPrice = price;
+            triggerHapticFeedback();
+            updateLiveCost();
+
+            // Calculate date projection based on today + selected days
+            const today = new Date();
+            let daysToAdd = 60;
+            if (name.includes('Urgente')) daysToAdd = 15;
+            else if (name.includes('30 días')) daysToAdd = 30;
+            else if (name.includes('90 días')) daysToAdd = 90;
+
+            today.setDate(today.getDate() + daysToAdd);
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const formattedDate = `${today.getDate()} de ${months[today.getMonth()]} de ${today.getFullYear()}`;
+            document.getElementById('calendar-proy-date').innerText = formattedDate;
         }
 
         // Accordion Category Toggles
         function toggleCategoryAccordion(catId) {
-            // In mobile view (viewport < 768px), collapse all other categories and only open the selected one
             const isMobile = window.innerWidth <= 768;
             const targetGroup = document.getElementById(catId);
             const isOpen = targetGroup.classList.contains('open');
@@ -1836,7 +2374,6 @@
             const groups = document.querySelectorAll('.cat-group');
 
             if (!query) {
-                // Reset search (show all cards and keep only the first category open)
                 cards.forEach(c => c.style.display = 'flex');
                 groups.forEach((g, idx) => {
                     if (idx === 0) g.classList.add('open');
@@ -1845,7 +2382,6 @@
                 return;
             }
 
-            // Loop cards and test query
             cards.forEach(c => {
                 const title = c.querySelector('.feature-card-title-row').innerText.toLowerCase();
                 const desc = c.querySelector('.feature-card-desc').innerText.toLowerCase();
@@ -1856,7 +2392,6 @@
                 }
             });
 
-            // Expand matching categories and collapse empty ones
             groups.forEach(g => {
                 const visibleCardsInGroup = g.querySelectorAll('.interactive-feature-card[style="display: flex;"]');
                 if (visibleCardsInGroup.length > 0) {
@@ -1871,7 +2406,7 @@
 
         // Modal tooltip handlers
         function showFidTooltip(fid, title, description, e) {
-            e.stopPropagation(); // Avoid selecting card when clicking tooltip icon
+            e.stopPropagation();
             document.getElementById('tooltip-title').innerText = title;
             document.getElementById('tooltip-desc').innerText = description;
             document.getElementById('fid-tooltip-overlay').classList.add('active');
@@ -1881,22 +2416,22 @@
             document.getElementById('fid-tooltip-overlay').classList.remove('active');
         }
 
-        function selectDesignLevel(name, price, element) {
-            const cards = element.parentElement.querySelectorAll('.option-card');
-            cards.forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            designName = name;
-            designPrice = price;
-            updateLiveCost();
+        // Haptic vibe helper
+        function triggerHapticFeedback() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(12);
+            }
         }
 
-        function selectUrgency(name, price, element) {
-            const cards = element.parentElement.querySelectorAll('.option-card');
-            cards.forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            urgencyName = name;
-            urgencyPrice = price;
-            updateLiveCost();
+        function updatePersistentLabels() {
+            document.getElementById('persistent-proj-lbl').innerText = `${businessName.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim()} | ${selectedModules.length} func`;
+        }
+
+        function updateSavingSimDescription() {
+            const biz = businessName.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+            document.getElementById('saving-conclusion-desc').innerHTML = `
+                Automatizando el rubro de <strong>${biz}</strong>, estimamos que recuperarás hasta <strong>20 horas semanales</strong> que antes perdías cuadrando inventarios o reservas manuales.
+            `;
         }
 
         // Navigation controls
@@ -1906,37 +2441,33 @@
 
             // Update Progress Tracker
             const percent = Math.round((step / totalSteps) * 100);
-            document.getElementById('tracker-step-lbl').innerText = `Paso ${step} de ${totalSteps}`;
+            const times = ["Paso 1 de 7 | ~3 min", "Paso 2 de 7 | ~2.5 min", "Paso 3 de 7 | ~2 min", "Paso 4 de 7 | ~1.5 min", "Paso 5 de 7 | ~1 min", "Paso 6 de 7 | ~30 seg", "Cotización Completa"];
+            document.getElementById('tracker-step-lbl').innerText = times[step - 1];
             document.getElementById('tracker-percent').innerText = `${percent}% Completado`;
             document.getElementById('tracker-bar').style.width = `${percent}%`;
 
-            // Prev button visibility
-            document.getElementById('prev-btn').style.visibility = step > 1 ? 'visible' : 'hidden';
+            // Onboarding step indicators
+            document.querySelectorAll('.tracker-dot').forEach((dot, idx) => {
+                dot.className = 'tracker-dot';
+                if (idx + 1 === step) dot.classList.add('active');
+                else if (idx + 1 < step) dot.classList.add('completed');
+            });
 
-            // Next button text
-            const nextBtn = document.getElementById('next-btn');
+            // Normal scroll action to focus top
+            window.scrollTo({ top: 120, behavior: 'smooth' });
+
+            // Sticky Bottom Panel Navigation controls visibility
+            document.getElementById('persist-prev').style.display = step > 1 ? 'block' : 'none';
+            
+            // Next button configuration
+            const nextBtn = document.getElementById('persist-next');
             if (step === 6) {
-                nextBtn.innerText = 'Calcular Presupuesto';
+                nextBtn.innerText = 'Ver Cotización';
             } else if (step === 7) {
-                nextBtn.style.display = 'none';
+                // Hide floating bar on result
+                document.getElementById('persistent-summary-panel').classList.remove('active');
             } else {
-                nextBtn.innerText = 'Siguiente';
-                nextBtn.style.display = 'block';
-            }
-
-            // Normal scroll action
-            window.scrollTo({ top: 180, behavior: 'smooth' });
-
-            // Live cost banner visibility (Desktop/Tablet)
-            const costBanner = document.getElementById('live-cost-banner');
-            costBanner.style.display = (step < 7 && step !== 3) ? 'flex' : 'none';
-
-            // Sticky/fixed footer panel specific to Step 3
-            const floatingPanel = document.getElementById('step3-floating-panel');
-            if (step === 3) {
-                floatingPanel.classList.add('active');
-            } else {
-                floatingPanel.classList.remove('active');
+                nextBtn.innerText = 'Continuar →';
             }
         }
 
@@ -1988,6 +2519,10 @@
 
         function prevStep() {
             if (currentStep > 1) {
+                // If returning from step 7, make sure persistent bar is active
+                if (currentStep === 7) {
+                    document.getElementById('persistent-summary-panel').classList.add('active');
+                }
                 currentStep--;
                 showStep(currentStep);
             }
@@ -2033,6 +2568,17 @@
             window.location.href = '/';
         }
 
+        // Toggle Drawer Sidebar Mobile menu
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobile-drawer');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const toggle = document.querySelector('.nav-toggle');
+
+            drawer.classList.toggle('open');
+            backdrop.classList.toggle('active');
+            toggle.classList.toggle('open');
+        }
+
         // FAQ accordion toggle
         function toggleFaq(btn) {
             const item = btn.parentElement;
@@ -2053,6 +2599,11 @@
         // Scroll Reveal implementation
         document.addEventListener("DOMContentLoaded", function() {
             updateLiveCost();
+            updatePersistentLabels();
+            updateSavingSimDescription();
+
+            // Set projection default date
+            selectUrgency('60 días (Estándar)', 0, document.querySelector('.plazo-timeline-item.selected'));
 
             const reveals = document.querySelectorAll(".reveal");
             const observer = new IntersectionObserver((entries) => {
