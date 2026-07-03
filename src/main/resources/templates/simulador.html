@@ -1507,6 +1507,434 @@
             margin-top: auto;
             font-weight: 500;
         }
+
+        /* MOBILE OPTIMIZATIONS (max-width: 992px) */
+        @media (max-width: 992px) {
+            /* General */
+            body {
+                overflow-x: hidden;
+                font-size: clamp(0.9rem, 2vw + 0.75rem, 1.05rem);
+            }
+            * {
+                max-width: 100%;
+            }
+            
+            /* Typography */
+            h2, #dash-heading {
+                font-size: clamp(1.3rem, 4vw + 1rem, 1.8rem) !important;
+            }
+            h3, .sidebar-title, .col-card h3 {
+                font-size: clamp(1rem, 3vw + 0.8rem, 1.2rem) !important;
+            }
+            p, .sidebar-info-text, .support-card p, .exclusive-badge span {
+                font-size: clamp(0.85rem, 2vw + 0.75rem, 0.95rem) !important;
+            }
+
+            /* Navbar */
+            nav {
+                padding: 0.75rem 1.2rem !important;
+                height: 60px;
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+            .logo {
+                font-size: 1.15rem !important;
+            }
+            .nav-toggle {
+                display: flex !important;
+                background: none;
+                border: none;
+                cursor: pointer;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 24px;
+                height: 18px;
+                z-index: 101;
+                padding: 0;
+            }
+            .hamburger-bar {
+                width: 24px;
+                height: 2px;
+                background-color: var(--text-main);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--card-bg);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1.5rem;
+                gap: 1.2rem;
+                box-shadow: var(--shadow);
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                z-index: 99;
+            }
+            .nav-links.open {
+                display: flex !important;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .nav-toggle.open .hamburger-bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .nav-toggle.open .hamburger-bar:nth-child(2) {
+                opacity: 0;
+            }
+            .nav-toggle.open .hamburger-bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            /* Single column responsive layout and order control */
+            .builder-layout {
+                display: flex !important;
+                flex-direction: column !important;
+                padding: 1rem !important;
+                gap: 1.5rem !important;
+                width: 100% !important;
+                overflow-x: hidden !important;
+            }
+            
+            #software-main {
+                order: 1 !important;
+                width: 100% !important;
+                padding: 1rem !important;
+            }
+            #info-sidebar {
+                order: 2 !important;
+                width: 100% !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                gap: 0.6rem !important;
+            }
+            #right-panel {
+                order: 3 !important;
+                width: 100% !important;
+                padding: 1rem !important;
+                gap: 1.5rem !important;
+            }
+
+            /* Reorder children of Center Panel (#sec-dash) */
+            #sec-dash {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.5rem !important;
+            }
+            #sec-dash > div:first-of-type {
+                order: 1 !important; /* Dashboard title and MongoDB badge */
+            }
+            #sec-dash > .workspace-menu {
+                order: 1.5 !important; /* Tabs */
+            }
+            #sec-dash > #metrics-container {
+                order: 2 !important; /* Estadísticas */
+            }
+            #sec-dash > .modules-quick-access {
+                order: 3 !important; /* Accesos rápidos */
+            }
+            #sec-dash > .dashboard-columns {
+                order: 4 !important; /* Bitacora & Tareas */
+            }
+            #sec-dash > .security-banner {
+                order: 5 !important;
+            }
+
+            /* Workspace navigation tabs wrap to prevent scroll */
+            .workspace-menu {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.5rem !important;
+                overflow-x: visible !important;
+                padding-bottom: 0.5rem !important;
+                border-bottom: 1px solid var(--border-color) !important;
+            }
+            .workspace-menu-item {
+                justify-content: center !important;
+                padding: 0.6rem 1rem !important;
+            }
+
+            /* Dashboard Widget Grid (Estadísticas) */
+            .dash-widget-grid {
+                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+                gap: 1rem !important;
+                width: 100% !important;
+            }
+            .kpi-card {
+                width: 100% !important;
+                padding: 1rem !important;
+            }
+
+            /* Accordion items for left sidebar */
+            .accordion-item {
+                border: 1px solid var(--border-color) !important;
+                border-radius: 8px !important;
+                background: var(--card-bg) !important;
+                overflow: hidden !important;
+                width: 100% !important;
+                box-shadow: var(--shadow) !important;
+            }
+            .accordion-header {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem !important;
+                font-weight: 700;
+                cursor: pointer;
+                background: var(--bg-secondary) !important;
+                width: 100%;
+                border: none;
+                color: var(--text-main);
+                font-family: var(--font-family);
+                font-size: 0.95rem;
+                text-align: left;
+            }
+            .accordion-content {
+                display: none;
+                padding: 1.2rem 1rem !important;
+                border-top: 1px solid var(--border-color) !important;
+                transition: max-height 0.3s ease-out;
+                max-height: 0;
+                overflow: hidden;
+            }
+            .accordion-item.active .accordion-content {
+                display: block !important;
+            }
+            .accordion-item.active .accordion-header span {
+                color: var(--accent-color);
+            }
+
+            /* Bitácora Cards on Mobile */
+            .activity-timeline {
+                border-left: none !important;
+                padding-left: 0 !important;
+                gap: 0.8rem !important;
+            }
+            .activity-node {
+                background: var(--card-bg) !important;
+                border: 1px solid var(--border-color) !important;
+                border-radius: 8px !important;
+                padding: 0.75rem 1rem !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.8rem !important;
+                box-shadow: var(--shadow) !important;
+            }
+            .activity-node::before {
+                display: none !important;
+            }
+            .activity-icon-container {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: var(--bg-secondary);
+                color: var(--accent-color);
+                flex-shrink: 0;
+            }
+            .activity-icon-container svg {
+                width: 16px;
+                height: 16px;
+                fill: currentColor;
+            }
+            .activity-details {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+            .activity-time {
+                font-size: 0.75rem;
+                color: var(--text-muted);
+                font-weight: 700;
+            }
+            .activity-text {
+                font-size: 0.8rem;
+                font-weight: 500;
+                color: var(--text-main);
+            }
+            .activity-status {
+                display: block !important;
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            /* Tareas checklist */
+            #tasks-list {
+                gap: 1.2rem !important;
+            }
+            #tasks-list li {
+                font-size: 0.95rem !important;
+                gap: 0.8rem !important;
+                align-items: center !important;
+                display: flex !important;
+            }
+            #tasks-list input[type="checkbox"] {
+                width: 22px !important;
+                height: 22px !important;
+                cursor: pointer;
+                accent-color: var(--accent-color);
+            }
+            .col-card button.btn-primary, .col-card button.btn-outline-brown {
+                width: 100% !important;
+                margin-top: 1rem !important;
+            }
+
+            /* Quick Access Modules */
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.8rem !important;
+            }
+            .module-card {
+                padding: 1.2rem 0.8rem !important;
+                gap: 0.6rem !important;
+            }
+            .module-card-icon {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 0.2rem;
+            }
+            .module-card-icon svg {
+                width: 24px !important;
+                height: 24px !important;
+            }
+            .module-card h4 {
+                font-size: 0.9rem !important;
+            }
+            .module-card p {
+                display: none !important; /* Hide description on mobile to keep clean grid */
+            }
+            .module-card .btn-ir {
+                width: 100% !important;
+                min-height: 40px !important;
+                border-radius: 20px !important;
+                margin-top: 0.3rem;
+            }
+
+            /* Buttons styling and Tactile effects */
+            button, .btn-primary, .btn-secondary, .btn-outline-brown {
+                min-height: 48px !important;
+                border-radius: 24px !important;
+                font-size: 0.95rem !important;
+                font-weight: 700;
+                transition: transform 0.2s ease, opacity 0.2s ease;
+            }
+            button:active, .btn-primary:active, .btn-secondary:active, .btn-outline-brown:active, .module-card:active {
+                transform: scale(0.96) !important;
+                opacity: 0.85;
+            }
+
+            /* Smartphone Simulator */
+            .phone-mockup-container {
+                width: 100% !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .phone-shell {
+                width: 260px !important;
+                height: 500px !important;
+                border-width: 8px !important;
+                border-radius: 30px !important;
+                margin: 0 auto !important;
+            }
+            .phone-view {
+                padding: 1.6rem 0.8rem 0.6rem 0.8rem !important;
+            }
+            #phone-content-body {
+                flex: 1;
+                overflow-y: auto !important;
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                max-height: calc(100% - 60px);
+                padding-bottom: 1rem;
+            }
+            
+            /* UI Animations */
+            aside, main, .widget-card, .kpi-card, .module-card, .activity-node {
+                animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
+            main { animation-delay: 0.05s; }
+            aside#info-sidebar { animation-delay: 0.1s; }
+            aside#right-panel { animation-delay: 0.15s; }
+        }
+
+        /* Specific Breakpoint Tweaks */
+        @media (max-width: 768px) {
+            .dashboard-columns {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.2rem !important;
+            }
+            .col-card {
+                width: 100% !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .workspace-menu {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .table-controls {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 0.8rem;
+            }
+            .search-input {
+                max-width: 100% !important;
+            }
+        }
+
+        @media (max-width: 425px) {
+            .phone-shell {
+                width: 245px !important;
+                height: 480px !important;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .workspace-menu {
+                grid-template-columns: 1fr !important; /* Single column tabs for very narrow screen sizes */
+            }
+            .phone-shell {
+                width: 235px !important;
+                height: 460px !important;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .phone-shell {
+                width: 220px !important;
+                height: 440px !important;
+            }
+            .logo {
+                font-size: 1rem !important;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1514,10 +1942,15 @@
     <!-- Header Navigation -->
     <nav>
         <div class="logo" onclick="window.location.href='/'">Luis Devp</div>
-        <ul class="nav-links">
-            <li><a href="/simulador" style="color:var(--text-main)">Simuladores</a></li>
-            <li><a href="/casos">Casos de Éxito</a></li>
-            <li><a href="/cliente" class="btn-warm" style="box-shadow:none; padding: 0.5rem 1.1rem; border-radius: 6px; font-size: 0.9rem;">Portal del Cliente</a></li>
+        <button class="nav-toggle" aria-label="Abrir menú" onclick="toggleMobileNav()">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </button>
+        <ul class="nav-links" id="main-nav-links">
+            <li><a href="/simulador" style="color:var(--text-main)" onclick="closeMobileNav()">Simuladores</a></li>
+            <li><a href="/casos" onclick="closeMobileNav()">Casos de Éxito</a></li>
+            <li><a href="/cliente" class="btn-warm" style="box-shadow:none; padding: 0.5rem 1.1rem; border-radius: 6px; font-size: 0.9rem;" onclick="closeMobileNav()">Portal del Cliente</a></li>
         </ul>
     </nav>
 
@@ -1526,82 +1959,122 @@
         
         <!-- Left Panel: Information Card (dynamically updated) -->
         <aside id="info-sidebar">
-            <div class="sidebar-title-container">
-                <div class="sidebar-title-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                </div>
-                <h3 class="sidebar-title" id="info-sidebar-title">Información del Sistema</h3>
-            </div>
-            
-            <p class="sidebar-info-text" id="info-sidebar-desc">
-                Bienvenido al sistema de gestión de <strong>Hotel & Glamping Manager</strong>. Aquí podrás administrar habitaciones, reservas, huéspedes, reportes, agenda y más, de forma fácil y segura.
-            </p>
+            <!-- Accordion 1: Información del Sistema -->
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>▼ Información del sistema</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="sidebar-title-container">
+                        <div class="sidebar-title-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        </div>
+                        <h3 class="sidebar-title" id="info-sidebar-title">Información del Sistema</h3>
+                    </div>
+                    
+                    <p class="sidebar-info-text" id="info-sidebar-desc">
+                        Bienvenido al sistema de gestión de <strong>Hotel & Glamping Manager</strong>. Aquí podrás administrar habitaciones, reservas, huéspedes, reportes, agenda y más, de forma fácil y segura.
+                    </p>
 
-            <h4 class="sidebar-subtitle">¿Qué puedes hacer?</h4>
-            <ul class="sidebar-list" id="info-actions-list">
-                <li>
-                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-                    Gestionar habitaciones y servicios
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    Registrar huéspedes y reservas
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>
-                    Controlar ingresos y ocupación
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
-                    Generar reportes y estadísticas
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-                    Revisar agenda y tareas
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                    Configuración del sistema
-                </li>
-            </ul>
-
-            <h4 class="sidebar-subtitle">Recomendaciones</h4>
-            <ul class="recommendation-list">
-                <li><div class="chk-circle">✓</div> Mantén la información actualizada</li>
-                <li><div class="chk-circle">✓</div> Realiza respaldos periódicos</li>
-                <li><div class="chk-circle">✓</div> Cierra sesión al terminar tu jornada</li>
-                <li><div class="chk-circle">✓</div> Usa navegadores actualizados</li>
-            </ul>
-
-            <div class="support-card">
-                <div class="support-header">
-                    <!-- Headset Icon -->
-                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:var(--accent-color)"><path d="M12 2c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
-                    Soporte
-                </div>
-                <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.4">Si necesitas ayuda o tienes algún inconveniente, contacta al administrador del sistema.</p>
-            </div>
-
-            <div class="exclusive-badge">
-                <!-- Shield Icon -->
-                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15l-4-4 1.41-1.41L10 13.17l5.59-5.59L17 9l-7 7z"/></svg>
-                <div>
-                    <strong style="display:block; font-size:0.85rem">Uso exclusivo</strong>
-                    <span style="font-size:0.75rem; color:var(--text-muted)">Sistema de uso interno. Acceso solo para personal autorizado.</span>
+                    <h4 class="sidebar-subtitle" style="margin-top:0.8rem">¿Qué puedes hacer?</h4>
+                    <ul class="sidebar-list" id="info-actions-list">
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                            Gestionar habitaciones y servicios
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            Registrar huéspedes y reservas
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>
+                            Controlar ingresos y ocupación
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                            Generar reportes y estadísticas
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                            Revisar agenda y tareas
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                            Configuración del sistema
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="clock-card">
-                <div class="clock-row">
-                    <!-- Calendar Icon -->
-                    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
-                    Fecha y Hora Actual
+            <!-- Accordion 2: Recomendaciones -->
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>▼ Recomendaciones</span>
+                </button>
+                <div class="accordion-content">
+                    <h4 class="sidebar-subtitle">Recomendaciones</h4>
+                    <ul class="recommendation-list">
+                        <li><div class="chk-circle">✓</div> Mantén la información actualizada</li>
+                        <li><div class="chk-circle">✓</div> Realiza respaldos periódicos</li>
+                        <li><div class="chk-circle">✓</div> Cierra sesión al terminar tu jornada</li>
+                        <li><div class="chk-circle">✓</div> Usa navegadores actualizados</li>
+                    </ul>
                 </div>
-                <div class="clock-time" id="live-date">30 de junio de 2026</div>
-                <div class="clock-row" style="margin-top:0.2rem">
-                    <!-- Clock Icon -->
-                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                    <span id="live-clock" style="font-size:0.95rem; font-weight:800; color:var(--text-main)">10:24:35 AM</span>
+            </div>
+
+            <!-- Accordion 3: Soporte -->
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>▼ Soporte</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="support-card" style="margin-top:0">
+                        <div class="support-header">
+                            <!-- Headset Icon -->
+                            <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:var(--accent-color)"><path d="M12 2c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
+                            Soporte
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.4">Si necesitas ayuda o tienes algún inconveniente, contacta al administrador del sistema.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 4: Uso exclusivo -->
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>▼ Uso exclusivo</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="exclusive-badge" style="margin-top:0">
+                        <!-- Shield Icon -->
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15l-4-4 1.41-1.41L10 13.17l5.59-5.59L17 9l-7 7z"/></svg>
+                        <div>
+                            <strong style="display:block; font-size:0.85rem">Uso exclusivo</strong>
+                            <span style="font-size:0.75rem; color:var(--text-muted)">Sistema de uso interno. Acceso solo para personal autorizado.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 5: Fecha y Hora -->
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>▼ Fecha y Hora</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="clock-card" style="border-top:none; padding-top:0">
+                        <div class="clock-row">
+                            <!-- Calendar Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                            Fecha y Hora Actual
+                        </div>
+                        <div class="clock-time" id="live-date">30 de junio de 2026</div>
+                        <div class="clock-row" style="margin-top:0.2rem">
+                            <!-- Clock Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                            <span id="live-clock" style="font-size:0.95rem; font-weight:800; color:var(--text-main)">10:24:35 AM</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -2362,7 +2835,16 @@
             timeline.innerHTML = "";
             config.timeline.forEach(t => {
                 timeline.innerHTML += `
-                    <div class="activity-node"><strong>${t.time}</strong> - ${t.text}</div>
+                    <div class="activity-node">
+                        <div class="activity-icon-container">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        </div>
+                        <div class="activity-details">
+                            <span class="activity-time">${t.time}</span>
+                            <p class="activity-text">${t.text}</p>
+                        </div>
+                        <span class="activity-status badge-status badge-success">Completado</span>
+                    </div>
                 `;
             });
 
@@ -2825,7 +3307,6 @@
             alert("Recorrido guiado de prueba: usa el panel lateral para elegir entre 10 giros de negocio con base de datos MongoDB en tiempo real.");
         }
 
-        // Toast notifications manager
         function showToast(msg) {
             const wrapper = document.getElementById('toast-wrapper');
             const toast = document.createElement('div');
@@ -2841,10 +3322,65 @@
             }, 3000);
         }
 
+        // Navigation & accordion helpers for mobile
+        function toggleMobileNav() {
+            const navLinks = document.getElementById('main-nav-links');
+            const navToggle = document.querySelector('.nav-toggle');
+            navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open');
+        }
+
+        function closeMobileNav() {
+            const navLinks = document.getElementById('main-nav-links');
+            const navToggle = document.querySelector('.nav-toggle');
+            if (navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+            }
+        }
+
+        function toggleAccordion(btn) {
+            if (window.innerWidth > 992) return;
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close other accordions
+            document.querySelectorAll('#info-sidebar .accordion-item').forEach(acc => {
+                acc.classList.remove('active');
+                const content = acc.querySelector('.accordion-content');
+                if (content) content.style.maxHeight = null;
+            });
+
+            const content = item.querySelector('.accordion-content');
+            if (!isActive) {
+                item.classList.add('active');
+                if (content) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            } else {
+                item.classList.remove('active');
+                if (content) {
+                    content.style.maxHeight = null;
+                }
+            }
+        }
+
         // Initial setup on window load
         window.onload = function() {
             rebuildSimulator();
+            
+            // Ensure accordions are closed by default on mobile
+            if (window.innerWidth <= 992) {
+                document.querySelectorAll('#info-sidebar .accordion-item').forEach(acc => {
+                    acc.classList.remove('active');
+                    const content = acc.querySelector('.accordion-content');
+                    if (content) content.style.maxHeight = null;
+                });
+            }
         };
     </script>
 </body>
 </html>
+
+
+
