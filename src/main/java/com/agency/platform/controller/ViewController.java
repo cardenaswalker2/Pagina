@@ -58,6 +58,11 @@ public class ViewController {
         return "casos";
     }
 
+    @GetMapping("/calculadora")
+    public String calculadora() {
+        return "calculadora";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
